@@ -6,7 +6,7 @@
 import os, subprocess, base64, json, urllib.request, urllib.error
 from pathlib import Path
 
-API_KEY = os.environ.get("GEMINI_API_KEY", "<REDACTED-LEAKED-KEY-DISABLED>")
+API_KEY = os.environ.get("GEMINI_API_KEY", "")
 IMG_DIR = Path("/Users/yuki/workspace/teshikaga-cabin/img")
 PV_DIR  = Path("/Users/yuki/workspace/teshikaga-cabin/pv")
 PV_DIR.mkdir(exist_ok=True)
