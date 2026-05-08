@@ -373,16 +373,32 @@
     <button id="daylightBtn" style="width:100%;margin-bottom:4px">💡 昼光率 Daylight</button>
     <button id="roiBtn" style="width:100%;margin-bottom:4px">💹 ROI/IRR (投資家モード)</button>
     <hr style="border:0;border-top:1px solid #ece8de;margin:6px 0">
-    <label style="font-size:11px;color:#666;display:block;margin-bottom:4px">💴 コストモード</label>
+    <label style="font-size:11px;color:#666;display:block;margin-bottom:4px">💴 コストモード (節約手法)</label>
     <select id="costModeSelect" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;font-size:11px;margin-bottom:6px;font-family:inherit">
-      <option value="standard">標準 (フル施工)</option>
-      <option value="diy_interior">DIY内装 (-25%)</option>
-      <option value="shell_kit">シェルキット (-45%)</option>
-      <option value="ppa_solar">PPA太陽光</option>
-      <option value="offsite_factory">オフサイト工場 (-15%)</option>
-      <option value="cooperative">コーポラティブ ÷10</option>
+      <optgroup label="標準">
+        <option value="standard">標準 (フル施工)</option>
+      </optgroup>
+      <optgroup label="🪚 セルフビルド系">
+        <option value="diy_interior">DIY内装 (-25%)</option>
+        <option value="shell_kit">シェルキット 外皮のみ (-45%)</option>
+        <option value="workparty">🪚 ワークパーティDIY (-40%)</option>
+        <option value="loft_no_2f">🏠 ロフト+平屋化 (-18%)</option>
+      </optgroup>
+      <optgroup label="🌞 インフラ・調達">
+        <option value="offgrid">🌞 完全オフグリッド (-20%)</option>
+        <option value="self_finish">📦 施主支給 (-15%)</option>
+        <option value="bundled_order">📦 複数棟一括発注 (-12%)</option>
+        <option value="compact_spec">🔧 コンパクト仕様 (-10%)</option>
+        <option value="ppa_solar">PPA太陽光 (PV月額化)</option>
+        <option value="offsite_factory">オフサイト工場 (-15%)</option>
+      </optgroup>
+      <optgroup label="🤝 共同・最大">
+        <option value="cooperative">コーポラティブ 共同所有10名 (÷10)</option>
+        <option value="combo_max">⚡ 最大節約 (-65%)</option>
+      </optgroup>
     </select>
     <div id="costModeNote" style="font-size:10px;color:#888;margin-bottom:4px;line-height:1.4"></div>
+    <div id="costSavings" style="font-size:11px;font-weight:600;margin-top:4px"></div>
   </details>
 
   <details>
@@ -2304,9 +2320,10 @@ if (!localStorage.getItem('bim_visited')) {
   localStorage.setItem('bim_visited', '1');
 }
 
-// ─── コストモード切替 ───
+// ─── コストモード切替 + 節約額ライブ表示 ───
 const costSel = document.getElementById('costModeSelect');
 const costNote = document.getElementById('costModeNote');
+const costSavings = document.getElementById('costSavings');
 const COST_MODE_NOTES = {
   standard: '建築士監理 + 施工会社一括 + 内装込',
   diy_interior: '床貼り・壁塗装・棚は施主、外皮・設備は施工会社',
@@ -2314,14 +2331,51 @@ const COST_MODE_NOTES = {
   ppa_solar: '太陽光・パワコンは月額¥7,500で別契約',
   offsite_factory: '弟子屈SIPs工場でプレカット → 現場工期14→5日',
   cooperative: '1棟を10名で共同所有 → 1人あたり1/10の費用',
+  offgrid: 'PV+蓄電池+雨水+コンポストトイレ → 浄化槽・電気引込・町水道すべて不要',
+  workparty: 'SOLUNA仲間20名で土日に建てる → 人件費80%カット (棟梁1名のみ雇用)',
+  self_finish: 'キッチン/UB/サッシをIKEA/楽天/メルカリで施主直購入 → 中間マージンカット',
+  bundled_order: '同年度3棟以上発注で材料一括仕入れ・現場連続稼働で経費圧縮',
+  loft_no_2f: '2階を諦めロフト+吹き抜けに → 階段・床スラブ削減、構造シンプル化',
+  compact_spec: 'UB1216/エコジョーズ/サッシ簡素化 → 設備グレードダウン',
+  combo_max: '全節約手法スタック: DIY内装 + オフグリッド + 施主支給 + ワークパーティ',
 };
 function refreshCostNote() {
   costNote.textContent = COST_MODE_NOTES[costSel.value] || '';
+  if (!viewer.softCosts) return;
+  // 節約額をライブ計算: 標準モードの total と比較
+  if (!costSavings) return;
+  const cur = costSel.value;
+  if (cur === 'standard') {
+    costSavings.textContent = '';
+    return;
+  }
+  try {
+    const prevMode = viewer.getCostMode?.() || cur;
+    // 一旦 standard で計算
+    viewer.setCostMode?.('standard');
+    const stdSoft = viewer.softCosts();
+    const stdTotal = stdSoft.grandTotal * 1.10;
+    // 現モードに戻して計算
+    viewer.setCostMode?.(cur);
+    const curSoft = viewer.softCosts();
+    const curTotal = curSoft.grandTotal * 1.10;
+    const diff = stdTotal - curTotal;
+    const pct = (diff / stdTotal) * 100;
+    if (diff > 0) {
+      costSavings.innerHTML = `<span style="color:#1a6b3a">▼ ¥${Math.round(diff/10000).toLocaleString()}万 節約 (-${pct.toFixed(0)}%)</span>`;
+    } else if (diff < 0) {
+      costSavings.innerHTML = `<span style="color:#c0392b">▲ ¥${Math.round(-diff/10000).toLocaleString()}万 増 (+${(-pct).toFixed(0)}%)</span>`;
+    } else {
+      costSavings.textContent = '';
+    }
+  } catch (e) { costSavings.textContent = ''; }
 }
 refreshCostNote();
 costSel.addEventListener('change', () => {
-  refreshCostNote();
   if (viewer.setCostMode) viewer.setCostMode(costSel.value);
+  refreshCostNote();
+  // info カードの価格更新
+  if (viewer.getPlan) updateInfo(viewer.getPlan());
   // Refresh BOM modal if open
   const bomModal = document.getElementById('bomModal');
   if (bomModal && bomModal.style.display !== 'none') {

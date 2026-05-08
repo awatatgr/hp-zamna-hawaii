@@ -472,31 +472,74 @@ export const COST_MODES = {
     note: '建築士監理 + 施工会社一括 + 内装込',
   },
   diy_interior: {
-    label: 'DIY内装 (施主仕上げ)',
+    label: 'DIY内装 (-25%)',
     matMult: 0.92, laborMult: 0.55, removeKeys: [],
     note: '床貼り・壁塗装・棚は施主、外皮・設備は施工会社',
   },
   shell_kit: {
-    label: 'シェルキット (外皮+屋根+開口部のみ)',
+    label: 'シェルキット 外皮のみ (-45%)',
     matMult: 0.55, laborMult: 0.40, removeKeys: ['septic','rainwater','electric_in'],
     note: '外皮・屋根・サッシのみ。基礎・内装・水回りは別発注 (¥298万〜)',
   },
   ppa_solar: {
-    label: 'PPA太陽光 (PV分を本体から外す)',
+    label: 'PPA太陽光 (PV月額化)',
     matMult: 1.0, laborMult: 1.0, removeKeys: [],
     note: '太陽光・パワコンは月額¥7,500で別契約 → 本体価格-15-30万/kW',
     pvOffset: true,
   },
   offsite_factory: {
-    label: 'オフサイト工場プレカット (現場5日)',
+    label: 'オフサイト工場プレカット (-15%)',
     matMult: 0.95, laborMult: 0.65, removeKeys: [],
     note: '弟子屈SIPs工場でプレカット → 現場工期14→5日、人件費-35%',
   },
   cooperative: {
-    label: 'コーポラティブ (共同所有10名)',
+    label: 'コーポラティブ 共同所有10名 (÷10)',
     matMult: 1.0, laborMult: 1.0, removeKeys: [],
     note: '1棟を10名で共同所有 → 1人あたり1/10の費用',
     divBy: 10,
+  },
+  // ── 新規追加: より現実的な節約手法 ──
+  offgrid: {
+    label: '🌞 完全オフグリッド (-20%)',
+    matMult: 0.94, laborMult: 0.85,
+    removeKeys: ['septic','rainwater','electric_in','temp_power'],
+    note: 'PV+蓄電池+雨水+コンポストトイレ → 浄化槽・電気引込・町水道すべて不要',
+  },
+  workparty: {
+    label: '🪚 ワークパーティ DIY建設 (-40%)',
+    matMult: 1.0, laborMult: 0.20,
+    removeKeys: ['scaffolding'],
+    note: 'SOLUNA仲間20名で土日に建てる → 人件費80%カット (棟梁1名のみ雇用)',
+  },
+  self_finish: {
+    label: '📦 施主支給 (-15%)',
+    matMult: 0.85, laborMult: 0.95,
+    removeKeys: [],
+    note: 'キッチン/UB/サッシをIKEA/楽天/メルカリで施主直購入 → 中間マージンカット',
+  },
+  bundled_order: {
+    label: '📦 複数棟一括発注 (-12%)',
+    matMult: 0.85, laborMult: 0.92,
+    removeKeys: [],
+    note: '同年度3棟以上発注で材料一括仕入れ・現場連続稼働で経費圧縮',
+  },
+  loft_no_2f: {
+    label: '🏠 ロフト活用 平屋化 (-18%)',
+    matMult: 0.82, laborMult: 0.78,
+    removeKeys: ['stairs_main'],
+    note: '2階を諦めロフト+吹き抜けに → 階段・床スラブ削減、構造シンプル化',
+  },
+  compact_spec: {
+    label: '🔧 コンパクト仕様 (-10%)',
+    matMult: 0.88, laborMult: 0.95,
+    removeKeys: [],
+    note: 'UB1216/エコジョーズ/サッシ簡素化 → 設備グレードダウン',
+  },
+  combo_max: {
+    label: '⚡ 最大節約 (DIY+オフグリッド+施主支給+ワークパーティ -65%)',
+    matMult: 0.55, laborMult: 0.18,
+    removeKeys: ['septic','rainwater','electric_in','temp_power','scaffolding','jio'],
+    note: '全節約手法スタック: DIY内装 + オフグリッド + 施主支給 + ワークパーティ → 規格化された SOLUNA WP モデル',
   },
 };
 export let CURRENT_COST_MODE = 'standard';
