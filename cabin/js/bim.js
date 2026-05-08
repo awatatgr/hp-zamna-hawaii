@@ -3268,7 +3268,136 @@ export function createViewer(container, opts = {}) {
       totals[id].cost += bim.cost;
       totals[id].count += 1;
     });
-    return Object.values(totals).sort((a, b) => a.phase - b.phase || (b.cost - a.cost));
+    // ── 不足項目を面積ベースで追加 (内装仕上げ・MEP・住宅設備) ──
+    // 幾何タグで拾えない部分を係数化して BOM に明示
+    if (currentPlan && !currentPlan.tiny) {
+      const area = (currentPlan.W / 1000) * (currentPlan.D / 1000) * (currentPlan.stories || 1);
+      const isUnits = !!currentPlan.openings?.units;
+      const stories = currentPlan.stories || 1;
+      // ── 設備グレード判定 (面積で3段階) ──
+      // compact (<35㎡): 1216UB / 一体洗面 / 普通便器 / エコジョーズ / バッテリーなし
+      // standard (35-150㎡): 1616UB / 750洗面 / シャワートイレ / エコキュート / バッテリー
+      // luxury (>150㎡): 1620UB(2台) / 900洗面 / 高機能便器 / エネファーム / 大型バッテリー
+      const grade = area < 35 ? 'compact' : area < 150 ? 'standard' : 'luxury';
+      // 内装仕上げ: グレードで単価変動
+      const intPrice = grade === 'compact' ? 32000 : grade === 'standard' ? 48000 : 62000;
+      totals.interior_finish = {
+        itemId: 'interior_finish', name: `内装仕上げ ${grade==='compact'?'(コンパクト)':grade==='luxury'?'(ハイグレード)':''} 床無垢/漆喰/天井/建具/造作`.trim(),
+        unit: 'm²', unitPrice: intPrice, qty: area, cost: area * intPrice, count: 1,
+        phase: 9, category: '内装', vendor: '造作大工',
+      };
+      // MEP工事
+      const mepPrice = grade === 'compact' ? 28000 : grade === 'standard' ? 42000 : 52000;
+      totals.mep_install = {
+        itemId: 'mep_install', name: 'MEP工事 (給排水/電気配線/換気ダクト/床暖配管)',
+        unit: 'm²', unitPrice: mepPrice, qty: area, cost: area * mepPrice, count: 1,
+        phase: 7, category: '設備', vendor: '設備工事店',
+      };
+      // ユニット数 (戸数 or 階数+0.5)
+      const unitMult = isUnits ? (currentPlan.openings.units || 1) : Math.max(1, stories - 1) * 0.5 + 1;
+      // ユニットバス
+      const ubPrice = grade === 'compact' ? 450000 : grade === 'standard' ? 850000 : 1280000;
+      totals.unit_bath = {
+        itemId: 'unit_bath', name: `ユニットバス ${grade==='compact'?'1216':grade==='luxury'?'1620':'1616'} (TOTO/LIXIL)`,
+        unit: '式', unitPrice: ubPrice, qty: unitMult, cost: ubPrice * unitMult, count: 1,
+        phase: 7, category: '設備', vendor: 'TOTO',
+      };
+      // 洗面化粧台
+      const vanPrice = grade === 'compact' ? 80000 : grade === 'standard' ? 180000 : 280000;
+      totals.vanity = {
+        itemId: 'vanity', name: `洗面化粧台 ${grade==='compact'?'600':grade==='luxury'?'900':'750'}`,
+        unit: '台', unitPrice: vanPrice, qty: unitMult, cost: vanPrice * unitMult, count: 1,
+        phase: 7, category: '設備', vendor: 'LIXIL',
+      };
+      // 便器
+      const wcPrice = grade === 'compact' ? 95000 : grade === 'standard' ? 190000 : 280000;
+      totals.toilet_wash = {
+        itemId: 'toilet_wash', name: grade === 'compact' ? '便器 + 普通シャワー' : grade === 'luxury' ? 'タンクレス高機能 NEOREST' : 'タンクレストイレ + シャワー',
+        unit: '台', unitPrice: wcPrice, qty: unitMult, cost: wcPrice * unitMult, count: 1,
+        phase: 7, category: '設備', vendor: 'TOTO',
+      };
+      // 給湯器: コンパクト=エコジョーズ、ノーマル=エコキュート370L、ラグジュアリ=エコキュート560L
+      const waterPrice = grade === 'compact' ? 280000 : grade === 'standard' ? 580000 : 780000;
+      totals.eco_cute = {
+        itemId: 'eco_cute',
+        name: grade === 'compact' ? 'エコジョーズ給湯器 24号' : grade === 'luxury' ? 'エコキュート 560L (寒冷地)' : 'エコキュート 370L (寒冷地)',
+        unit: '台', unitPrice: waterPrice, qty: 1, cost: waterPrice, count: 1,
+        phase: 7, category: '設備', vendor: '三菱',
+      };
+      // エアコン
+      const acCnt = Math.max(1, Math.ceil(area / 30));
+      totals.aircon = {
+        itemId: 'aircon', name: 'エアコン 寒冷地仕様 (室内+室外+配管工事)',
+        unit: '台', unitPrice: 220000, qty: acCnt, cost: 220000 * acCnt, count: 1,
+        phase: 7, category: '設備', vendor: '三菱/ダイキン',
+      };
+      // 床暖房 (50㎡超 standard/luxury のみ)
+      if (area > 50) {
+        const flhArea = area * (grade === 'luxury' ? 0.65 : 0.50);
+        totals.floor_heat = {
+          itemId: 'floor_heat', name: '床暖房 温水パネル + 制御',
+          unit: 'm²', unitPrice: 16000, qty: flhArea, cost: flhArea * 16000, count: 1,
+          phase: 7, category: '設備', vendor: '東京ガス',
+        };
+      }
+      // 第一種熱交換換気 (HRV) — 寒冷地必須
+      const hrvBase = grade === 'compact' ? 220000 : 380000;
+      totals.hrv = {
+        itemId: 'hrv', name: '第一種熱交換換気 (HRV) Lossnay/Stiebel',
+        unit: '式', unitPrice: hrvBase + area * 1200, qty: 1,
+        cost: hrvBase + area * 1200, count: 1,
+        phase: 7, category: '設備', vendor: '三菱/Stiebel',
+      };
+      // 蓄電池 (standard以上 + PVあり)
+      if (currentPlan.openings?.solar && grade !== 'compact') {
+        const battKWh = grade === 'luxury' ? 27 : 13.5;
+        const battPrice = grade === 'luxury' ? 3200000 : 1850000;
+        totals.battery = {
+          itemId: 'battery', name: `蓄電池 ${battKWh}kWh (PV連携 EV充電)`,
+          unit: '式', unitPrice: battPrice, qty: 1, cost: battPrice, count: 1,
+          phase: 7, category: '設備', vendor: 'Tesla Powerwall',
+        };
+      }
+      // パワコン (PV あれば必須)
+      if (currentPlan.openings?.solar) {
+        totals.pv_inverter = {
+          itemId: 'pv_inverter', name: 'パワコン PCS + 接続箱',
+          unit: '式', unitPrice: 320000 + (currentPlan.openings.solar * 12000),
+          qty: 1, cost: 320000 + (currentPlan.openings.solar * 12000), count: 1,
+          phase: 7, category: '設備', vendor: 'OMRON/田淵',
+        };
+      }
+      // 階段 (2階建て以上)
+      if (stories >= 2 && !isUnits) {
+        totals.stairs_main = {
+          itemId: 'stairs_main', name: '木製階段 (集成材踏面 + 蹴込 + 手摺)',
+          unit: '基', unitPrice: 480000, qty: stories - 1, cost: 480000 * (stories - 1), count: 1,
+          phase: 6, category: '内装', vendor: '銘建工業',
+        };
+      }
+      // 雪下ろし足場
+      if (currentPlan.roofType === 'mono' && (currentPlan.roofPitch || 0.15) < 0.27) {
+        totals.snow_access = {
+          itemId: 'snow_access', name: '雪下ろし通路 (キャットウォーク + 雪止め追加)',
+          unit: '式', unitPrice: 280000, qty: 1, cost: 280000, count: 1,
+          phase: 5, category: '屋根', vendor: 'JFE鋼板',
+        };
+      }
+    } else if (currentPlan?.tiny) {
+      // tiny house: 簡易設備のみ (バス省略・コンポストトイレ・小型給湯器のみ)
+      const area = (currentPlan.W / 1000) * (currentPlan.D / 1000);
+      totals.interior_finish_tiny = {
+        itemId: 'interior_finish_tiny', name: '内装仕上げ (床無垢/壁無塗装/簡素)',
+        unit: 'm²', unitPrice: 22000, qty: area, cost: area * 22000, count: 1,
+        phase: 9, category: '内装',
+      };
+      totals.mep_tiny = {
+        itemId: 'mep_tiny', name: '簡易電気配線 + 給水 (ポリタンク or 雨水)',
+        unit: '式', unitPrice: 280000, qty: 1, cost: 280000, count: 1,
+        phase: 7, category: '設備',
+      };
+    }
+    return Object.values(totals).sort((a, b) => (a.phase||9) - (b.phase||9) || (b.cost - a.cost));
   }
 
   // ── 4D Construction sequence animation ──
