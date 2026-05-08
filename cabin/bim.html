@@ -506,6 +506,8 @@
     <button id="brochureBtn" style="width:100%;margin-bottom:4px">📰 SNS用画像生成</button>
     <button id="compareBtn" style="width:100%;margin-bottom:4px">📊 全16プラン比較表</button>
     <button id="importBtn" style="width:100%;margin-bottom:4px">📥 SketchUp/Revit/IFC 取込</button>
+    <button id="drawingsBtn" style="width:100%;margin-bottom:4px">📐 平面・立面・断面図PDF</button>
+    <button id="furnitureStyleBtn" style="width:100%;margin-bottom:4px">🛋 家具スタイル切替</button>
     <div id="xrButtons" style="display:flex;gap:4px;margin-bottom:4px"></div>
   </details>
 
@@ -709,6 +711,9 @@
   <div class="price" id="planPrice">¥— <small>税込</small></div>
   <div class="loan" id="planLoan">月々 ¥— (35年・1.0%)</div>
   <div class="maint" id="planMaint">30年メンテ ¥—</div>
+  <label style="display:block;font-size:10px;color:#888;margin-top:4px;cursor:pointer">
+    <input type="checkbox" id="includeLand" style="vertical-align:middle"> 土地代込み (北海道弟子屈 ¥1,800/㎡)
+  </label>
   <div style="display:flex;gap:6px;margin-top:8px">
     <a class="detail" id="planLink" href="/build/standard">詳細 →</a>
     <button id="quoteBtn" style="background:#1a6b3a;color:#fff;border:1px solid #1a6b3a;border-radius:4px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600">✉️ 見積依頼</button>
@@ -917,8 +922,17 @@ function updateInfo(plan) {
     requestAnimationFrame(() => {
       try {
         const soft = viewer.softCosts();
-        const grand = soft.grandTotal * 1.10;
-        priceEl.innerHTML = '¥' + Math.round(grand).toLocaleString() + ' <small>税込</small>';
+        let grand = soft.grandTotal * 1.10;
+        // 土地代込み (敷地 = 建物 × 3.5倍想定、弟子屈 ¥1,800/㎡)
+        const includeLand = document.getElementById('includeLand')?.checked;
+        if (includeLand) {
+          const siteArea = (plan.W/1000) * (plan.D/1000) * 3.5;
+          const landCost = siteArea * 18000;       // ¥1,800/㎡ × 10 (¥18,000/坪) for raw land in 弟子屈
+          grand += landCost;
+          priceEl.innerHTML = '¥' + Math.round(grand).toLocaleString() + ' <small>税込・土地込</small>';
+        } else {
+          priceEl.innerHTML = '¥' + Math.round(grand).toLocaleString() + ' <small>税込・土地別</small>';
+        }
         // 月額返済 (35年・1.0% フラット35想定 / 元利均等)
         const r = 0.01 / 12;        // 月利
         const n = 35 * 12;
@@ -2772,6 +2786,204 @@ document.getElementById('ePermitBtn').addEventListener('click', () => {
       location.href = `mailto:permit@solun.art?subject=${encodeURIComponent('確認申請 - '+plan.name)}&body=${encodeURIComponent(body)}`;
     }
   });
+});
+
+// ── 土地代込みトグル → 価格再計算 ──
+document.getElementById('includeLand')?.addEventListener('change', () => {
+  if (viewer.getPlan) updateInfo(viewer.getPlan());
+});
+
+// ── 平面・立面・断面図 PDF出力 ──
+document.getElementById('drawingsBtn')?.addEventListener('click', async () => {
+  const plan = viewer.getPlan();
+  const W = plan.W, D = plan.D, H = plan.H || 3000;
+  const stories = plan.stories || 1;
+  const pitch = plan.roofPitch || 0.15;
+  const dropH = plan.roofType === 'mono' ? (D/1000 + 1.4) * pitch * 1000 : 0;
+  const totalH = stories * H + dropH + 400;        // 基礎400mm含む
+
+  // SVG ベースで4面図 (A3 portrait, 8mm/m スケール 1/100)
+  const scale = 0.012;        // 100mm/m → 1.2px/mm
+  const padding = 40;
+  const svgW = 1200, svgH = 1700;
+  const fmt = (n) => Math.round(n).toLocaleString() + 'mm';
+
+  // 平面図 (top view)
+  const planX = padding + 100;
+  const planY = padding + 80;
+  const planW = W * scale;
+  const planD = D * scale;
+  // 立面図 (south elevation)
+  const elevX = padding + 100;
+  const elevY = planY + planD + 120;
+  // 断面図 (E-W section)
+  const sectX = padding + 100 + W * scale + 80;
+  const sectY = elevY;
+
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" font-family="Helvetica,Arial,sans-serif" font-size="11">
+    <style>
+      .ttl{font-size:14px;font-weight:700}
+      .lbl{font-size:10px;fill:#666}
+      .dim{font-size:9px;fill:#444}
+      .wall{fill:none;stroke:#222;stroke-width:1.5}
+      .opening{fill:#c8d4dc;stroke:#222;stroke-width:0.8}
+      .axis{stroke:#888;stroke-width:0.4;stroke-dasharray:4 2}
+      .grid{stroke:#ddd;stroke-width:0.3}
+    </style>
+    <!-- Title block -->
+    <text x="${padding}" y="${padding + 18}" class="ttl">SOLUNA ${plan.name} - ${plan.label}</text>
+    <text x="${padding}" y="${padding + 36}" class="lbl">プラン: ${plan.tag} | 寸法: ${W}×${D}×${H}mm | 階数: ${stories}階 | 屋根: ${plan.roofType||'-'}</text>
+    <text x="${padding}" y="${padding + 52}" class="lbl">scale 1/100 | 図面: 平面・立面・断面 | 出力日: ${new Date().toISOString().slice(0,10)}</text>
+
+    <!-- ─── 平面図 (Top view) ─── -->
+    <text x="${planX}" y="${planY - 20}" class="ttl">📐 平面図 (Plan)</text>
+    <rect x="${planX}" y="${planY}" width="${planW}" height="${planD}" class="wall"/>
+    <!-- 内壁 (簡易: 中央十字) -->
+    <line x1="${planX + planW/2}" y1="${planY}" x2="${planX + planW/2}" y2="${planY + planD}" class="axis"/>
+    <line x1="${planX}" y1="${planY + planD/2}" x2="${planX + planW}" y2="${planY + planD/2}" class="axis"/>
+    <!-- 開口部 (south = bottom) -->
+    ${plan.openings?.south ? `<rect x="${planX + planW/2 - (plan.openings.south.w * scale)/2}" y="${planY + planD - 4}" width="${plan.openings.south.w * scale}" height="8" class="opening"/>` : ''}
+    <!-- ラベル -->
+    <text x="${planX + planW/2}" y="${planY - 6}" class="dim" text-anchor="middle">N ↑</text>
+    <text x="${planX + planW/2}" y="${planY + planD + 24}" class="dim" text-anchor="middle">${fmt(W)}</text>
+    <text x="${planX - 8}" y="${planY + planD/2}" class="dim" text-anchor="end">${fmt(D)}</text>
+    <text x="${planX + planW + 12}" y="${planY + planD/2}" class="dim" text-anchor="start">居室・LDK・寝室</text>
+    <!-- グリッド (910mm) -->
+    ${Array.from({length: Math.floor(W/910) - 1}, (_, i) =>
+      `<line x1="${planX + (i+1)*910*scale}" y1="${planY}" x2="${planX + (i+1)*910*scale}" y2="${planY + planD}" class="grid"/>`).join('')}
+
+    <!-- ─── 立面図 (Elevation South) ─── -->
+    <text x="${elevX}" y="${elevY - 20}" class="ttl">📐 南立面図 (South Elevation)</text>
+    <line x1="${elevX - 10}" y1="${elevY + totalH * scale + 20}" x2="${elevX + W * scale + 10}" y2="${elevY + totalH * scale + 20}" class="wall" stroke-width="2"/>
+    <text x="${elevX - 14}" y="${elevY + totalH * scale + 24}" class="dim" text-anchor="end">±0 GL</text>
+    <!-- 基礎 -->
+    <rect x="${elevX}" y="${elevY + (totalH - 400) * scale + 20}" width="${planW}" height="${400 * scale}" fill="#e8e4dc" stroke="#222" stroke-width="0.8"/>
+    <!-- 1階壁 -->
+    <rect x="${elevX}" y="${elevY + (totalH - 400 - H) * scale + 20}" width="${planW}" height="${H * scale}" class="wall"/>
+    <!-- 2階壁 (もしあれば) -->
+    ${stories >= 2 ? `<rect x="${elevX}" y="${elevY + (totalH - 400 - 2*H) * scale + 20}" width="${planW}" height="${H * scale}" class="wall"/>` : ''}
+    <!-- 3階壁 -->
+    ${stories >= 3 ? `<rect x="${elevX}" y="${elevY + (totalH - 400 - 3*H) * scale + 20}" width="${planW}" height="${H * scale}" class="wall"/>` : ''}
+    <!-- 屋根 (mono pitch: 南低・北高 → 立面では水平に見えるが頂点は隠れる; 簡易表示) -->
+    <line x1="${elevX - 8}" y1="${elevY + 20}" x2="${elevX + planW + 8}" y2="${elevY + 20}" class="wall" stroke-width="1.5"/>
+    <!-- 開口部 -->
+    ${plan.openings?.south ? `<rect x="${elevX + planW/2 - (plan.openings.south.w * scale)/2}" y="${elevY + (totalH - 400 - plan.openings.south.h - 800) * scale + 20}" width="${plan.openings.south.w * scale}" height="${plan.openings.south.h * scale}" class="opening"/>` : ''}
+    <!-- ドア -->
+    <rect x="${elevX + planW * 0.15}" y="${elevY + (totalH - 400 - 2050) * scale + 20}" width="${900 * scale}" height="${2050 * scale}" class="opening" fill="#a9824f"/>
+    <!-- 寸法線 -->
+    <text x="${elevX + planW + 14}" y="${elevY + 24}" class="dim" text-anchor="start">最高高さ: ${fmt(totalH)}</text>
+    <text x="${elevX + planW + 14}" y="${elevY + (totalH - 400) * scale + 24}" class="dim" text-anchor="start">FL: +400</text>
+    <text x="${elevX + planW/2}" y="${elevY + totalH * scale + 50}" class="dim" text-anchor="middle">${fmt(W)}</text>
+
+    <!-- ─── 断面図 (Section E-W) ─── -->
+    <text x="${sectX}" y="${sectY - 20}" class="ttl">📐 東西断面図 (Section)</text>
+    <line x1="${sectX - 10}" y1="${sectY + totalH * scale + 20}" x2="${sectX + D * scale + 10}" y2="${sectY + totalH * scale + 20}" class="wall" stroke-width="2"/>
+    <!-- 屋根 (片屋根 mono = 南低・北高) -->
+    <polyline points="${sectX},${sectY + 20 + dropH * scale} ${sectX + D * scale},${sectY + 20}" class="wall" stroke-width="2" fill="none"/>
+    <line x1="${sectX}" y1="${sectY + 20 + dropH * scale}" x2="${sectX}" y2="${sectY + (totalH - 400) * scale + 20}" class="wall"/>
+    <line x1="${sectX + D * scale}" y1="${sectY + 20}" x2="${sectX + D * scale}" y2="${sectY + (totalH - 400) * scale + 20}" class="wall"/>
+    <!-- 床/天井 -->
+    ${stories >= 2 ? `<line x1="${sectX}" y1="${sectY + (totalH - 400 - H) * scale + 20}" x2="${sectX + D * scale}" y2="${sectY + (totalH - 400 - H) * scale + 20}" class="wall" stroke-width="1.5"/>` : ''}
+    <!-- 基礎 -->
+    <rect x="${sectX}" y="${sectY + (totalH - 400) * scale + 20}" width="${D * scale}" height="${400 * scale}" fill="#e8e4dc" stroke="#222"/>
+    <!-- 杭 (frost depth -1m) -->
+    <line x1="${sectX + D * scale * 0.15}" y1="${sectY + totalH * scale + 20}" x2="${sectX + D * scale * 0.15}" y2="${sectY + totalH * scale + 1000 * scale + 20}" stroke="#888" stroke-width="3"/>
+    <line x1="${sectX + D * scale * 0.85}" y1="${sectY + totalH * scale + 20}" x2="${sectX + D * scale * 0.85}" y2="${sectY + totalH * scale + 1000 * scale + 20}" stroke="#888" stroke-width="3"/>
+    <text x="${sectX + D * scale + 10}" y="${sectY + totalH * scale + 1010 * scale + 24}" class="dim">凍結深度 GL-1000mm</text>
+    <text x="${sectX + D * scale/2}" y="${sectY + totalH * scale + 50}" class="dim" text-anchor="middle">D=${fmt(D)} (南→北)</text>
+    <text x="${sectX + D * scale + 10}" y="${sectY + 20}" class="dim">高側 (北)</text>
+    <text x="${sectX - 10}" y="${sectY + 20 + dropH * scale - 6}" class="dim" text-anchor="end">低側 (南)</text>
+
+    <!-- 注記 -->
+    <text x="${padding}" y="${svgH - 60}" class="lbl">▼ 注記</text>
+    <text x="${padding}" y="${svgH - 44}" class="dim">・グリッド: 910mmモジュール (SIPsパネル幅準拠)</text>
+    <text x="${padding}" y="${svgH - 30}" class="dim">・基礎: スクリュー杭Φ100×L1500 + 凍結深度1000mm対応 + ベタ基礎150mm</text>
+    <text x="${padding}" y="${svgH - 16}" class="dim">・断熱: SIPsパネル t160 (壁) / t200 (屋根) UA値 ${plan.id === 'mini' ? '0.40' : '0.30'} W/m²K</text>
+  </svg>`;
+
+  // SVG → 画像 → PDF (jsPDF + html2canvas 経由が最も互換性が高い)
+  await ensureLib('html2canvas', 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+  await ensureLib('jspdf', 'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js');
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;top:-9999px;left:0;width:1200px;background:#fff';
+  wrap.innerHTML = svg;
+  document.body.appendChild(wrap);
+  try {
+    const canvas = await html2canvas(wrap, {scale: 2, backgroundColor: '#fff'});
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const {jsPDF} = window.jspdf;
+    const pdf = new jsPDF({orientation: 'portrait', unit: 'mm', format: 'a3'});
+    pdf.addImage(imgData, 'JPEG', 10, 10, 277, 392);
+    pdf.save(`SOLUNA_${plan.name}_drawings.pdf`);
+  } finally {
+    document.body.removeChild(wrap);
+  }
+});
+
+// ── 家具スタイル切替 ──
+const FURNITURE_STYLES = {
+  japandi: {label:'Japandi (デフォルト)', cedar: 0xc8a580, accent: 0x2a3140, fabric: 0xbab0a0, leg: 0x222222},
+  industrial: {label:'Industrial (ブラックメタル+レザー)', cedar: 0x4a3c2c, accent: 0x8a4a30, fabric: 0x6a4a3a, leg: 0x111111},
+  midcentury: {label:'Mid-century (ティーク+マスタード)', cedar: 0xa86a3a, accent: 0xc89030, fabric: 0xd4a060, leg: 0x3a2a1a},
+  scandi: {label:'Scandinavian (ライトオーク+グレー)', cedar: 0xd8c0a0, accent: 0x6a6a6a, fabric: 0xeeece6, leg: 0x9a9a9a},
+  zen: {label:'Zen Minimal (杉+黒+白)', cedar: 0xc8a580, accent: 0x111111, fabric: 0xf6f3ec, leg: 0x000000},
+};
+document.getElementById('furnitureStyleBtn')?.addEventListener('click', () => {
+  const opts = Object.entries(FURNITURE_STYLES).map(([k, v]) =>
+    `<button data-fstyle="${k}" style="display:block;width:100%;text-align:left;padding:8px 12px;margin-bottom:4px;background:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit">
+      <span style="display:inline-block;width:16px;height:16px;background:#${v.cedar.toString(16).padStart(6,'0')};vertical-align:middle;margin-right:6px;border-radius:2px"></span>
+      <span style="display:inline-block;width:16px;height:16px;background:#${v.accent.toString(16).padStart(6,'0')};vertical-align:middle;margin-right:6px;border-radius:2px"></span>
+      <span style="display:inline-block;width:16px;height:16px;background:#${v.fabric.toString(16).padStart(6,'0')};vertical-align:middle;margin-right:8px;border-radius:2px"></span>
+      <b>${v.label.split(' ')[0]}</b> <span style="color:#888;font-size:11px">${v.label.split(' (')[1]?.replace(')','')}</span>
+    </button>`).join('');
+  showSimpleModal(`<h3 style="margin:0 0 12px 0">🛋 家具スタイル切替</h3>
+    <p style="font-size:11px;color:#888;margin-bottom:12px">内装家具の木材・アクセント・ファブリックの色味を切替</p>
+    ${opts}
+    <p style="font-size:10px;opacity:.55;margin-top:10px">※家具のジオメトリは共通。色味のみ変更されます。プラン再ロードで反映。</p>`);
+  // ボタンクリックハンドラ
+  setTimeout(() => {
+    document.querySelectorAll('[data-fstyle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.fstyle;
+        const s = FURNITURE_STYLES[k];
+        // viewer に反映 (cedar/cedarLite を上書き)
+        viewer.applyPreset?.({
+          cedar: s.cedar, cedarLite: s.cedar | 0x100808,
+          line: s.leg, sash: s.leg,
+        });
+        // モーダル閉じてプラン再ロード
+        document.getElementById('floatingModal')?.remove?.();
+        document.querySelectorAll('[id$="Modal"]').forEach(m => m.style.display = 'none');
+        const cur = viewer.getPlan?.();
+        if (cur) viewer.loadPlan(cur.id);
+        // 通知
+        const note = document.createElement('div');
+        note.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1a6b3a;color:#fff;padding:8px 18px;border-radius:6px;z-index:100;font-size:13px';
+        note.textContent = '🛋 ' + s.label + ' 適用';
+        document.body.appendChild(note);
+        setTimeout(() => note.remove(), 2000);
+      });
+    });
+  }, 100);
+});
+
+// ── AIインスタント見積コマンド (シンプルモード時の info カード周辺) ──
+// AI チャットに「概算 ¥XX万」と先頭につけるショートカット
+const aiQuickBtn = document.createElement('button');
+aiQuickBtn.id = 'aiQuickQuote';
+aiQuickBtn.title = 'AIに即時見積を依頼';
+aiQuickBtn.textContent = '⚡ AI即答';
+aiQuickBtn.style.cssText = 'position:fixed;bottom:54px;right:130px;z-index:24;background:#c8a455;color:#fff;border:0;border-radius:50%;width:48px;height:48px;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+document.body.appendChild(aiQuickBtn);
+aiQuickBtn.addEventListener('click', async () => {
+  const plan = viewer.getPlan();
+  const soft = viewer.softCosts();
+  const grand = soft.grandTotal * 1.10;
+  // AI チャットを開く + プリセットメッセージ送信
+  document.getElementById('aiChat').style.display = 'block';
+  const aiInput = document.getElementById('aiInput');
+  aiInput.value = `${plan.name} (${plan.label}) を考えています。予算${Math.round(grand/10000)}万円ですが、もっと安くできますか？節約のおすすめモードを教えて。`;
+  document.getElementById('aiSend')?.click();
 });
 
 // ─── SketchUp / Revit / IFC インポート ───
