@@ -1068,11 +1068,69 @@ viewer.onElementClick((info) => {
 document.getElementById('epClose').addEventListener('click', () => popup.style.display = 'none');
 
 // BOM modal — now includes labor + soft costs
+// 通貨換算 (BIMビューワー全体で共有)
+window.__currency = window.__currency || 'JPY';
+const FX = {JPY: 1, USD: 1/150, EUR: 1/160};        // 2026 想定レート
+const FX_LABEL = {JPY: '¥', USD: '$', EUR: '€'};
+window.fxFmt = (jpy) => {
+  const cur = window.__currency || 'JPY';
+  const rate = FX[cur];
+  const v = jpy * rate;
+  if (cur === 'JPY') return '¥' + Math.round(v).toLocaleString();
+  return FX_LABEL[cur] + Math.round(v).toLocaleString(undefined, {maximumFractionDigits: 0});
+};
 function refreshBOM() {
   const items = viewer.takeoff();
   const soft = viewer.softCosts();
   const tbody = document.getElementById('bomTbody');
   tbody.innerHTML = '';
+  // ── 業者別集計トグル ──
+  const groupMode = window.__bomGroup || 'phase';
+  const grpHdr = document.createElement('tr');
+  grpHdr.innerHTML = `<td colspan="7" style="padding:6px 8px;background:#fafaf6">
+    <span style="font-size:11px;color:#666">表示: </span>
+    <button onclick="window.__bomGroup='phase';refreshBOM()" style="padding:3px 8px;font-size:11px;${groupMode==='phase'?'background:#222;color:#fff':''}">工程順</button>
+    <button onclick="window.__bomGroup='vendor';refreshBOM()" style="padding:3px 8px;font-size:11px;${groupMode==='vendor'?'background:#222;color:#fff':''}">業者別</button>
+    <button onclick="window.__bomGroup='category';refreshBOM()" style="padding:3px 8px;font-size:11px;${groupMode==='category'?'background:#222;color:#fff':''}">カテゴリ別</button>
+    <span style="margin-left:14px;font-size:11px;color:#666">通貨: </span>
+    <button onclick="window.__currency='JPY';refreshBOM()" style="padding:3px 8px;font-size:11px;${(window.__currency||'JPY')==='JPY'?'background:#222;color:#fff':''}">¥</button>
+    <button onclick="window.__currency='USD';refreshBOM()" style="padding:3px 8px;font-size:11px;${window.__currency==='USD'?'background:#222;color:#fff':''}">$</button>
+    <button onclick="window.__currency='EUR';refreshBOM()" style="padding:3px 8px;font-size:11px;${window.__currency==='EUR'?'background:#222;color:#fff':''}">€</button>
+  </td>`;
+  tbody.appendChild(grpHdr);
+
+  // 業者別 / カテゴリ別 集計
+  if (groupMode === 'vendor' || groupMode === 'category') {
+    const groups = {};
+    for (const r of items) {
+      const k = (groupMode === 'vendor' ? (r.vendor || '未指定') : (r.category || '未分類'));
+      if (!groups[k]) groups[k] = {items: [], total: 0};
+      groups[k].items.push(r);
+      groups[k].total += r.cost;
+    }
+    const sorted = Object.entries(groups).sort((a, b) => b[1].total - a[1].total);
+    for (const [grpKey, grp] of sorted) {
+      const hdr = document.createElement('tr');
+      hdr.style.background = '#f0eee7';
+      hdr.innerHTML = `<td colspan="6" style="padding:6px 8px;font-weight:700;color:#222">${groupMode==='vendor'?'🏭':'📦'} ${grpKey}</td><td style="padding:6px 8px;text-align:right;font-weight:700">${window.fxFmt(grp.total)}</td>`;
+      tbody.appendChild(hdr);
+      for (const r of grp.items) {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #e0dcd2';
+        tr.innerHTML = `
+          <td style="padding:5px 8px">${r.phase}</td>
+          <td style="padding:5px 8px">${r.category || '-'}</td>
+          <td style="padding:5px 8px">${r.name}</td>
+          <td style="text-align:right;padding:5px 8px">${qtyFmt(r.qty, r.unit)}</td>
+          <td style="text-align:right;padding:5px 8px">${window.fxFmt(r.unitPrice)}</td>
+          <td style="text-align:right;padding:5px 8px;font-weight:600">${window.fxFmt(r.cost)}</td>
+          <td style="padding:5px 8px;font-size:10px">${r.vendor || '-'}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+    return items;
+  }
+  // 工程順 (デフォルト)
   for (const r of items) {
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid #e0dcd2';
@@ -1081,8 +1139,8 @@ function refreshBOM() {
       <td style="padding:5px 8px">${r.category || '-'}</td>
       <td style="padding:5px 8px">${r.name}</td>
       <td style="text-align:right;padding:5px 8px">${qtyFmt(r.qty, r.unit)}</td>
-      <td style="text-align:right;padding:5px 8px">${yenFmt(r.unitPrice)}</td>
-      <td style="text-align:right;padding:5px 8px;font-weight:600">${yenFmt(r.cost)}</td>
+      <td style="text-align:right;padding:5px 8px">${window.fxFmt(r.unitPrice)}</td>
+      <td style="text-align:right;padding:5px 8px;font-weight:600">${window.fxFmt(r.cost)}</td>
       <td style="padding:5px 8px;font-size:10px">${r.vendor || '-'}</td>`;
     tbody.appendChild(tr);
   }
@@ -1091,7 +1149,7 @@ function refreshBOM() {
   sub.style.borderTop = '1px solid #222';
   sub.innerHTML = `
     <td colspan="5" style="padding:6px 8px;text-align:right;font-weight:600">材料費 小計</td>
-    <td style="text-align:right;padding:6px 8px;font-weight:600">${yenFmt(soft.matTotal)}</td><td></td>`;
+    <td style="text-align:right;padding:6px 8px;font-weight:600">${window.fxFmt(soft.matTotal)}</td><td></td>`;
   tbody.appendChild(sub);
   // Soft costs
   for (const sc of soft.breakdown) {
@@ -1101,10 +1159,10 @@ function refreshBOM() {
     tr.innerHTML = `
       <td colspan="3" style="padding:5px 8px;font-style:italic">${sc.label}</td>
       <td colspan="2" style="text-align:right;padding:5px 8px;font-size:10px;opacity:.6">${sc.note || ''}</td>
-      <td style="text-align:right;padding:5px 8px">${yenFmt(sc.cost)}</td><td></td>`;
+      <td style="text-align:right;padding:5px 8px">${window.fxFmt(sc.cost)}</td><td></td>`;
     tbody.appendChild(tr);
   }
-  document.getElementById('bomTotal').textContent = yenFmt(soft.grandTotal) + ' (税抜)';
+  document.getElementById('bomTotal').textContent = window.fxFmt(soft.grandTotal) + ' (税抜)';
   return items;
 }
 
@@ -2230,54 +2288,155 @@ document.getElementById('gisBtn').addEventListener('click', () => {
 });
 
 // ─── ROI/IRR 投資家モード ───
-document.getElementById('roiBtn').addEventListener('click', () => {
-  const plan = viewer.getPlan();
-  const soft = viewer.softCosts();
-  const total = soft.grandTotal * 1.1;     // 税込
+// 地域別 ROI パラメータ
+const ROI_REGIONS = {
+  teshikaga: {label:'北海道弟子屈 (TAPKOP/SOLUNA)', tsuboNight: 18000, occLodge: 0.42, longRent: 2200, longOcc: 0.95, terminal: 0.45},
+  atami: {label:'熱海 (WHITE HOUSE)', tsuboNight: 32000, occLodge: 0.65, longRent: 3800, longOcc: 0.95, terminal: 0.55},
+  honolulu: {label:'ハワイ (HONOLULU/HAWAII KAI)', tsuboNight: 48000, occLodge: 0.78, longRent: 5500, longOcc: 0.92, terminal: 0.65},
+  tokyo: {label:'東京 都心 (POD/STACK)', tsuboNight: 0, occLodge: 0, longRent: 8500, longOcc: 0.97, terminal: 0.70},
+};
+function calcROI(plan, total, regionKey = 'teshikaga') {
+  const r = ROI_REGIONS[regionKey];
   const isYield = plan.openings?.units;
   const isLodge = ['villa','myth','kosmos'].includes(plan.id);
-  // Estimated rental income
-  let monthlyRent = 0, occupancy = 0;
+  const isUrban = ['pod','stack','tower','flat','duo','yield','roots'].includes(plan.id);
+  let monthlyRent = 0, occupancy = 0, mode = '';
   if (isYield) {
-    monthlyRent = plan.openings.units * 75000;     // 1K@¥75,000
+    monthlyRent = plan.openings.units * (regionKey === 'tokyo' ? 95000 : 75000);
     occupancy = 0.92;
-  } else if (isLodge) {
-    monthlyRent = plan.W * plan.D / 1e6 * 1500 * 30 * 0.6;     // 別荘貸出
-    occupancy = 0.55;
+    mode = '1K賃貸 (' + plan.openings.units + '戸)';
+  } else if (isLodge && r.tsuboNight > 0) {
+    // 短期貸出 (民泊・別荘): 1泊あたり = 坪単価 × 0.6
+    const tsubo = (plan.W / 1000) * (plan.D / 1000) / 3.31;
+    const nightlyRate = tsubo * r.tsuboNight * 0.10;
+    monthlyRent = nightlyRate * 30 * r.occLodge;
+    occupancy = r.occLodge;
+    mode = `民泊・別荘 (¥${Math.round(nightlyRate).toLocaleString()}/泊)`;
+  } else if (isUrban || regionKey === 'tokyo') {
+    monthlyRent = (plan.W * plan.D / 1e6) * r.longRent;
+    occupancy = r.longOcc;
+    mode = '長期賃貸';
   } else {
-    monthlyRent = plan.W * plan.D / 1e6 * 2200;
-    occupancy = 0.95;
+    monthlyRent = (plan.W * plan.D / 1e6) * 2200;
+    occupancy = 0.55;
+    mode = '別荘貸出 (低稼働率)';
   }
   const annualIncome = monthlyRent * 12 * occupancy;
-  const annualExp = annualIncome * 0.25;        // 経費・修繕25%
+  const annualExp = annualIncome * 0.25;
   const annualNoi = annualIncome - annualExp;
   const grossYield = (annualIncome / total) * 100;
   const netYield = (annualNoi / total) * 100;
-  const payback = total / annualNoi;
-  // 30y IRR (simplified: assume terminal value = 50% of cost)
+  const payback = annualNoi > 0 ? total / annualNoi : 99;
   const cashFlows30 = Array(30).fill(annualNoi);
-  cashFlows30[29] += total * 0.5;
+  cashFlows30[29] += total * r.terminal;
   let irr = 0;
-  for (let r = 0.001; r < 0.20; r += 0.001) {
+  for (let rate = 0.001; rate < 0.20; rate += 0.001) {
     let npv = -total;
-    cashFlows30.forEach((cf, i) => npv += cf / Math.pow(1 + r, i + 1));
-    if (npv < 0) { irr = r - 0.001; break; }
+    cashFlows30.forEach((cf, i) => npv += cf / Math.pow(1 + rate, i + 1));
+    if (npv < 0) { irr = rate - 0.001; break; }
+  }
+  return {region: r.label, monthlyRent, occupancy, annualIncome, annualExp, annualNoi, grossYield, netYield, payback, irr, mode, terminal: r.terminal};
+}
+document.getElementById('roiBtn').addEventListener('click', () => {
+  const plan = viewer.getPlan();
+  const soft = viewer.softCosts();
+  const total = soft.grandTotal * 1.1;
+  const regionKey = window.__roiRegion || 'teshikaga';
+  const r = calcROI(plan, total, regionKey);
+  // 全地域比較表
+  const regionRows = Object.keys(ROI_REGIONS).map(k => {
+    const v = calcROI(plan, total, k);
+    const cur = k === regionKey ? 'background:#fff8e8;font-weight:600' : '';
+    return `<tr style="${cur};cursor:pointer" onclick="window.__roiRegion='${k}';document.getElementById('roiBtn').click()">
+      <td>${ROI_REGIONS[k].label}</td>
+      <td style="text-align:right">${v.netYield.toFixed(1)}%</td>
+      <td style="text-align:right">${v.payback.toFixed(0)}年</td>
+      <td style="text-align:right;color:#c8801c">${(v.irr*100).toFixed(1)}%</td>
+    </tr>`;
+  }).join('');
+  // 30年キャッシュフロー (要約: 5年毎)
+  let cashflowRows = '';
+  let cumulative = -total;
+  for (let yr = 1; yr <= 30; yr++) {
+    cumulative += r.annualNoi;
+    if (yr === 1 || yr % 5 === 0 || yr === 30) {
+      const cv = yr === 30 ? cumulative + total * r.terminal : cumulative;
+      cashflowRows += `<tr><td>${yr}年目${yr===30?' (売却含)':''}</td><td style="text-align:right">${yenFmt(r.annualNoi)}</td><td style="text-align:right;color:${cv>=0?'#1a6b3a':'#c0392b'};font-weight:600">${yenFmt(cv)}</td></tr>`;
+    }
   }
   const html = `
     <h3 style="margin:0 0 12px 0">💹 ROI / IRR 投資シミュレーション</h3>
-    <table style="width:100%;font-feature-settings:'tnum';font-size:12px">
+    <div style="background:#f8f6f0;padding:8px 10px;border-radius:5px;margin-bottom:10px;font-size:11px">
+      地域: <b>${r.region}</b>　|　収益モデル: <b>${r.mode}</b>
+    </div>
+    <table style="width:100%;font-feature-settings:'tnum';font-size:12px;margin-bottom:12px">
       <tr><td>初期投資 (税込)</td><td style="text-align:right">${yenFmt(total)}</td></tr>
-      <tr><td>月額収入想定</td><td style="text-align:right">${yenFmt(monthlyRent)}</td></tr>
-      <tr><td>稼働率想定</td><td style="text-align:right">${(occupancy*100).toFixed(0)}%</td></tr>
-      <tr><td>年間収入</td><td style="text-align:right">${yenFmt(annualIncome)}</td></tr>
-      <tr><td>年間経費(25%)</td><td style="text-align:right">−${yenFmt(annualExp)}</td></tr>
-      <tr><td><b>年間NOI (Net Operating Income)</b></td><td style="text-align:right;font-weight:600">${yenFmt(annualNoi)}</td></tr>
-      <tr style="border-top:2px solid #222"><td><b>表面利回り</b></td><td style="text-align:right;color:#1a6b3a;font-weight:700">${grossYield.toFixed(2)}%</td></tr>
-      <tr><td><b>実質利回り (NOI/投資)</b></td><td style="text-align:right;color:#1a6b3a;font-weight:700">${netYield.toFixed(2)}%</td></tr>
-      <tr><td><b>投資回収期間</b></td><td style="text-align:right;font-weight:600">${payback.toFixed(1)} 年</td></tr>
-      <tr><td><b>30年IRR (終価50%想定)</b></td><td style="text-align:right;color:#c8801c;font-weight:700">${(irr*100).toFixed(1)}%</td></tr>
+      <tr><td>月額収入想定</td><td style="text-align:right">${yenFmt(r.monthlyRent)}</td></tr>
+      <tr><td>稼働率想定</td><td style="text-align:right">${(r.occupancy*100).toFixed(0)}%</td></tr>
+      <tr><td>年間NOI</td><td style="text-align:right;font-weight:600">${yenFmt(r.annualNoi)}</td></tr>
+      <tr style="border-top:2px solid #222"><td><b>表面利回り</b></td><td style="text-align:right;color:#1a6b3a;font-weight:700">${r.grossYield.toFixed(2)}%</td></tr>
+      <tr><td><b>実質利回り</b></td><td style="text-align:right;color:#1a6b3a;font-weight:700">${r.netYield.toFixed(2)}%</td></tr>
+      <tr><td><b>投資回収期間</b></td><td style="text-align:right;font-weight:600">${r.payback.toFixed(1)} 年</td></tr>
+      <tr><td><b>30年IRR (終価${(r.terminal*100).toFixed(0)}%)</b></td><td style="text-align:right;color:#c8801c;font-weight:700">${(r.irr*100).toFixed(1)}%</td></tr>
     </table>
-    <p style="font-size:10px;opacity:.55;margin-top:10px">※稼働率・賃料は地域・運営・物件規模で変動。賃貸案件はYIELD想定、別荘貸出はVILLA/MYTH/KOSMOS想定。</p>`;
+    <h4 style="font-size:11px;margin:14px 0 6px;color:#666">🌍 地域別比較 (クリックで切替)</h4>
+    <table style="width:100%;font-feature-settings:'tnum';font-size:11px;margin-bottom:14px;border-collapse:collapse">
+      <thead style="background:#eee"><tr><th style="text-align:left;padding:4px 6px">地域</th><th style="text-align:right;padding:4px 6px">実質利回</th><th style="text-align:right;padding:4px 6px">回収</th><th style="text-align:right;padding:4px 6px">IRR</th></tr></thead>
+      ${regionRows}
+    </table>
+    <h4 style="font-size:11px;margin:14px 0 6px;color:#666">📊 累積キャッシュフロー (5年毎)</h4>
+    <table style="width:100%;font-feature-settings:'tnum';font-size:11px;border-collapse:collapse">
+      <thead style="background:#eee"><tr><th style="text-align:left;padding:4px 6px">年次</th><th style="text-align:right;padding:4px 6px">年NOI</th><th style="text-align:right;padding:4px 6px">累積</th></tr></thead>
+      ${cashflowRows}
+    </table>
+    <p style="font-size:10px;opacity:.55;margin-top:10px">※稼働率・賃料は2026年市場想定。実際の運営ではエージェント手数料・税金・更新時空室等で変動。</p>`;
+  showSimpleModal(html);
+});
+
+// 補助金シミュレーター (新規)
+const subsidyBtn = document.createElement('button');
+subsidyBtn.id = 'subsidyBtn';
+subsidyBtn.style.cssText = 'width:100%;margin-bottom:4px';
+subsidyBtn.textContent = '💴 補助金シミュレーション';
+document.querySelector('#bim-tools details:first-of-type')?.appendChild(subsidyBtn);
+subsidyBtn.addEventListener('click', () => {
+  const plan = viewer.getPlan();
+  const soft = viewer.softCosts();
+  const total = soft.grandTotal * 1.10;
+  const area = (plan.W/1000) * (plan.D/1000) * (plan.stories || 1);
+  const ua = viewer.uaValue?.()?.UA || 0.30;
+  // 補助金 (2026年時点)
+  const zeh = ua <= 0.30 ? 1000000 : 0;       // ZEH 100万 (UA≤0.30)
+  const choujuHigh = area >= 50 && plan.stories <= 2 ? 800000 : 0;       // 長期優良住宅 80万
+  const sennen = ua <= 0.46 ? 600000 : 0;       // こどもエコすまい 60万 (UA≤0.46)
+  const kaitsu = 250000;       // 自治体補助 (弟子屈町 etc) 25万
+  const taiyou = plan.openings?.solar ? plan.openings.solar * 50000 : 0;       // 太陽光kW別補助
+  const subTotal = zeh + choujuHigh + sennen + kaitsu + taiyou;
+  // 住宅ローン減税 (年末残高×0.7%×13年)
+  const mortgage = total * 0.7;       // 仮: 70%借入
+  const taxReduction = Math.min(31500000, mortgage) * 0.007 * 13;
+  // 中古売却推定 (10年後、20年後)
+  const at10 = total * 0.65 * 1.10;       // 65%減価+SOLUNAブランド+10%
+  const at20 = total * 0.45 * 1.10;
+  const html = `
+    <h3 style="margin:0 0 12px 0">💴 補助金・税制優遇シミュレーション</h3>
+    <p style="font-size:11px;color:#888;margin-bottom:14px">2026年時点の制度。実際は予算枠/募集タイミングで変動。建築士事務所サポートあり。</p>
+    <table style="width:100%;font-size:12px;font-feature-settings:'tnum'">
+      <tr style="background:#f8f6f0"><td colspan="2" style="padding:5px 8px"><b>🏠 一時補助金</b></td></tr>
+      <tr><td>ZEH補助 (UA≦0.30)</td><td style="text-align:right;color:${zeh>0?'#1a6b3a':'#888'}">${zeh>0?yenFmt(zeh):'対象外'}</td></tr>
+      <tr><td>長期優良住宅 (50㎡以上)</td><td style="text-align:right;color:${choujuHigh>0?'#1a6b3a':'#888'}">${choujuHigh>0?yenFmt(choujuHigh):'対象外'}</td></tr>
+      <tr><td>こどもエコすまい (UA≦0.46)</td><td style="text-align:right;color:${sennen>0?'#1a6b3a':'#888'}">${sennen>0?yenFmt(sennen):'対象外'}</td></tr>
+      <tr><td>自治体補助 (弟子屈町等)</td><td style="text-align:right;color:#1a6b3a">${yenFmt(kaitsu)}</td></tr>
+      <tr><td>太陽光発電補助 (¥5万/kW)</td><td style="text-align:right;color:${taiyou>0?'#1a6b3a':'#888'}">${taiyou>0?yenFmt(taiyou):'対象外'}</td></tr>
+      <tr style="border-top:2px solid #222"><td><b>補助金合計</b></td><td style="text-align:right;color:#1a6b3a;font-weight:700">${yenFmt(subTotal)}</td></tr>
+      <tr style="background:#f8f6f0"><td colspan="2" style="padding:5px 8px"><b>📋 税制優遇 (13年)</b></td></tr>
+      <tr><td>住宅ローン減税 (借入70%想定)</td><td style="text-align:right;color:#1a6b3a;font-weight:600">${yenFmt(taxReduction)}</td></tr>
+      <tr style="border-top:2px solid #c8801c"><td><b>実質負担減少 計</b></td><td style="text-align:right;color:#c8801c;font-weight:700;font-size:14px">${yenFmt(subTotal + taxReduction)}</td></tr>
+      <tr style="background:#f8f6f0"><td colspan="2" style="padding:5px 8px"><b>📈 中古売却推定 (SOLUNAブランド+10%)</b></td></tr>
+      <tr><td>10年後</td><td style="text-align:right">${yenFmt(at10)}</td></tr>
+      <tr><td>20年後</td><td style="text-align:right">${yenFmt(at20)}</td></tr>
+    </table>
+    <p style="font-size:10px;opacity:.55;margin-top:10px">※建築士事務所サポート (申請代行) は別途 ¥30〜80万。</p>`;
   showSimpleModal(html);
 });
 
