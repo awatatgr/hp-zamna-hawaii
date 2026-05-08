@@ -965,6 +965,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// ── bim.solun.art / dojo.solun.art サブドメイン → ルートで該当ビューワー ──
+app.use((req, res, next) => {
+  const host = req.hostname || "";
+  if (req.path === "/" || req.path === "") {
+    if (host === "bim.solun.art")  return res.redirect(302, "/bim");
+    if (host === "dojo.solun.art") return res.redirect(302, "/dojo");
+  }
+  next();
+});
+
 // ── X-Robots-Tag: noindex on non-canonical hosts (fly.dev preview) ────────────
 app.use((req, res, next) => {
   const host = req.hostname || "";
