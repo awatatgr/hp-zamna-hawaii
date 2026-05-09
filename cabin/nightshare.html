@@ -80,7 +80,9 @@ h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line
 /* PROPERTY CARDS */
 .props{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:24px 0}
 @media(max-width:768px){.props{grid-template-columns:1fr}}
-.prop{padding:32px 26px;background:#0a0a0a;border:1px solid #1a1a1a;display:flex;flex-direction:column}
+.prop{background:#0a0a0a;border:1px solid #1a1a1a;display:flex;flex-direction:column;overflow:hidden}
+.prop-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#0e0e0e}
+.prop-body{padding:24px 26px 28px;display:flex;flex-direction:column;flex:1}
 .prop-tag{font-size:9px;letter-spacing:.22em;color:var(--gold);font-weight:700;margin-bottom:8px}
 .prop-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.01em;margin-bottom:6px}
 .prop-loc{font-size:10.5px;color:#555;margin-bottom:16px}
@@ -159,11 +161,12 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <div class="w">
 <p class="label r" style="text-align:center">SOLUNA NIGHTSHARE · 2026年9月オープン予定</p>
 <h2 class="r" style="text-align:center;font-size:clamp(1.8rem,5vw,3rem)">年1泊から始める、<span class="gold" data-en="Your second home, one night at a time.">もうひとつの家。</span></h2>
-<p class="r" style="text-align:center;color:#888;font-size:13.5px;line-height:2.2;max-width:540px;margin:0 auto 8px">別荘を1棟買うのも、30泊オーナーになるのも大きい。<br/>それなら<strong style="color:var(--text)">年1泊だけ</strong>を、買いませんか。</p>
+<p class="r" style="text-align:center;color:#888;font-size:13.5px;line-height:2.2;max-width:540px;margin:0 auto 8px">別荘を1棟買うのも、30泊オーナーになるのも大きい。<br/>それなら<strong style="color:var(--text)">毎年1泊だけ</strong>を、買いませんか。</p>
 <div class="r hero-price">
   <span class="num">¥198,000〜</span>
-  <span class="unit">/ 1口（年1泊 × 30年）</span>
+  <span class="unit">/ 1口</span>
 </div>
+<p class="r" style="text-align:center;color:#666;font-size:11.5px;line-height:1.9;margin-top:14px;letter-spacing:.04em"><strong style="color:var(--gold)">毎年1泊×30年=合計30泊</strong>の宿泊権 · <strong style="color:var(--gold)">1泊あたり¥6,600</strong>相当 · 固定資産税ゼロ</p>
 <div class="r" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px">
 <a class="cta-btn" href="#signup" data-sln-track="purchase_click">先行登録する</a>
 <a class="cta-ghost" href="#how" style="border-color:rgba(200,164,85,.3);color:var(--gold)">仕組みを見る</a>
@@ -181,8 +184,8 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <div class="feat r">
 <div class="feat-cell">
 <div class="feat-num">01</div>
-<div class="feat-h">1泊から所有できる</div>
-<div class="feat-d">「30泊オーナー」の1/30。年1泊×30年=合計30泊分の宿泊権を1口で確保。複数口購入で年泊数を増やせる。</div>
+<div class="feat-h">毎年1泊から始められる</div>
+<div class="feat-d">「30泊オーナー」の1/30の入口。毎年1泊×30年=合計30泊を1口¥198,000で確保。家族4人OK・追加料金なし。複数口で年泊数を増やせる（最大10泊/年）。</div>
 </div>
 <div class="feat-cell">
 <div class="feat-num">02</div>
@@ -208,30 +211,44 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <div class="ww">
 <div class="props r">
 <div class="prop">
+<img class="prop-img" src="/img/village_arc_sunset.webp" alt="SOLUNAビレッジ 美留和" loading="lazy"/>
+<div class="prop-body">
 <div class="prop-tag">VILLAGE · 北海道弟子屈</div>
 <div class="prop-name">SOLUNAビレッジ</div>
-<div class="prop-loc">美留和 · 摩周湖徒歩圏</div>
+<div class="prop-loc">美留和 · 摩周湖徒歩7分</div>
 <div class="prop-price">¥198,000</div>
-<div class="prop-unit">/ 1口（年1泊×30年）</div>
+<div class="prop-unit">/ 1口（毎年1泊×30年）</div>
 <div class="prop-meta">
-  10口まで購入可<br/>
-  オフシーズン優先 / ハイシーズン抽選<br/>
+  最大4名 / ペット可（小型犬1頭まで）<br/>
+  最大10口購入可（年10泊まで）<br/>
+  キッチン・サウナ・薪ストーブ完備<br/>
+  Wi-Fi 200Mbps / デスク完備<br/>
+  最寄: 釧路空港 70分 / 摩周駅 8分<br/>
   オープン: 2026年9月
 </div>
 </div>
+</div>
 <div class="prop">
+<img class="prop-img" src="/img/kumaushi_a_exterior_dusk.webp" alt="天空の道場 熊牛原野" loading="lazy"/>
+<div class="prop-body">
 <div class="prop-tag">SKY DOJO · 北海道弟子屈</div>
 <div class="prop-name">天空の道場</div>
 <div class="prop-loc">熊牛原野 · 32,337坪の自社地</div>
 <div class="prop-price">¥298,000</div>
-<div class="prop-unit">/ 1口（年1泊×30年）</div>
+<div class="prop-unit">/ 1口（毎年1泊×30年）</div>
 <div class="prop-meta">
-  5口まで購入可<br/>
-  通年抽選方式（柔術合宿対応）<br/>
+  最大6名 / ペット応相談<br/>
+  最大5口購入可（年5泊まで）<br/>
+  柔術マット・サウナ・薪火キッチン<br/>
+  Wi-Fi 200Mbps / 屋上ヨガデッキ<br/>
+  最寄: 釧路空港 80分 / 自家用車推奨<br/>
   オープン: 2026年9月
 </div>
 </div>
+</div>
 <div class="prop coming">
+<img class="prop-img" src="/img/wakayama_after_exterior.webp" alt="SOLUNA 和歌山 古民家" loading="lazy"/>
+<div class="prop-body">
 <div class="prop-tag">WAKAYAMA · 古民家</div>
 <div class="prop-name">SOLUNA 和歌山</div>
 <div class="prop-loc">調整中</div>
@@ -241,6 +258,7 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
   価格未定<br/>
   先行登録で優先案内<br/>
   詳細: 2026年夏に発表
+</div>
 </div>
 </div>
 </div>
@@ -259,7 +277,7 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 </div>
 <div class="flow-step" data-num="02">
 <div class="flow-title">月次抽選 — 第1〜3希望を提出</div>
-<div class="flow-desc">毎月15日までに翌々月の希望日を最大3候補提出。20日に抽選 → 25日までに割当通知。落選した分は翌月の優先枠で再抽選（連続2回落選は3回目で確定）。</div>
+<div class="flow-desc">毎月15日までに「翌々月」の希望を最大3日提出。<strong style="color:var(--text)">例: 8月10日に泊まりたい → 6月15日までに希望提出 → 6月20日抽選 → 6月25日までに通知</strong>。落選した分は翌月の優先枠で再抽選（連続2回落選は3回目で確定）。</div>
 </div>
 <div class="flow-step" data-num="03">
 <div class="flow-title">滞在 — 当日チェックイン</div>
@@ -291,7 +309,14 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
   <div class="lot-cell">31</div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div>
 </div>
 <div class="lot-cap"><span>■ 第1希望</span> ・ <span>■ 第2希望</span> ・ <span>■ 第3希望</span></div>
-<div style="font-size:11.5px;color:#666;line-height:2;margin-top:18px">お盆（8/8〜16）に希望が集中。第1希望で外れた会員は第2・第3希望で再抽選 → 平均で第2希望までに <strong style="color:var(--gold)">94%が当選</strong>するシミュレーション結果（10口×100会員モデル）。</div>
+<div style="font-size:11.5px;color:#666;line-height:2;margin-top:18px">お盆（8/8〜16）に希望が集中。第1希望で外れた会員は第2・第3希望で再抽選 → 平均で第2希望までに <strong style="color:var(--gold)">94%が当選</strong>（10口×100会員モデルで月次10,000回シミュレーション）。</div>
+<div style="margin-top:14px;padding:14px 18px;background:rgba(200,164,85,.04);border:1px solid rgba(200,164,85,.15);border-radius:10px;font-size:11px;color:#888;line-height:1.9">
+<strong style="color:var(--gold)">当選確率の目安</strong><br/>
+・<strong style="color:var(--text)">平日（月〜木）</strong>: 第1希望でほぼ100%<br/>
+・<strong style="color:var(--text)">通常週末（金土日）</strong>: 第2希望までに約94%<br/>
+・<strong style="color:var(--text)">ハイシーズン（GW/お盆/年末年始）</strong>: 約30%<br/>
+ハイシーズン確保が必須の場合「ハイシーズン優先枠」（年¥50,000オプション、抽選なし先着）を追加可能。
+</div>
 </div>
 </div>
 </div>
@@ -306,17 +331,17 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <div style="overflow-x:auto">
 <table class="comp r">
 <thead>
-<tr><th></th><th class="me">NIGHTSHARE</th><th>SHARE OWNER<br/>(30泊/年)</th><th>普通の別荘<br/>所有</th><th>都度予約<br/>(ホテル)</th></tr>
+<tr><th></th><th class="me">NIGHTSHARE</th><th>ホテル泊<br/>（年5泊）</th><th>SHARE OWNER<br/>(30泊/年)</th><th>普通の別荘<br/>所有</th></tr>
 </thead>
 <tbody>
-<tr class="hl"><td>初期費用</td><td class="me">¥198,000〜</td><td>¥4,900,000〜</td><td>¥30,000,000〜</td><td>¥0</td></tr>
-<tr class="hl"><td>年間泊数</td><td class="me">1泊／口</td><td>30泊</td><td>無制限</td><td>都度</td></tr>
-<tr class="hl"><td>日付の自由度</td><td class="me">3希望抽選</td><td>先着予約</td><td>完全自由</td><td>空きのみ</td></tr>
-<tr class="hl"><td>固定資産税・修繕</td><td class="me">不要</td><td>不要</td><td>必要</td><td>不要</td></tr>
-<tr><td>譲渡・売却</td><td class="me">運営承認制</td><td>運営承認制</td><td>市場売却</td><td>—</td></tr>
-<tr><td>法的根拠</td><td class="me">旅館業法（会員契約）</td><td>不特法（共有持分）</td><td>区分所有・所有権</td><td>都度契約</td></tr>
-<tr><td>退会のしやすさ</td><td class="me">譲渡で簡単</td><td>持分譲渡</td><td>仲介経由</td><td>—</td></tr>
-<tr><td>こんな人向け</td><td class="me">年1〜数回行きたい</td><td>セカンドハウス代替</td><td>家族で常用</td><td>年1回未満</td></tr>
+<tr class="hl"><td>初期費用</td><td class="me">¥198,000〜</td><td>¥0</td><td>¥4,900,000〜</td><td>¥30,000,000〜</td></tr>
+<tr class="hl"><td>年間ランニング</td><td class="me">¥0</td><td>¥150,000〜<br/>(¥30K×5泊)</td><td>¥120,000<br/>(管理費)</td><td>¥500,000〜<br/>(税+修繕)</td></tr>
+<tr class="hl"><td>5年累計</td><td class="me">¥198,000</td><td>¥750,000</td><td>¥5,500,000</td><td>¥32,500,000〜</td></tr>
+<tr class="hl"><td>30年累計</td><td class="me">¥198,000<br/><span style="color:var(--gold);font-size:10px">(1泊¥6,600)</span></td><td>¥4,500,000<br/><span style="color:#666;font-size:10px">(1泊¥30K)</span></td><td>¥8,500,000</td><td>¥45,000,000〜</td></tr>
+<tr><td>年間泊数</td><td class="me">1泊／口</td><td>都度</td><td>30泊</td><td>無制限</td></tr>
+<tr><td>日付の自由度</td><td class="me">3希望抽選</td><td>空きのみ</td><td>先着予約</td><td>完全自由</td></tr>
+<tr><td>譲渡・売却</td><td class="me">運営承認制</td><td>—</td><td>運営承認制</td><td>市場売却</td></tr>
+<tr><td>こんな人向け</td><td class="me">毎年1〜数回行きたい</td><td>年1回未満</td><td>セカンドハウス代替</td><td>家族で常用</td></tr>
 </tbody>
 </table>
 </div>
@@ -328,19 +353,21 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <div class="w">
 <p class="label r">Legal · 法的フレーム</p>
 <h2 class="r">「投資商品」では、<span class="gold">ありません。</span></h2>
-<p class="sub r">NIGHTSHAREは旅館業法に基づく宿泊サービスの会員契約です。値上がり益や賃料分配を約束する商品ではないため、金融商品取引法・不動産特定共同事業法の規制対象外です。</p>
+<p class="sub r">NIGHTSHAREは旅館業法に基づく宿泊サービスの<strong style="color:var(--text)">前払式会員契約</strong>です。値上がり益や賃料分配を約束しない設計のため、金融商品取引法・不動産特定共同事業法の集団投資スキーム持分には該当しないと整理していますが、<strong style="color:var(--text)">最終解釈は2026年7月までに監督官庁・専門家との確認を完了</strong>させます。</p>
 <div class="legal r">
 <div class="legal-h">スキーム要約</div>
 <p class="legal-p">
-<strong>① 事業者</strong>: 株式会社Enabler（旅館業許可を保有）<br/>
-<strong>② 契約形態</strong>: 宿泊サービス会員契約（チケット型）<br/>
-<strong>③ 配分方法</strong>: 月次抽選方式（規約で配分ルールを明示）<br/>
-<strong>④ 譲渡</strong>: 運営承認制での名義変更（手数料あり）<br/>
-<strong>⑤ 投資勧誘性なし</strong>: 値上がり益・賃料配当を約束しない<br/>
-<strong>⑥ 重要事項説明</strong>: 契約前に書面交付・クーリングオフ8日<br/>
+<strong>① 事業者</strong>: 株式会社Enabler（旅館業許可は2026年7月までに各物件で取得予定）<br/>
+<strong>② 契約形態</strong>: 宿泊サービス会員契約（前払式宿泊権・チケット型）<br/>
+<strong>③ 配分方法</strong>: 月次抽選方式（会員規約で配分ルールを書面明示）<br/>
+<strong>④ 譲渡</strong>: 運営承認制での名義変更（手数料 ¥10,000/口、価格は当事者合意・上限あり）<br/>
+<strong>⑤ 投資勧誘性なし</strong>: 値上がり益・賃料配当を約束せず、譲渡価格は購入価格を上限とする<br/>
+<strong>⑥ 中途解約権</strong>: 契約書面交付から8日間は無条件解除（任意規定として設定）。8日経過後も書面交付による中途解約に応じます（譲渡または買取窓口経由）<br/>
+<strong>⑦ 資金保全</strong>: 前払金は資金決済法および特定商取引法に準拠して保全（前払式支払手段の届出/登録、または前払金保全措置を正式募集開始前に整備）
 </p>
 </div>
 <p class="r" style="font-size:11px;color:#444;line-height:2;margin-top:14px">
+※ 上記は2026年9月のサービス開始に向けた設計方針です。<strong style="color:#777">正式募集開始前に弁護士・監督官庁との最終確認を行い、確定した内容を重要事項説明書として書面交付</strong>します。本ページは情報提供目的であり、契約の申込みや勧誘ではありません。<br/>
 ※ 別途、出資型のシェアオーナー制度（不特法ベース、30泊/年・¥4,900,000〜）も準備中です。詳細は <a href="/scheme" style="color:var(--gold);text-decoration:underline">スキームページ</a> をご確認ください。
 </p>
 </div>
@@ -374,19 +401,79 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 </div>
 <div class="faq-item">
 <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">解約・返金はできる？</div>
-<div class="faq-a"><p>契約から8日以内はクーリングオフで全額返金。それ以降は契約期間（30年）の途中解約はできませんが、譲渡で実質的な資金回収が可能です。SOLUNAが買取窓口を運営。</p></div>
+<div class="faq-a"><p>契約書面の交付から<strong style="color:var(--text)">8日以内は無条件解除</strong>（任意設定の中途解約権、全額返金）。8日経過後は譲渡または運営買取窓口経由での中途解約に応じます。30年契約の途中解約料は契約書面で明示します（特定商取引法に準拠した上限を設定予定）。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">譲渡価格に上限はある？儲けで売れる？</div>
+<div class="faq-a"><p>譲渡価格は<strong style="color:var(--text)">購入価格を上限</strong>とします（投資勧誘性の排除のため）。下限は当事者合意。SOLUNAは仲介のみで価格に介入しませんが、上限超過の取引は名義変更を承認しません。これにより「値上がり期待で買う」商品ではないことを設計上担保しています。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">重要事項説明書はある？</div>
+<div class="faq-a"><p>はい。正式募集開始時に下記項目を書面（PDF・電子署名対応）で交付：<br/>① 事業者情報・旅館業許可番号<br/>② 物件・サービス内容<br/>③ 抽選ルール・配分方法<br/>④ 価格・追加費用・解約条件<br/>⑤ 譲渡・名義変更ルール<br/>⑥ 資金保全措置・倒産時の取扱<br/>⑦ 苦情窓口・準拠法・管轄裁判所<br/>サンプルは先行登録者に2026年6月配布予定。</p></div>
 </div>
 <div class="faq-item">
 <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">なぜ「投資」じゃないの？</div>
 <div class="faq-a"><p>NIGHTSHAREは「宿泊サービスを年1泊使う権利」を購入する会員契約です。値上がり益・賃料分配を約束していないため、金融商品取引法・不動産特定共同事業法の対象外。<strong style="color:var(--text)">投資ではなく、家族のための時間を確保する仕組み</strong>として設計しています。</p></div>
 </div>
 <div class="faq-item">
-<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">家族や友人と一緒に泊まれる？</div>
-<div class="faq-a"><p>はい。1泊あたり最大4名（物件によっては6名）まで宿泊可能です。会員本人の同伴ゲストとして無料。会員以外への又貸し（自分が同行しない宿泊）は禁止です。</p></div>
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">家族や友人と一緒に泊まれる？子供は？</div>
+<div class="faq-a"><p>はい。1泊あたり<strong style="color:var(--text)">最大4名（村）/ 6名（道場）</strong>まで追加料金なしで宿泊可能。子供の年齢制限なし、未就学児は添い寝で人数カウント外。会員本人の同伴ゲストとして無料。会員以外への又貸し（自分が同行しない宿泊）は禁止です。</p></div>
 </div>
 <div class="faq-item">
-<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">先行登録は何が起きる？</div>
-<div class="faq-a"><p>口数の確保（保証）と、正式募集開始の優先案内。料金は発生しません。2026年9月のオープンに向けて、各物件の口数は限定（村10口×10名、道場5口×10名）のため先行登録された方を優先します。</p></div>
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">ペット連れは可能？</div>
+<div class="faq-a"><p>SOLUNAビレッジは小型犬1頭まで可（追加料金¥3,000/泊）。天空の道場は応相談。中型犬以上・猫は現状不可。和歌山は調整中です。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">急に行けなくなったら？台風や子供の体調不良も</div>
+<div class="faq-a"><p>滞在14日前まで無料でキャンセル → 翌月以降の抽選にロールオーバー。13日前〜前日は1泊分消化扱い（自然災害・本人/同伴者の入院は診断書提出で全額免除）。当日無断キャンセルは2泊分消化。<strong style="color:var(--text)">未使用の泊数は最大2泊まで翌年に繰越可能</strong>です。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">食事・買い出しは？周辺に何がある？</div>
+<div class="faq-a"><p>全物件にフルキッチン（IH・冷蔵庫・調理器具一式）完備。SOLUNAビレッジは車5分にスーパー（ジョイ摩周）、徒歩7分で摩周湖カフェ。天空の道場は車15分に道の駅。事前予約で食材デリバリー（北海道食材セット ¥6,000〜）、地元シェフ出張（¥15,000/回）も手配可能です。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">空港からのアクセスは？</div>
+<div class="faq-a"><p>釧路空港から SOLUNAビレッジまで車70分、天空の道場まで80分。レンタカー必須。羽田→釧路は1日5便（約1.5時間、繁忙期で往復¥45,000程度）。<strong style="color:var(--text)">会員はレンタカー10%オフ</strong>（タイムズカー・ニッポンレンタカー提携）。冬季の道路は除雪済みですが冬タイヤ必須。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">SOLUNA（運営会社）が倒産したらどうなる？</div>
+<div class="faq-a"><p>前払宿泊権の保全策として下記いずれかを2026年7月までに整備：<br/>① <strong style="color:var(--text)">資金決済法の前払式支払手段</strong>として登録 → 未使用残高の半額を法務局に供託（保有者は供託金から優先弁済を受ける権利）<br/>② <strong style="color:var(--text)">前払金保全契約</strong>（信託・保証）<br/>物件は株式会社Enablerの保有資産（East Ventures出資先）。倒産時は供託金/保全金から返金、または会員合意で別の旅館業者へ運営移管（事前同意条項を契約に明記予定）。詳細は重要事項説明書で開示します。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">相続・離婚した場合は？</div>
+<div class="faq-a"><p>相続: 配偶者・子への名義変更可（手数料無料）。離婚: 共有名義の分割は譲渡手続で対応（手数料¥10,000/口）。30年契約期間中の名義人変更は何度でも可能です。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">連泊できる？複数口買えば3連泊とか</div>
+<div class="faq-a"><p>はい。例えば3口購入すれば年3泊分の権利、希望提出時に「8/10〜8/12 連泊」と書けば月またぎなしで連泊割当。月をまたぐ連泊（例: 7/30〜8/2）は両月の抽選を通せばOK（運営側で連結処理）。同じ物件で<strong style="color:var(--text)">最大連泊7日</strong>まで（村）/ <strong style="color:var(--text)">14日</strong>まで（道場）。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">一人で泊まっても安全？女性ひとりOK？</div>
+<div class="faq-a"><p>はい、ソロ宿泊歓迎。全室<strong style="color:var(--text)">スマートロック</strong>（個別パスコード）、村は集落内・夜間防犯灯あり、道場は完全プライベート敷地（敷地内に他客なし）。緊急時24時間ホットライン、最寄派出所車5分。スタッフは女性も常駐（土日）。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">リモートワークできる？Wi-Fiは速い？</div>
+<div class="faq-a"><p>はい。<strong style="color:var(--text)">光回線200Mbps（実測）</strong>、各室にデスク・モニタアーム・人間工学チェア。Zoom 4並列OK確認済み。村は集落カフェ（徒歩7分）でもコワーキング可。長期滞在向け「ワーケーションパッケージ」（複数口買い+優先抽選）も検討中。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">譲渡したいけど買い手が見つからない時は？</div>
+<div class="faq-a"><p>SOLUNAが<strong style="color:var(--text)">買取相談窓口</strong>を運営。市場で売れない場合、購入価格の70%（5年以内）/ 50%（5〜15年）/ 30%（15年以降）でSOLUNAが買い戻し可能（年間枠あり、要審査）。値上がり益はないが「全く売れない」リスクは抑えられています。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">30年は長い。短期プランはある？</div>
+<div class="faq-a"><p>2027年Q1に<strong style="color:var(--text)">5年プラン（¥58,000/口）</strong>と<strong style="color:var(--text)">10年プラン（¥98,000/口）</strong>の追加を予定しています。30年プランは1泊あたり¥6,600、5年プランは¥11,600で、長期ほど割安に設計。先行登録時に希望期間も伺います。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">経費にできる？個人事業主・法人</div>
+<div class="faq-a"><p>個人事業主・法人で福利厚生 / 取材 / 会議目的の利用は経費計上可能（按分が必要なケースあり）。会員契約書には目的記載欄あり、領収書発行可。詳細は税理士にご相談ください。法人版（複数社員でのシェア利用）は2026年内に提供予定。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">どんな人が会員になっている？</div>
+<div class="faq-a"><p>創業者・テック従事者・建築家・医師・編集者など、リモートワーク可で年数回の自然回帰を求める30〜50代が中心。SOLUNAのSHARE OWNER（30泊オーナー）も100名超、East Ventures出資先のスタートアップ経営者多数。<strong style="color:var(--text)">既存メンバーのSlackコミュニティに招待</strong>（任意参加）。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">先行登録すると何が起きる？</div>
+<div class="faq-a"><p>① 各物件の口数を優先確保（村10口×10名、道場5口×10名の限定枠）<br/>② 2026年7月の正式募集開始の優先案内<br/>③ 抽選シミュレーター・物件3D内覧会（オンライン）への招待<br/><strong style="color:var(--text)">料金は発生しません</strong>。登録 = 確保のみで、購入の意思決定は正式募集時に行います。</p></div>
 </div>
 </div>
 </div>
