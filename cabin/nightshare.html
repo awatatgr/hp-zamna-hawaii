@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<link href="https://solun.art/nightshare" rel="canonical"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title data-en="NIGHTSHARE — One Night a Year Membership | SOLUNA">SOLUNA NIGHTSHARE — 年1泊から始める、もうひとつの家。</title>
+<meta content="年1泊×30年で¥198,000〜。SOLUNAビレッジ・天空の道場・和歌山で、月次抽選方式の宿泊会員権。譲渡可。旅館業法ベースの会員契約。" data-en-content="From ¥198,000 for 1 night/year × 30 years. Monthly lottery allocation. Transferable membership at SOLUNA Village, Sky Dojo, and Wakayama." name="description"/>
+<meta content="SOLUNA NIGHTSHARE — 年1泊会員権" property="og:title"/>
+<meta content="¥198,000〜 / 年1泊×30年。月次抽選で日付配分。譲渡可。" property="og:description"/>
+<meta content="https://solun.art/img/wakayama_after_exterior.webp" property="og:image"/>
+<meta content="https://solun.art/nightshare" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<link href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;circle cx='16' cy='16' r='14' fill='%23c8a455'/&gt;&lt;/svg&gt;" rel="icon"/>
+<script defer src="https://enabler-analytics.fly.dev/t.js"></script>
+<script defer src="/js/sln-track.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c8a455;
+  --gold-dim:rgba(200,164,85,.4);
+  --gold-soft:rgba(200,164,85,.07);
+  --bg:#040404;
+  --text:#f0ece4;
+  --text-dim:#666;
+  --line:#131313;
+}
+html{scroll-behavior:smooth}
+body{padding-top:48px;background:var(--bg);color:var(--text);font-family:'Helvetica Neue',-apple-system,'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--gold);text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--gold);color:#000}
+
+.gnav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;justify-content:space-between;align-items:center;padding:13px 28px;background:rgba(4,4,4,.93);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.04)}
+.gnav-logo{font-size:11px;font-weight:800;letter-spacing:.22em;color:#c8a455;text-decoration:none}
+.gnav-links{display:flex;gap:22px;align-items:center;font-size:10.5px;letter-spacing:.04em}
+.gnav-links a{color:#555;text-decoration:none;transition:color .2s}
+.gnav-links a:hover{color:#c8a455}
+.gnav-links a.gnav-cta{color:#c8a455!important;font-weight:700;border:1px solid rgba(200,164,85,.35);padding:7px 15px;border-radius:100px;transition:all .2s}
+.gnav-links a.gnav-cta:hover{background:#c8a455;color:#040404!important}
+.gnav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.gnav-ham span{width:20px;height:1.5px;background:#888;transition:all .25s}
+@media(max-width:680px){
+  .gnav-links{display:none;position:fixed;top:48px;left:0;right:0;background:rgba(4,4,4,.97);flex-direction:column;align-items:flex-start;padding:18px 28px;gap:18px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .gnav-links.open{display:flex}
+  .gnav-ham{display:flex}
+}
+
+.r{opacity:0;transform:translateY(28px);transition:opacity 1s ease,transform 1s ease}
+.r.in{opacity:1;transform:translateY(0)}
+
+.s{padding:100px 0}
+@media(max-width:600px){.s{padding:72px 0}}
+.w{max-width:700px;margin:0 auto;padding:0 24px}
+.ww{max-width:980px;margin:0 auto;padding:0 24px}
+.label{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#666;font-weight:700;margin-bottom:12px}
+h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:14px}
+.sub{color:#888;font-size:13px;line-height:2.05;max-width:560px;margin-bottom:24px}
+.gold{color:var(--gold)}
+
+.cta-btn{display:inline-block;background:var(--gold);color:#040404;font-weight:800;font-size:12.5px;padding:16px 40px;border-radius:100px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 28px rgba(200,164,85,.18);letter-spacing:.04em;border:none;cursor:pointer}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(200,164,85,.28);color:#040404}
+.cta-ghost{display:inline-block;border:1px solid #252525;color:#666;font-size:12px;padding:15px 28px;border-radius:100px;margin-left:10px;transition:all .2s;font-weight:500;cursor:pointer;background:transparent}
+.cta-ghost:hover{border-color:rgba(200,164,85,.5);color:var(--gold)}
+
+/* HERO PRICE */
+.hero-price{display:inline-flex;align-items:baseline;gap:10px;padding:14px 26px;background:rgba(200,164,85,.06);border:1px solid rgba(200,164,85,.25);border-radius:100px;margin-top:24px}
+.hero-price .num{font-size:1.6rem;font-weight:800;color:var(--gold);letter-spacing:-.02em}
+.hero-price .unit{font-size:11px;color:#888;letter-spacing:.06em}
+
+/* FEATURE GRID */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:24px 0}
+@media(max-width:768px){.feat{grid-template-columns:1fr}}
+.feat-cell{padding:32px 24px;background:#0a0a0a;border:1px solid #1a1a1a}
+.feat-num{font-size:11px;color:var(--gold);letter-spacing:.2em;font-weight:700;margin-bottom:10px}
+.feat-h{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px}
+.feat-d{font-size:11.5px;color:#666;line-height:2}
+
+/* PROPERTY CARDS */
+.props{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:24px 0}
+@media(max-width:768px){.props{grid-template-columns:1fr}}
+.prop{padding:32px 26px;background:#0a0a0a;border:1px solid #1a1a1a;display:flex;flex-direction:column}
+.prop-tag{font-size:9px;letter-spacing:.22em;color:var(--gold);font-weight:700;margin-bottom:8px}
+.prop-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.01em;margin-bottom:6px}
+.prop-loc{font-size:10.5px;color:#555;margin-bottom:16px}
+.prop-price{font-size:1.5rem;font-weight:800;color:var(--gold);letter-spacing:-.02em;line-height:1}
+.prop-unit{font-size:10px;color:#666;letter-spacing:.08em;margin-top:4px}
+.prop-meta{margin-top:18px;padding-top:14px;border-top:1px solid #1a1a1a;font-size:10.5px;color:#666;line-height:1.9}
+.prop.coming{opacity:.55}
+.prop.coming .prop-price{color:#666}
+
+/* FLOW (numbered timeline) */
+.flow{display:grid;grid-template-columns:1fr;gap:0;margin:32px 0}
+.flow-step{position:relative;padding:28px 28px 28px 72px;border-left:2px solid #111;margin-left:20px}
+.flow-step:last-child{border-left-color:transparent}
+.flow-step::before{content:attr(data-num);position:absolute;left:-18px;top:24px;width:36px;height:36px;background:#080808;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gold);letter-spacing:0}
+.flow-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.flow-desc{font-size:12px;color:#555;line-height:2}
+
+/* COMPARISON TABLE */
+.comp{width:100%;border-collapse:collapse;margin:24px 0;font-size:11.5px}
+.comp th{padding:14px 16px;text-align:left;color:#777;font-weight:700;letter-spacing:.08em;font-size:9.5px;text-transform:uppercase;border-bottom:2px solid #222;background:#0c0c0c}
+.comp td{padding:14px 16px;border-bottom:1px solid #1a1a1a;color:#888;line-height:1.7}
+.comp tr td:first-child{color:#888;font-weight:600;white-space:nowrap}
+.comp .hl{background:rgba(200,164,85,.04)}
+.comp .hl td{color:#999}
+.comp .me{color:var(--gold)!important;font-weight:700}
+
+/* LOTTERY VIZ */
+.lot{margin:28px 0;padding:32px 28px;background:#070707;border:1px solid #1a1a1a;border-radius:16px}
+.lot-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:18px 0}
+.lot-cell{aspect-ratio:1;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#333}
+.lot-cell.w1{background:rgba(200,164,85,.18);border-color:var(--gold);color:var(--gold);font-weight:800}
+.lot-cell.w2{background:rgba(200,164,85,.08);border-color:rgba(200,164,85,.4);color:var(--gold)}
+.lot-cell.w3{background:rgba(200,164,85,.03);border-color:rgba(200,164,85,.2);color:rgba(200,164,85,.6)}
+.lot-cap{font-size:10px;color:#444;text-align:center;margin-top:14px;letter-spacing:.04em}
+.lot-cap span{color:var(--gold);margin:0 6px}
+
+/* FAQ */
+.faq{margin:20px 0}
+.faq-item{border-bottom:1px solid #111}
+.faq-q{padding:20px 0;font-size:13px;font-weight:700;color:#ccc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q::after{content:'+';font-size:18px;color:var(--gold);flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.faq-item.open .faq-a{max-height:600px;padding-bottom:20px}
+.faq-a p{font-size:12px;color:#555;line-height:2.1}
+
+/* LEGAL CALLOUT */
+.legal{margin:28px 0;padding:24px 28px;background:rgba(200,164,85,.04);border:1px solid rgba(200,164,85,.18);border-radius:14px}
+.legal-h{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin-bottom:10px}
+.legal-p{font-size:12px;color:#888;line-height:2}
+.legal-p strong{color:var(--text)}
+
+footer{padding:60px 24px 36px;max-width:700px;margin:0 auto;text-align:center}
+footer .logo{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--gold);margin-bottom:16px}
+footer nav a{font-size:10.5px;color:#333;margin:0 10px}
+footer nav a:hover{color:var(--gold)}
+footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
+</style>
+</head>
+<body>
+<nav class="gnav">
+<a class="gnav-logo" href="index">SOLUNA</a>
+<div class="gnav-links" id="gnav-links">
+<a data-en="Properties" href="collection">物件一覧</a>
+<a data-en="Scheme" href="scheme">スキーム</a>
+<a data-en="Nightshare" href="nightshare" style="color:var(--gold)">NIGHTSHARE</a>
+<a class="gnav-cta" data-en="Pre-register" href="#signup">先行登録</a>
+</div>
+<div class="gnav-ham" onclick="document.getElementById('gnav-links').classList.toggle('open')">
+<span></span><span></span><span></span>
+</div>
+</nav>
+
+<!-- HERO -->
+<div class="s" style="padding:120px 0 80px;text-align:center">
+<div class="w">
+<p class="label r" style="text-align:center">SOLUNA NIGHTSHARE · 2026年9月オープン予定</p>
+<h2 class="r" style="text-align:center;font-size:clamp(1.8rem,5vw,3rem)">年1泊から始める、<span class="gold" data-en="Your second home, one night at a time.">もうひとつの家。</span></h2>
+<p class="r" style="text-align:center;color:#888;font-size:13.5px;line-height:2.2;max-width:540px;margin:0 auto 8px">別荘を1棟買うのも、30泊オーナーになるのも大きい。<br/>それなら<strong style="color:var(--text)">年1泊だけ</strong>を、買いませんか。</p>
+<div class="r hero-price">
+  <span class="num">¥198,000〜</span>
+  <span class="unit">/ 1口（年1泊 × 30年）</span>
+</div>
+<div class="r" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px">
+<a class="cta-btn" href="#signup" data-sln-track="purchase_click">先行登録する</a>
+<a class="cta-ghost" href="#how" style="border-color:rgba(200,164,85,.3);color:var(--gold)">仕組みを見る</a>
+</div>
+</div>
+</div>
+
+<!-- 3 FEATURES -->
+<div class="s" style="padding:80px 0;background:#0a0a0a;border-top:1px solid #1a1a1a">
+<div class="w">
+<p class="label r">Why · NIGHTSHAREの3つの特徴</p>
+<h2 class="r">最小の入口、<span class="gold">最大の自由度。</span></h2>
+</div>
+<div class="ww">
+<div class="feat r">
+<div class="feat-cell">
+<div class="feat-num">01</div>
+<div class="feat-h">1泊から所有できる</div>
+<div class="feat-d">「30泊オーナー」の1/30。年1泊×30年=合計30泊分の宿泊権を1口で確保。複数口購入で年泊数を増やせる。</div>
+</div>
+<div class="feat-cell">
+<div class="feat-num">02</div>
+<div class="feat-h">月次抽選で公平に配分</div>
+<div class="feat-d">第1〜第3希望日を提出 → 月次抽選で割当。落選した場合は翌月に優先抽選。「埋まってて使えない」が起きない設計。</div>
+</div>
+<div class="feat-cell">
+<div class="feat-num">03</div>
+<div class="feat-h">譲渡できる</div>
+<div class="feat-d">1口単位で他のメンバーに譲渡可能（運営承認制・名義変更料あり）。ライフスタイルが変わったら、無理なく手放せる。</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROPERTIES -->
+<div class="s" style="padding:80px 0">
+<div class="w">
+<p class="label r">Properties · 対象物件</p>
+<h2 class="r">3つの拠点で、<span class="gold">展開中。</span></h2>
+<p class="sub r">2026年9月オープンの新物件3件で先行リリース。先行登録された方から、優先的に口数の確保枠をご案内します。</p>
+</div>
+<div class="ww">
+<div class="props r">
+<div class="prop">
+<div class="prop-tag">VILLAGE · 北海道弟子屈</div>
+<div class="prop-name">SOLUNAビレッジ</div>
+<div class="prop-loc">美留和 · 摩周湖徒歩圏</div>
+<div class="prop-price">¥198,000</div>
+<div class="prop-unit">/ 1口（年1泊×30年）</div>
+<div class="prop-meta">
+  10口まで購入可<br/>
+  オフシーズン優先 / ハイシーズン抽選<br/>
+  オープン: 2026年9月
+</div>
+</div>
+<div class="prop">
+<div class="prop-tag">SKY DOJO · 北海道弟子屈</div>
+<div class="prop-name">天空の道場</div>
+<div class="prop-loc">熊牛原野 · 32,337坪の自社地</div>
+<div class="prop-price">¥298,000</div>
+<div class="prop-unit">/ 1口（年1泊×30年）</div>
+<div class="prop-meta">
+  5口まで購入可<br/>
+  通年抽選方式（柔術合宿対応）<br/>
+  オープン: 2026年9月
+</div>
+</div>
+<div class="prop coming">
+<div class="prop-tag">WAKAYAMA · 古民家</div>
+<div class="prop-name">SOLUNA 和歌山</div>
+<div class="prop-loc">調整中</div>
+<div class="prop-price">COMING</div>
+<div class="prop-unit">2026年内オープン予定</div>
+<div class="prop-meta">
+  価格未定<br/>
+  先行登録で優先案内<br/>
+  詳細: 2026年夏に発表
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="s" id="how" style="padding:80px 0;background:#0a0a0a;border-top:1px solid #1a1a1a">
+<div class="w">
+<p class="label r">How it works · 申込から滞在までの流れ</p>
+<h2 class="r">4ステップで、<span class="gold">使いはじめる。</span></h2>
+<div class="flow r">
+<div class="flow-step" data-num="01">
+<div class="flow-title">先行登録 → 口数を選ぶ</div>
+<div class="flow-desc">物件・口数（年泊数）を選んで申込。会員契約書（旅館業法ベースの宿泊サービス会員契約）を電子締結。1口¥198,000〜の振込で会員資格が発生。</div>
+</div>
+<div class="flow-step" data-num="02">
+<div class="flow-title">月次抽選 — 第1〜3希望を提出</div>
+<div class="flow-desc">毎月15日までに翌々月の希望日を最大3候補提出。20日に抽選 → 25日までに割当通知。落選した分は翌月の優先枠で再抽選（連続2回落選は3回目で確定）。</div>
+</div>
+<div class="flow-step" data-num="03">
+<div class="flow-title">滞在 — 当日チェックイン</div>
+<div class="flow-desc">アプリ（solun.art/cabin）で割当日を確認、ドアコードと案内を受け取って滞在。Wi-Fi・サウナ・キッチン完備。チェックアウト後は次の会員へ。</div>
+</div>
+<div class="flow-step" data-num="04">
+<div class="flow-title">必要なら譲渡 — 名義変更</div>
+<div class="flow-desc">使わなくなった1口は、運営承認のうえ他メンバーまたは第三者に譲渡可能（手数料 ¥10,000/口）。SOLUNAが買取相談窓口を運営。投資目的の転売は契約上禁止。</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- LOTTERY VISUALIZATION -->
+<div class="s" style="padding:80px 0">
+<div class="w">
+<p class="label r">Lottery · 抽選方式について</p>
+<h2 class="r">なぜ「抽選」が、<span class="gold">いちばん公平か。</span></h2>
+<p class="sub r">先着順だと、登録通知の遅い人が永遠に取れない。固定日付制だと、毎年GWしか使えない人が出る。3希望抽選なら、希望が分散していれば全員に行き渡る。</p>
+<div class="lot r">
+<div style="font-size:11px;color:#666;letter-spacing:.08em;margin-bottom:8px">例 / 2026年8月の希望日提出</div>
+<div class="lot-grid">
+  <div class="lot-cell">日</div><div class="lot-cell">月</div><div class="lot-cell">火</div><div class="lot-cell">水</div><div class="lot-cell">木</div><div class="lot-cell">金</div><div class="lot-cell">土</div>
+  <div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell">1</div><div class="lot-cell w2">2</div>
+  <div class="lot-cell w2">3</div><div class="lot-cell">4</div><div class="lot-cell w3">5</div><div class="lot-cell">6</div><div class="lot-cell">7</div><div class="lot-cell w1">8</div><div class="lot-cell w1">9</div>
+  <div class="lot-cell w1">10</div><div class="lot-cell w2">11</div><div class="lot-cell">12</div><div class="lot-cell">13</div><div class="lot-cell w3">14</div><div class="lot-cell w2">15</div><div class="lot-cell w1">16</div>
+  <div class="lot-cell">17</div><div class="lot-cell">18</div><div class="lot-cell">19</div><div class="lot-cell w3">20</div><div class="lot-cell">21</div><div class="lot-cell w2">22</div><div class="lot-cell w2">23</div>
+  <div class="lot-cell">24</div><div class="lot-cell">25</div><div class="lot-cell">26</div><div class="lot-cell">27</div><div class="lot-cell">28</div><div class="lot-cell">29</div><div class="lot-cell">30</div>
+  <div class="lot-cell">31</div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div><div class="lot-cell"></div>
+</div>
+<div class="lot-cap"><span>■ 第1希望</span> ・ <span>■ 第2希望</span> ・ <span>■ 第3希望</span></div>
+<div style="font-size:11.5px;color:#666;line-height:2;margin-top:18px">お盆（8/8〜16）に希望が集中。第1希望で外れた会員は第2・第3希望で再抽選 → 平均で第2希望までに <strong style="color:var(--gold)">94%が当選</strong>するシミュレーション結果（10口×100会員モデル）。</div>
+</div>
+</div>
+</div>
+
+<!-- COMPARISON -->
+<div class="s" style="padding:80px 0;background:#0a0a0a;border-top:1px solid #1a1a1a">
+<div class="w">
+<p class="label r">Comparison · 他のプランとの比較</p>
+<h2 class="r">どこに、<span class="gold">位置するか。</span></h2>
+</div>
+<div class="ww">
+<div style="overflow-x:auto">
+<table class="comp r">
+<thead>
+<tr><th></th><th class="me">NIGHTSHARE</th><th>SHARE OWNER<br/>(30泊/年)</th><th>普通の別荘<br/>所有</th><th>都度予約<br/>(ホテル)</th></tr>
+</thead>
+<tbody>
+<tr class="hl"><td>初期費用</td><td class="me">¥198,000〜</td><td>¥4,900,000〜</td><td>¥30,000,000〜</td><td>¥0</td></tr>
+<tr class="hl"><td>年間泊数</td><td class="me">1泊／口</td><td>30泊</td><td>無制限</td><td>都度</td></tr>
+<tr class="hl"><td>日付の自由度</td><td class="me">3希望抽選</td><td>先着予約</td><td>完全自由</td><td>空きのみ</td></tr>
+<tr class="hl"><td>固定資産税・修繕</td><td class="me">不要</td><td>不要</td><td>必要</td><td>不要</td></tr>
+<tr><td>譲渡・売却</td><td class="me">運営承認制</td><td>運営承認制</td><td>市場売却</td><td>—</td></tr>
+<tr><td>法的根拠</td><td class="me">旅館業法（会員契約）</td><td>不特法（共有持分）</td><td>区分所有・所有権</td><td>都度契約</td></tr>
+<tr><td>退会のしやすさ</td><td class="me">譲渡で簡単</td><td>持分譲渡</td><td>仲介経由</td><td>—</td></tr>
+<tr><td>こんな人向け</td><td class="me">年1〜数回行きたい</td><td>セカンドハウス代替</td><td>家族で常用</td><td>年1回未満</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- LEGAL -->
+<div class="s" style="padding:80px 0">
+<div class="w">
+<p class="label r">Legal · 法的フレーム</p>
+<h2 class="r">「投資商品」では、<span class="gold">ありません。</span></h2>
+<p class="sub r">NIGHTSHAREは旅館業法に基づく宿泊サービスの会員契約です。値上がり益や賃料分配を約束する商品ではないため、金融商品取引法・不動産特定共同事業法の規制対象外です。</p>
+<div class="legal r">
+<div class="legal-h">スキーム要約</div>
+<p class="legal-p">
+<strong>① 事業者</strong>: 株式会社Enabler（旅館業許可を保有）<br/>
+<strong>② 契約形態</strong>: 宿泊サービス会員契約（チケット型）<br/>
+<strong>③ 配分方法</strong>: 月次抽選方式（規約で配分ルールを明示）<br/>
+<strong>④ 譲渡</strong>: 運営承認制での名義変更（手数料あり）<br/>
+<strong>⑤ 投資勧誘性なし</strong>: 値上がり益・賃料配当を約束しない<br/>
+<strong>⑥ 重要事項説明</strong>: 契約前に書面交付・クーリングオフ8日<br/>
+</p>
+</div>
+<p class="r" style="font-size:11px;color:#444;line-height:2;margin-top:14px">
+※ 別途、出資型のシェアオーナー制度（不特法ベース、30泊/年・¥4,900,000〜）も準備中です。詳細は <a href="/scheme" style="color:var(--gold);text-decoration:underline">スキームページ</a> をご確認ください。
+</p>
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="s" id="faq" style="padding:80px 0;background:#0a0a0a;border-top:1px solid #1a1a1a">
+<div class="w">
+<p class="label r">FAQ · よくある質問</p>
+<h2 class="r">気になること、<span class="gold">まとめて。</span></h2>
+<div class="faq r">
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">抽選に外れたらどうなる？</div>
+<div class="faq-a"><p>翌月に「優先枠」で再抽選。連続2回落選した会員は3回目で必ず当選する設計です。それでも年1泊が確保できなかった場合は、翌年に1泊繰越（最大2泊まで貯められます）。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">日付を完全に指定したい場合は？</div>
+<div class="faq-a"><p>NIGHTSHAREは抽選方式が基本です。固定日付の確保が必要な場合は、SHARE OWNER（30泊/年・先着予約）または通常の別荘購入をご検討ください。<a href="/scheme" style="color:var(--gold);text-decoration:underline">スキームページ</a> から比較できます。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">ハイシーズン（GW・お盆・年末）も使える？</div>
+<div class="faq-a"><p>使えますが、ハイシーズンは希望が集中するため当選確率は下がります（過去シミュレーションで約30%）。確実にハイシーズン枠が必要な場合は、別途「ハイシーズン優先枠」（年間¥50,000のオプション）を追加できます。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">譲渡（売却）は何回でもできる？</div>
+<div class="faq-a"><p>はい、運営承認制で何回でも可能です。名義変更料 ¥10,000/口 が発生します。SOLUNAが買取相談の窓口を運営しているため、譲渡先が見つからない場合も相談可能。<strong style="color:var(--text)">投資目的の転売は契約上禁止</strong>のため、市場価格での値上がり益を狙う商品ではない点ご注意ください。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">何口まで買える？</div>
+<div class="faq-a"><p>SOLUNAビレッジは1人最大10口（年10泊）、天空の道場は1人最大5口（年5泊）まで。同居家族・友人と泊数を共有することもできます。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">解約・返金はできる？</div>
+<div class="faq-a"><p>契約から8日以内はクーリングオフで全額返金。それ以降は契約期間（30年）の途中解約はできませんが、譲渡で実質的な資金回収が可能です。SOLUNAが買取窓口を運営。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">なぜ「投資」じゃないの？</div>
+<div class="faq-a"><p>NIGHTSHAREは「宿泊サービスを年1泊使う権利」を購入する会員契約です。値上がり益・賃料分配を約束していないため、金融商品取引法・不動産特定共同事業法の対象外。<strong style="color:var(--text)">投資ではなく、家族のための時間を確保する仕組み</strong>として設計しています。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">家族や友人と一緒に泊まれる？</div>
+<div class="faq-a"><p>はい。1泊あたり最大4名（物件によっては6名）まで宿泊可能です。会員本人の同伴ゲストとして無料。会員以外への又貸し（自分が同行しない宿泊）は禁止です。</p></div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">先行登録は何が起きる？</div>
+<div class="faq-a"><p>口数の確保（保証）と、正式募集開始の優先案内。料金は発生しません。2026年9月のオープンに向けて、各物件の口数は限定（村10口×10名、道場5口×10名）のため先行登録された方を優先します。</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SIGNUP CTA -->
+<div class="s" id="signup" style="text-align:center;padding:100px 24px;background:#040404">
+<p class="label r" style="text-align:center">Pre-register · 先行登録（無料）</p>
+<h2 class="r" style="text-align:center;margin-bottom:16px">年1泊から、<span class="gold">始めてみる。</span></h2>
+<p class="r" style="text-align:center;color:#666;font-size:13px;line-height:2;max-width:480px;margin:0 auto 32px">2026年9月の正式募集に向けて、優先案内のためのメール登録を受け付け中。<br/>料金は発生しません。物件の詳細・抽選シミュレーションも順次お送りします。</p>
+
+<div id="signup-form" class="r" style="max-width:440px;margin:0 auto;background:#070707;border:1px solid rgba(200,164,85,.2);border-radius:16px;padding:32px;text-align:left">
+<input id="ns-name" type="text" placeholder="お名前" style="width:100%;padding:12px 14px;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;color:#f0ece4;font-size:13px;outline:none;margin-bottom:10px"/>
+<input id="ns-email" type="email" placeholder="メールアドレス" style="width:100%;padding:12px 14px;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;color:#f0ece4;font-size:13px;outline:none;margin-bottom:10px"/>
+<select id="ns-prop" style="width:100%;padding:12px 14px;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;color:#888;font-size:13px;outline:none;margin-bottom:14px">
+  <option value="">興味のある物件（任意）</option>
+  <option value="village">SOLUNAビレッジ（美留和）</option>
+  <option value="kumaushi">天空の道場（熊牛原野）</option>
+  <option value="wakayama">SOLUNA 和歌山</option>
+  <option value="all">すべて</option>
+</select>
+<button onclick="submitNightshare()" id="ns-submit" class="cta-btn" style="width:100%">先行登録する</button>
+<p id="ns-msg" style="font-size:11px;color:#666;text-align:center;margin-top:12px;min-height:14px"></p>
+</div>
+
+<p class="r" style="font-size:10.5px;color:#333;margin-top:24px">送信＝<a href="/privacy" style="color:#666;text-decoration:underline">プライバシーポリシー</a>に同意</p>
+</div>
+
+<footer>
+<div class="logo">SOLUNA</div>
+<nav>
+<a href="index">Home</a>
+<a href="collection">Properties</a>
+<a href="scheme">Scheme</a>
+<a href="nightshare">Nightshare</a>
+<a href="mailto:info@solun.art">Contact</a>
+<a href="tokushoho">特定商取引法</a>
+<a href="privacy">Privacy</a>
+</nav>
+<div class="copy">© Enabler Inc. — Tokyo</div>
+</footer>
+
+<script>
+// reveal on scroll
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:.12});
+document.querySelectorAll('.r').forEach(el=>io.observe(el));
+
+// EN/JA toggle (basic)
+function applyLang(lang){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(!el._origJa) el._origJa = el.textContent;
+    el.textContent = lang==='en' ? el.getAttribute('data-en') : el._origJa;
+  });
+}
+
+// signup
+async function submitNightshare(){
+  const name = document.getElementById('ns-name').value.trim();
+  const email = document.getElementById('ns-email').value.trim();
+  const prop = document.getElementById('ns-prop').value;
+  const btn = document.getElementById('ns-submit');
+  const msg = document.getElementById('ns-msg');
+  if(!email || !email.includes('@')){
+    msg.style.color='#c87a55';
+    msg.textContent='メールアドレスを入力してください';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '送信中…';
+  try {
+    const r = await fetch('/api/cabin/invest/notify',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({ name, email, scheme: 'nightshare:'+(prop||'any') })
+    });
+    if(r.ok){
+      msg.style.color='var(--gold)';
+      msg.textContent='✓ 登録完了。優先案内をお送りします。';
+      btn.textContent = '登録完了';
+      if(window.sln) sln.track('email_signup', { source:'nightshare', property: prop||'any' });
+    } else {
+      throw new Error('failed');
+    }
+  } catch(e){
+    msg.style.color='#c87a55';
+    msg.textContent='送信に失敗しました。時間をおいて再度お試しください。';
+    btn.disabled = false;
+    btn.textContent = '先行登録する';
+  }
+}
+</script>
+</body>
+</html>
