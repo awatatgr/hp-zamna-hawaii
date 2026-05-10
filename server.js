@@ -940,6 +940,30 @@ async function initDb() {
     paid_at TEXT
   )`).catch(() => {});
 
+  await db.execute(`CREATE TABLE IF NOT EXISTS nightshare_lottery (
+    id TEXT PRIMARY KEY,
+    purchase_id TEXT NOT NULL,
+    property_id TEXT NOT NULL,
+    target_year INTEGER NOT NULL,
+    target_month INTEGER NOT NULL,
+    candidate1_start TEXT,
+    candidate1_end TEXT,
+    candidate2_start TEXT,
+    candidate2_end TEXT,
+    candidate3_start TEXT,
+    candidate3_end TEXT,
+    status TEXT DEFAULT 'submitted',
+    awarded_start TEXT,
+    awarded_end TEXT,
+    awarded_at TEXT,
+    losses INTEGER DEFAULT 0,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  )`).catch(() => {});
+
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_lottery_purchase ON nightshare_lottery(purchase_id)`).catch(() => {});
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_lottery_target ON nightshare_lottery(property_id, target_year, target_month)`).catch(() => {});
+
   await db.execute(`CREATE TABLE IF NOT EXISTS kumiai_applications (
     id TEXT PRIMARY KEY,
     property_id TEXT NOT NULL,
@@ -6166,6 +6190,64 @@ app.post("/api/cabin/nightshare/checkout", async (req, res) => {
   res.json({ url: session.url, id });
 });
 
+// Polling fallback: success_url が叩く確認API。Webhook 未登録でも決済完了を反映できる
+app.get("/api/cabin/nightshare/confirm", async (req, res) => {
+  const id = String(req.query.id || "");
+  if (!id) return res.status(400).json({ error: "missing id" });
+  const row = (await db.execute({
+    sql: "SELECT id, property_id, sets, buyer_name, buyer_email, buyer_phone, status, stripe_session_id FROM nightshare_purchases WHERE id=?",
+    args: [id]
+  })).rows[0];
+  if (!row) return res.status(404).json({ error: "not found" });
+  if (row.status === "paid") return res.json({ ok: true, status: "paid", already: true });
+  if (!STRIPE_SECRET_KEY || !row.stripe_session_id) return res.json({ ok: false, status: row.status });
+  try {
+    const stripe = require("stripe")(STRIPE_SECRET_KEY);
+    const s = await stripe.checkout.sessions.retrieve(row.stripe_session_id);
+    if (s.payment_status === "paid" || s.status === "complete") {
+      await db.execute({
+        sql: "UPDATE nightshare_purchases SET status='paid', paid_at=datetime('now') WHERE id=? AND status!='paid'",
+        args: [id]
+      });
+      const cfg = NIGHTSHARE_PROPS[row.property_id] || {};
+      const setsN = Number(row.sets || 1);
+      sendTg(TG_CHAT, `🌙 *NIGHTSHARE 購入完了* (polling)\n\n🏡 ${cfg.name||row.property_id}\n📦 ${setsN}セット（年${3*setsN}連泊×30年）\n👤 ${row.buyer_name||"—"}\n📧 ${row.buyer_email}\n📞 ${row.buyer_phone||"—"}\n💴 ¥${((cfg.price_jpy||0)*setsN).toLocaleString()}`).catch(()=>{});
+      if (RESEND_API_KEY && row.buyer_email) {
+        fetch("https://api.resend.com/emails", { method:"POST",
+          headers: {"Content-Type":"application/json", Authorization:`Bearer ${RESEND_API_KEY}`},
+          body: JSON.stringify({
+            from: "SOLUNA <info@solun.art>",
+            to: [row.buyer_email],
+            bcc: ["info@solun.art"],
+            subject: `【SOLUNA NIGHTSHARE】${cfg.name||row.property_id} ご購入ありがとうございます`,
+            html: `<div style="background:#050505;color:#f0ece4;font-family:'Helvetica Neue',sans-serif;padding:40px;max-width:560px;margin:0 auto">
+              <p style="font-size:11px;letter-spacing:.2em;color:#c8a455">SOLUNA NIGHTSHARE</p>
+              <h2 style="font-size:20px;margin:16px 0">ご購入ありがとうございます</h2>
+              <p style="color:#aaa;line-height:1.9;font-size:14px">
+                ${row.buyer_name||""}様<br><br>
+                <strong style="color:#c8a455">${cfg.name||row.property_id}</strong> の年3連泊会員権 <strong>${setsN}セット</strong> のご購入を確認しました。<br><br>
+                <strong>ご購入内容</strong><br>
+                ・物件: ${cfg.name||row.property_id}（${cfg.location||""}）<br>
+                ・年間: 3連泊 × ${setsN}セット = 年${3*setsN}連泊<br>
+                ・期間: 30年（合計${90*setsN}泊）<br>
+                ・お支払い: ¥${((cfg.price_jpy||0)*setsN).toLocaleString()}<br><br>
+                3営業日以内に、会員契約書（電子署名）と重要事項説明書をお送りします。<br>
+                <a href="https://solun.art/nightshare-disclosure" style="color:#c8a455">重要事項説明書をオンラインで確認 →</a><br><br>
+                署名完了後、初回の3連泊予約フォームをご案内します。
+              </p>
+              <p style="font-size:12px;color:#555;margin-top:24px">SOLUNA — Enabler Inc.<br>info@solun.art</p>
+            </div>`
+          })
+        }).catch(()=>{});
+      }
+      return res.json({ ok: true, status: "paid" });
+    }
+    return res.json({ ok: false, status: s.payment_status || s.status });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: String(e?.message||e) });
+  }
+});
+
 app.post("/api/cabin/nightshare/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
   const wh  = process.env.STRIPE_WEBHOOK_SECRET_NIGHTSHARE || process.env.STRIPE_WEBHOOK_SECRET || "";
@@ -6216,6 +6298,135 @@ app.post("/api/cabin/nightshare/webhook", express.raw({ type: "application/json"
     }
   }
   res.json({ ok: true });
+});
+
+// ── NIGHTSHARE Lottery: 3連泊期間の希望提出・抽選 ──────────────────────────────
+function _validate3NightRange(start, end) {
+  if (!start || !end) return null;
+  const s = new Date(start), e = new Date(end);
+  if (isNaN(s) || isNaN(e)) return null;
+  const diffDays = Math.round((e - s) / (24*60*60*1000));
+  if (diffDays !== 3) return null; // 3連泊 = 開始から3日後がチェックアウト
+  return { start: s.toISOString().slice(0,10), end: e.toISOString().slice(0,10) };
+}
+
+// 購入者本人による状態確認（メールアドレスで照合、認証なしの簡易版）
+app.get("/api/cabin/nightshare/purchase", async (req, res) => {
+  const email = String(req.query.email || "").toLowerCase().trim();
+  if (!email) return res.status(400).json({ error: "missing email" });
+  const rows = (await db.execute({
+    sql: `SELECT id, property_id, sets, buyer_name, status, nights_total, nights_used, valid_from, valid_until, created_at, paid_at
+          FROM nightshare_purchases WHERE LOWER(buyer_email)=? ORDER BY created_at DESC`,
+    args: [email]
+  })).rows;
+  res.json({ purchases: rows.map(r => ({ ...r, property: NIGHTSHARE_PROPS[r.property_id]?.name || r.property_id })) });
+});
+
+// 抽選希望提出
+app.post("/api/cabin/nightshare/lottery/submit", async (req, res) => {
+  const { purchase_id, email, target_year, target_month, candidates } = req.body || {};
+  if (!purchase_id || !email || !target_year || !target_month) return res.status(400).json({ error: "missing fields" });
+  if (!Array.isArray(candidates) || candidates.length < 1 || candidates.length > 3) return res.status(400).json({ error: "candidates must be 1-3 items" });
+
+  // 購入が存在し paid 状態か確認 + メール照合
+  const p = (await db.execute({
+    sql: "SELECT id, property_id, status, buyer_email, sets FROM nightshare_purchases WHERE id=?",
+    args: [purchase_id]
+  })).rows[0];
+  if (!p) return res.status(404).json({ error: "purchase not found" });
+  if (String(p.buyer_email||"").toLowerCase() !== String(email).toLowerCase()) return res.status(403).json({ error: "email mismatch" });
+  if (p.status !== "paid") return res.status(400).json({ error: "purchase not paid" });
+
+  // 各候補を validate
+  const validated = candidates.map(c => _validate3NightRange(c.start, c.end));
+  if (validated.some(v => !v)) return res.status(400).json({ error: "each candidate must be a 3-night range (start to start+3days)" });
+
+  const id = crypto.randomBytes(8).toString("hex");
+  await db.execute({
+    sql: `INSERT INTO nightshare_lottery
+      (id, purchase_id, property_id, target_year, target_month,
+       candidate1_start, candidate1_end, candidate2_start, candidate2_end, candidate3_start, candidate3_end, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'submitted')`,
+    args: [
+      id, purchase_id, p.property_id, Number(target_year), Number(target_month),
+      validated[0].start, validated[0].end,
+      validated[1]?.start || null, validated[1]?.end || null,
+      validated[2]?.start || null, validated[2]?.end || null,
+    ]
+  });
+  res.json({ ok: true, id, status: "submitted", validated });
+});
+
+// 抽選状態確認（購入ID指定）
+app.get("/api/cabin/nightshare/lottery/list", async (req, res) => {
+  const purchase_id = String(req.query.purchase_id || "");
+  if (!purchase_id) return res.status(400).json({ error: "missing purchase_id" });
+  const rows = (await db.execute({
+    sql: `SELECT id, target_year, target_month, status, awarded_start, awarded_end, awarded_at, losses, created_at
+          FROM nightshare_lottery WHERE purchase_id=? ORDER BY target_year DESC, target_month DESC`,
+    args: [purchase_id]
+  })).rows;
+  res.json({ entries: rows });
+});
+
+// admin: 抽選実行（指定 property × year × month の submitted エントリを抽選）
+app.post("/api/cabin/nightshare/lottery/run", async (req, res) => {
+  const adminKey = req.headers["x-admin-key"];
+  if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) return res.status(403).json({ error: "unauthorized" });
+  const { property_id, year, month } = req.body || {};
+  if (!property_id || !year || !month) return res.status(400).json({ error: "missing fields" });
+
+  const entries = (await db.execute({
+    sql: `SELECT * FROM nightshare_lottery
+          WHERE property_id=? AND target_year=? AND target_month=? AND status='submitted'`,
+    args: [property_id, Number(year), Number(month)]
+  })).rows;
+  if (!entries.length) return res.json({ ok: true, results: [], message: "no pending entries" });
+
+  // Beds24連携で既存予約を取得（簡易: 抽選結果のみ記録、実際の予約作成は別途運用）
+  // 現状は希望日が衝突しなければ第1希望、衝突したら第2、第3、それも衝突したら lost
+
+  const occupied = new Set(); // yyyy-mm-dd that's already taken in this lottery run
+  const results = [];
+
+  // losses順（多い順）にシャッフル → 公平性
+  const sorted = entries.map(e => ({...e, _r: Math.random()}))
+    .sort((a,b) => (b.losses - a.losses) || (a._r - b._r));
+
+  for (const e of sorted) {
+    let awarded = null;
+    for (const idx of [1,2,3]) {
+      const s = e[`candidate${idx}_start`];
+      const en = e[`candidate${idx}_end`];
+      if (!s || !en) continue;
+      // 期間内の各日が空いているか
+      const days = [];
+      for (let d = new Date(s); d < new Date(en); d.setDate(d.getDate()+1)) {
+        days.push(d.toISOString().slice(0,10));
+      }
+      if (days.every(d => !occupied.has(d))) {
+        days.forEach(d => occupied.add(d));
+        awarded = { start: s, end: en, candidate: idx };
+        break;
+      }
+    }
+    if (awarded) {
+      await db.execute({
+        sql: `UPDATE nightshare_lottery SET status='won', awarded_start=?, awarded_end=?, awarded_at=datetime('now') WHERE id=?`,
+        args: [awarded.start, awarded.end, e.id]
+      });
+      results.push({ id: e.id, purchase_id: e.purchase_id, won: true, ...awarded });
+    } else {
+      const newLosses = (e.losses||0) + 1;
+      const finalStatus = newLosses >= 3 ? 'guaranteed_next' : 'lost';
+      await db.execute({
+        sql: `UPDATE nightshare_lottery SET status=?, losses=? WHERE id=?`,
+        args: [finalStatus, newLosses, e.id]
+      });
+      results.push({ id: e.id, purchase_id: e.purchase_id, won: false, losses: newLosses, status: finalStatus });
+    }
+  }
+  res.json({ ok: true, total: results.length, won: results.filter(r=>r.won).length, results });
 });
 
 // ── Kumiai: slots + apply + webhook ──────────────────────────────────────────
