@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NIGHTSHARE Admin — SOLUNA</title>
+<meta content="noindex,nofollow" name="robots"/>
+<link href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;circle cx='16' cy='16' r='14' fill='%23c8a455'/&gt;&lt;/svg&gt;" rel="icon"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c8a455;--bg:#040404;--text:#f0ece4;--line:#1a1a1a}
+body{background:var(--bg);color:var(--text);font-family:'Helvetica Neue',-apple-system,'Noto Sans JP',sans-serif;padding:24px;font-size:13px}
+a{color:var(--gold)}
+h1{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-.02em}
+.sub{color:#888;font-size:12px;margin-bottom:24px}
+.section{background:#0a0a0a;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
+.section h2{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+input,button,select{font-family:inherit}
+input{padding:9px 12px;background:#0d0d0d;border:1px solid var(--line);color:var(--text);font-size:12.5px;border-radius:6px;outline:none;width:280px}
+button{background:var(--gold);color:#040404;font-weight:800;font-size:12px;padding:9px 18px;border-radius:6px;border:none;cursor:pointer;letter-spacing:.04em}
+button:hover{transform:translateY(-1px)}
+button.ghost{background:transparent;color:var(--gold);border:1px solid rgba(200,164,85,.4)}
+button:disabled{background:#222;color:#555;cursor:not-allowed;transform:none}
+table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
+th{padding:10px 12px;text-align:left;color:#888;font-weight:700;background:#080808;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);color:#bbb;line-height:1.5}
+tr:hover td{background:#080808}
+.tag{display:inline-block;font-size:9.5px;padding:2px 8px;border-radius:100px;font-weight:700;letter-spacing:.04em}
+.tag.paid{background:rgba(200,164,85,.2);color:var(--gold)}
+.tag.pending{background:#222;color:#888}
+.tag.won{background:rgba(80,200,120,.2);color:#5fc878}
+.tag.lost{background:rgba(200,120,80,.15);color:#c87a55}
+.tag.guaranteed_next{background:rgba(80,140,200,.2);color:#5f9fc8}
+.tag.submitted{background:#252525;color:#aaa}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.sumcard{padding:14px 18px;background:#080808;border-radius:8px;border-left:3px solid var(--gold)}
+.sumcard-h{font-size:10px;color:#666;letter-spacing:.06em;font-weight:700;text-transform:uppercase}
+.sumcard-v{font-size:18px;font-weight:800;color:var(--text);margin-top:4px}
+.sumcard-sub{font-size:10.5px;color:#777;margin-top:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.msg{font-size:11px;color:#888;padding:8px 12px;border-radius:6px;background:#080808}
+.empty{padding:30px;text-align:center;color:#444;font-size:12px}
+</style>
+</head>
+<body>
+<h1>NIGHTSHARE Admin</h1>
+<p class="sub">購入管理 / 抽選キュー / 月次抽選トリガー（admin key 必須）</p>
+
+<div class="section">
+<h2>Auth</h2>
+<div class="row">
+<input id="key" type="password" placeholder="ADMIN_KEY を入力" autocomplete="off"/>
+<button onclick="loadAll()">読み込み</button>
+<button class="ghost" onclick="document.getElementById('key').value='';location.reload()">クリア</button>
+</div>
+<p class="msg" id="auth-msg" style="display:none"></p>
+</div>
+
+<div id="content" style="display:none">
+
+<div class="section">
+<h2>購入サマリ</h2>
+<div class="summary" id="summary"></div>
+</div>
+
+<div class="section">
+<h2>購入一覧（最新500件）</h2>
+<table id="purchases-table">
+<thead><tr><th>日時</th><th>物件</th><th>セット</th><th>購入者</th><th>email</th><th>金額</th><th>状態</th><th>有効期間</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="section">
+<h2>抽選キュー（最新500件）</h2>
+<div class="row">
+<select id="prop"><option value="">物件を選択</option></select>
+<input id="ym" type="month" placeholder="対象月"/>
+<button onclick="runLottery()">この物件・月の抽選を即実行</button>
+</div>
+<p class="msg" id="lottery-msg" style="display:none"></p>
+<table id="lottery-table">
+<thead><tr><th>対象月</th><th>物件</th><th>提出者</th><th>第1希望</th><th>第2</th><th>第3</th><th>状態</th><th>当選日程</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+let _key = '';
+
+async function loadAll() {
+  _key = document.getElementById('key').value.trim();
+  if(!_key){ alert('ADMIN_KEYを入力してください'); return; }
+  // load properties for select
+  try{
+    const p = await (await fetch('/api/cabin/nightshare/properties')).json();
+    const sel = document.getElementById('prop');
+    sel.innerHTML = '<option value="">物件を選択</option>' +
+      Object.entries(p.properties).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');
+  }catch(e){}
+  // purchases
+  try{
+    const r = await fetch('/api/cabin/nightshare/admin/purchases?key='+encodeURIComponent(_key));
+    if(!r.ok){ document.getElementById('auth-msg').style.display='block'; document.getElementById('auth-msg').textContent='✕ 認証失敗'; return; }
+    const data = await r.json();
+    document.getElementById('content').style.display='block';
+    renderSummary(data.summary, data.purchases);
+    renderPurchases(data.purchases);
+  }catch(e){ alert('通信エラー'); return; }
+  // lottery
+  try{
+    const r = await fetch('/api/cabin/nightshare/admin/lottery?key='+encodeURIComponent(_key));
+    const data = await r.json();
+    renderLottery(data.entries);
+  }catch(e){}
+}
+
+function renderSummary(summary, purchases){
+  const s = document.getElementById('summary');
+  const total = { paid:0, pending:0, revenue:0, sets:0 };
+  for(const v of Object.values(summary||{})){ total.paid+=v.paid; total.pending+=v.pending; total.revenue+=v.revenue_jpy; total.sets+=v.sets_paid; }
+  const cards = [
+    {h:'購入完了', v:total.paid+'件', sub:total.sets+'セット'},
+    {h:'保留中', v:total.pending+'件', sub:'(decsion pending)'},
+    {h:'累計売上', v:'¥'+total.revenue.toLocaleString(), sub:''},
+    ...Object.entries(summary||{}).map(([k,v])=>({h:k.toUpperCase(), v:v.paid+'件', sub:'¥'+v.revenue_jpy.toLocaleString()+' / '+v.sets_paid+'セット'})),
+  ];
+  s.innerHTML = cards.map(c=>`<div class="sumcard"><div class="sumcard-h">${c.h}</div><div class="sumcard-v">${c.v}</div><div class="sumcard-sub">${c.sub}</div></div>`).join('');
+}
+
+function renderPurchases(rows){
+  const tb = document.querySelector('#purchases-table tbody');
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="8" class="empty">データなし</td></tr>'; return; }
+  tb.innerHTML = rows.map(r=>`<tr>
+    <td>${r.created_at?.slice(5,16)||'—'}</td>
+    <td>${r.property_id}</td>
+    <td style="text-align:right">${r.sets}</td>
+    <td>${r.buyer_name||'—'}</td>
+    <td><a href="mailto:${r.buyer_email}">${r.buyer_email}</a></td>
+    <td style="text-align:right;font-family:monospace">¥${(r.price_jpy||0).toLocaleString()}</td>
+    <td><span class="tag ${r.status}">${r.status}</span></td>
+    <td style="font-size:10.5px;color:#777">${(r.valid_from||'').slice(0,10)} 〜 ${(r.valid_until||'').slice(0,10)}</td>
+  </tr>`).join('');
+}
+
+function renderLottery(rows){
+  const tb = document.querySelector('#lottery-table tbody');
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="8" class="empty">データなし</td></tr>'; return; }
+  tb.innerHTML = rows.map(r=>`<tr>
+    <td>${r.target_year}-${String(r.target_month).padStart(2,'0')}</td>
+    <td>${r.property_id}</td>
+    <td>${r.buyer_email||'—'}</td>
+    <td style="font-size:10.5px">${r.candidate1_start||'—'}</td>
+    <td style="font-size:10.5px">${r.candidate2_start||'—'}</td>
+    <td style="font-size:10.5px">${r.candidate3_start||'—'}</td>
+    <td><span class="tag ${r.status}">${r.status}</span></td>
+    <td style="font-size:10.5px;color:var(--gold)">${r.awarded_start?(r.awarded_start+' 〜 '+r.awarded_end):'—'}</td>
+  </tr>`).join('');
+}
+
+async function runLottery(){
+  const property_id = document.getElementById('prop').value;
+  const ym = document.getElementById('ym').value;
+  if(!property_id || !ym){ alert('物件と対象月を選択してください'); return; }
+  const [year, month] = ym.split('-');
+  const msg = document.getElementById('lottery-msg');
+  msg.style.display='block'; msg.textContent='抽選実行中…';
+  try {
+    const r = await fetch('/api/cabin/nightshare/lottery/run',{
+      method:'POST',
+      headers:{'content-type':'application/json','x-admin-key':_key},
+      body: JSON.stringify({ property_id, year:Number(year), month:Number(month) })
+    });
+    const data = await r.json();
+    if(!r.ok){ msg.textContent='✕ 失敗: '+(data.error||''); return; }
+    msg.textContent = `✓ 抽選完了: ${data.total||0}件処理 / ${data.won||0}件当選`;
+    setTimeout(()=>loadAll(), 800);
+  } catch(e){ msg.textContent='通信エラー'; }
+}
+</script>
+</body>
+</html>

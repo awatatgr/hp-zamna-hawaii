@@ -225,16 +225,22 @@ const NIGHTSHARE_PROPS = {
     name: "THE LODGE", location: "北海道 弟子屈 / 美留和",
     price_jpy: 594000, per_night_jpy: 6600, max_sets_per_member: 3, max_guests: 4,
     retail_per_night: 35000, beds24_prop: 243408,
+    permit_no: process.env.PERMIT_LODGE   || "（許可番号: 申請中・取得後本ページで開示）",
+    permit_authority: "釧路保健所",
   },
   nesting: {
     name: "NESTING", location: "北海道 弟子屈 / 美留和",
     price_jpy: 894000, per_night_jpy: 9933, max_sets_per_member: 2, max_guests: 4,
     retail_per_night: 50000, beds24_prop: 243409,
+    permit_no: process.env.PERMIT_NESTING || "（許可番号: 申請中・取得後本ページで開示）",
+    permit_authority: "釧路保健所",
   },
   atami:   {
     name: "WHITE HOUSE 熱海", location: "静岡県 熱海市",
     price_jpy: 1494000, per_night_jpy: 16600, max_sets_per_member: 2, max_guests: 6,
     retail_per_night: 55000, beds24_prop: 243406,
+    permit_no: process.env.PERMIT_ATAMI   || "（許可番号: 申請中・取得後本ページで開示）",
+    permit_authority: "熱海保健所",
   },
 };
 
@@ -6429,6 +6435,38 @@ app.post("/api/cabin/nightshare/lottery/run", async (req, res) => {
   res.json({ ok: true, total: results.length, won: results.filter(r=>r.won).length, results });
 });
 
+// admin: 購入一覧
+app.get("/api/cabin/nightshare/admin/purchases", async (req, res) => {
+  const adminKey = req.headers["x-admin-key"] || req.query.key;
+  if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) return res.status(403).json({ error: "unauthorized" });
+  const rows = (await db.execute({
+    sql: `SELECT id, property_id, sets, buyer_name, buyer_email, buyer_phone, price_jpy, status,
+           contract_signed, nights_total, nights_used, valid_from, valid_until, created_at, paid_at
+          FROM nightshare_purchases ORDER BY created_at DESC LIMIT 500`
+  })).rows;
+  const summary = {};
+  for (const r of rows) {
+    const k = r.property_id, st = r.status;
+    summary[k] = summary[k] || { paid: 0, pending: 0, sets_paid: 0, revenue_jpy: 0 };
+    if (st === "paid") { summary[k].paid++; summary[k].sets_paid += (r.sets||0); summary[k].revenue_jpy += (r.price_jpy||0); }
+    else summary[k].pending++;
+  }
+  res.json({ purchases: rows, summary });
+});
+
+// admin: 抽選キュー一覧
+app.get("/api/cabin/nightshare/admin/lottery", async (req, res) => {
+  const adminKey = req.headers["x-admin-key"] || req.query.key;
+  if (!process.env.ADMIN_KEY || adminKey !== process.env.ADMIN_KEY) return res.status(403).json({ error: "unauthorized" });
+  const rows = (await db.execute({
+    sql: `SELECT l.*, p.buyer_email, p.buyer_name, p.sets AS purchase_sets
+          FROM nightshare_lottery l
+          LEFT JOIN nightshare_purchases p ON l.purchase_id = p.id
+          ORDER BY l.target_year DESC, l.target_month DESC, l.created_at DESC LIMIT 500`
+  })).rows;
+  res.json({ entries: rows });
+});
+
 // ── Kumiai: slots + apply + webhook ──────────────────────────────────────────
 app.get("/api/cabin/kumiai/slots", async (req, res) => {
   const slots = [];
@@ -11816,6 +11854,66 @@ initDb().then(() => {
   const cleanOtps = () => db.execute(`DELETE FROM soluna_otps WHERE expires_at < datetime('now')`).catch(() => {});
   setTimeout(cleanOtps, 60 * 1000); // run once 1 min after startup
   setInterval(cleanOtps, 24 * 60 * 60 * 1000); // then daily
+
+  // NIGHTSHARE 月次抽選: 毎月20日 JST 20:00 (UTC 11:00) に実行
+  // 翌々月分の submitted エントリを物件ごとに抽選
+  const _runNightshareLottery = async () => {
+    const now = new Date();
+    const jstHour = (now.getUTCHours() + 9) % 24;
+    const jstDay = (jstHour < 9 && now.getUTCHours() >= 15) ? now.getUTCDate() + 1 : now.getUTCDate();
+    if (jstDay !== 20 || jstHour !== 20) return; // only at JST 20:00 on the 20th
+    // dedup: check if already run this month
+    const monthKey = `${now.getUTCFullYear()}-${String(now.getUTCMonth()+1).padStart(2,"0")}`;
+    const already = (await db.execute({
+      sql: "SELECT 1 FROM nightshare_lottery WHERE substr(awarded_at,1,7)=? LIMIT 1",
+      args: [monthKey]
+    })).rows[0];
+    if (already) return; // ran already this month
+    // target = 翌々月
+    const t = new Date(now); t.setMonth(t.getMonth() + 2);
+    const tYear = t.getFullYear();
+    const tMonth = t.getMonth() + 1;
+    let totalRun = 0, totalWon = 0;
+    for (const propId of Object.keys(NIGHTSHARE_PROPS)) {
+      const entries = (await db.execute({
+        sql: `SELECT * FROM nightshare_lottery WHERE property_id=? AND target_year=? AND target_month=? AND status='submitted'`,
+        args: [propId, tYear, tMonth]
+      })).rows;
+      if (!entries.length) continue;
+      const occupied = new Set();
+      const sorted = entries.map(e => ({...e, _r: Math.random()}))
+        .sort((a,b) => (b.losses - a.losses) || (a._r - b._r));
+      for (const e of sorted) {
+        let awarded = null;
+        for (const idx of [1,2,3]) {
+          const s = e[`candidate${idx}_start`], en = e[`candidate${idx}_end`];
+          if (!s || !en) continue;
+          const days = [];
+          for (let d = new Date(s); d < new Date(en); d.setDate(d.getDate()+1)) days.push(d.toISOString().slice(0,10));
+          if (days.every(d => !occupied.has(d))) {
+            days.forEach(d => occupied.add(d));
+            awarded = { start: s, end: en };
+            break;
+          }
+        }
+        totalRun++;
+        if (awarded) {
+          totalWon++;
+          await db.execute({ sql: `UPDATE nightshare_lottery SET status='won', awarded_start=?, awarded_end=?, awarded_at=datetime('now') WHERE id=?`, args: [awarded.start, awarded.end, e.id] });
+        } else {
+          const newLosses = (e.losses||0) + 1;
+          const finalStatus = newLosses >= 3 ? 'guaranteed_next' : 'lost';
+          await db.execute({ sql: `UPDATE nightshare_lottery SET status=?, losses=? WHERE id=?`, args: [finalStatus, newLosses, e.id] });
+        }
+      }
+    }
+    if (totalRun > 0) {
+      sendTg(TG_CHAT, `🎲 *NIGHTSHARE 月次抽選 自動実行*\n対象: ${tYear}年${tMonth}月\n対象${totalRun}件 / 当選${totalWon}件\n落選者には翌月優先抽選で再エントリー`).catch(()=>{});
+    }
+  };
+  // 1時間ごとにチェック（条件にマッチした時だけ抽選実行）
+  setInterval(() => _runNightshareLottery().catch(e => console.warn("[nightshare lottery]", e.message)), 60 * 60 * 1000);
+  console.log("✓ NIGHTSHARE 月次抽選 cron enabled (JST 20:00 毎月20日)");
 
   // LINE Rich Menu setup (once at startup)
   setupLineRichMenu().catch(() => {});

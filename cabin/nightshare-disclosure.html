@@ -113,7 +113,11 @@ footer a{color:#666;margin:0 8px}
 <p>会員契約の効力発生日（決済完了日）から<strong>30年間</strong>。1セットあたり年3連泊×30年=合計90泊の宿泊権を付与します。</p>
 
 <h3>旅館業許可</h3>
-<p>本サービスで提供する宿泊は、当社が取得した旅館業法上の許可（簡易宿所営業 または 旅館・ホテル営業）または住宅宿泊事業法上の届出に基づき提供されます。各物件の許可番号・所管自治体は契約締結時に書面で開示します。</p>
+<p>本サービスで提供する宿泊は、当社が取得した旅館業法上の許可（簡易宿所営業 または 旅館・ホテル営業）または住宅宿泊事業法上の届出に基づき提供されます。</p>
+<table class="tbl" id="permit-table">
+<tr><th>物件</th><th>許可番号</th><th>所管</th></tr>
+<tr><td colspan="3" style="text-align:center;color:#555">読み込み中…</td></tr>
+</table>
 
 <div class="box warn">
 <strong>⚠ 9月オープン予定物件について</strong>: SOLUNAビレッジ（美留和）・天空の道場（熊牛原野）・SOLUNA和歌山は2026年9月以降のオープン予定であり、現時点では本契約の対象外です。「先行登録」のみ受付中で、料金は発生しません。
@@ -263,6 +267,18 @@ footer a{color:#666;margin:0 8px}
 </div>
 
 <button class="print-btn" onclick="window.print()">📄 PDFとして保存</button>
+<script>
+fetch('/api/cabin/nightshare/properties').then(r=>r.json()).then(data=>{
+  const t = document.getElementById('permit-table');
+  if(!t || !data.properties) return;
+  const rows = ['<tr><th>物件</th><th>許可番号</th><th>所管</th></tr>'];
+  for(const k of ['lodge','nesting','atami']){
+    const p = data.properties[k]; if(!p) continue;
+    rows.push(`<tr class="hl"><td>${p.name}</td><td style="font-family:monospace;font-size:11.5px">${p.permit_no||'—'}</td><td>${p.permit_authority||'—'}</td></tr>`);
+  }
+  t.innerHTML = rows.join('');
+}).catch(()=>{});
+</script>
 
 <footer>
 <a href="nightshare">NIGHTSHARE</a> ・ <a href="scheme">スキーム</a> ・ <a href="privacy">Privacy</a> ・ <a href="tokushoho">特定商取引法</a><br/>
