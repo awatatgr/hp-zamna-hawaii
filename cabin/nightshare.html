@@ -65,9 +65,9 @@ h2{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line
 .cta-ghost:hover{border-color:rgba(200,164,85,.5);color:var(--gold)}
 
 /* HERO PRICE */
-.hero-price{display:inline-flex;align-items:baseline;gap:10px;padding:14px 26px;background:rgba(200,164,85,.06);border:1px solid rgba(200,164,85,.25);border-radius:100px;margin-top:24px}
-.hero-price .num{font-size:1.6rem;font-weight:800;color:var(--gold);letter-spacing:-.02em}
-.hero-price .unit{font-size:11px;color:#888;letter-spacing:.06em}
+.ns-pricepill{display:inline-flex;align-items:baseline;gap:10px;padding:14px 26px;background:rgba(200,164,85,.06);border:1px solid rgba(200,164,85,.25);border-radius:100px;margin-top:24px}
+.ns-pricepill .num{font-size:1.6rem;font-weight:800;color:var(--gold);letter-spacing:-.02em}
+.ns-pricepill .unit{font-size:11px;color:#888;letter-spacing:.06em}
 
 /* FEATURE GRID */
 .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:24px 0}
@@ -169,7 +169,7 @@ footer .copy{font-size:8.5px;color:#1a1a1a;letter-spacing:.2em;margin-top:24px}
 <p class="label r" style="text-align:center">SOLUNA NIGHTSHARE · 2026年9月オープン予定</p>
 <h2 class="r" style="text-align:center;font-size:clamp(1.8rem,5vw,3rem)">年3連泊から始める、<span class="gold" data-en="Your second home, three nights at a time.">もうひとつの家。</span></h2>
 <p class="r" style="text-align:center;color:#888;font-size:13.5px;line-height:2.2;max-width:540px;margin:0 auto 8px">別荘を1棟買うのも、30泊オーナーになるのも大きい。<br/>それなら<strong style="color:var(--text)">毎年3連泊だけ</strong>を、買いませんか。</p>
-<div class="r hero-price">
+<div class="r ns-pricepill">
   <span class="num">¥594,000〜</span>
   <span class="unit">/ 1セット（年3連泊×30年）</span>
 </div>
@@ -649,7 +649,9 @@ async function buyNightshare(propId){
     const data = await r.json();
     if(!r.ok || !data.url){ alert('決済セッションの作成に失敗しました: '+(data.error||'unknown')); return; }
     if(window.sln) sln.track('purchase_click', { source:'nightshare', property: propId, sets });
-    window.location.href = data.url;
+    // iframe (?embed=1 内) からのアクセスでも親ウィンドウで Stripe を開く
+    var target = (window.top && window.top !== window) ? window.top : window;
+    try { target.location.href = data.url; } catch(_e){ window.location.href = data.url; }
   } catch(e){
     alert('通信エラーが発生しました。時間をおいて再度お試しください。');
   }
