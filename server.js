@@ -8961,13 +8961,14 @@ app.post("/api/soluna/inquiry", express.json(), async (req, res) => {
 // ── 北海道 物件の公開予約フォーム ────────────────────────────────────────────
 // LODGE / NESTING / INSTANT のみ対応。Beds24未連携のtapkop/kumaushi/villageは除外
 const HOKKAIDO_PLANS = {
-  basic:     { label: "素泊まり",                                 addon_per_night_per_guest: 0,     desc: "シンプルな自炊滞在。チェックイン15:00 / チェックアウト11:00。" },
+  basic:     { label: "素泊まり",                                 addon_per_night_per_guest: 0,     desc: "シンプルな自炊滞在。温泉・サウナ・薪ストーブ込み。チェックイン15:00 / アウト11:00。" },
   breakfast: { label: "朝食付き（北海道食材）",                   addon_per_night_per_guest: 2500,  desc: "弟子屈町産の有機卵・野菜・パン・自家製ジャム。" },
-  onsen:     { label: "温泉&サウナ満喫プラン",                     addon_per_night_per_guest: 4500,  desc: "天然温泉pH9.2 + 薪サウナ + アロマセット。LODGE/NESTING推奨。" },
+  winter:    { label: "冬季・薪ストーブ満喫プラン（11-3月）",     addon_per_night_per_guest: 3500,  desc: "薪追加・ホットワイン・雪見温泉セット・チェアスキーレンタル含む。" },
   gibier:    { label: "道東ジビエディナー付き",                   addon_per_night_per_guest: 12000, desc: "蝦夷鹿・羆・知床牛のフルコース（地元シェフ調理）。要事前予約。" },
   activity:  { label: "アクティビティプラン（カヌー or 乗馬）",   addon_per_night_per_guest: 18000, desc: "屈斜路湖SUP/カヌー or 美留和乗馬ガイド付き（半日）。" },
 };
-const HOKKAIDO_PROP_PRICE = { lodge: 35000, nesting: 38000, instant: 25000 };
+// 一般公開予約は市場価格(airbnb_price相当)を使用。会員特典(stay_price)は別途。
+const HOKKAIDO_PROP_PRICE = { lodge: 52000, nesting: 44000, instant: 32000 };
 
 app.post("/api/hokkaido/book", express.json(), async (req, res) => {
   try {

@@ -176,9 +176,9 @@ h1{font-size:1.15rem;font-weight:700;color:var(--gold);letter-spacing:.08em;marg
       <div class="bm-group">
         <div class="bm-label">物件</div>
         <select class="bm-select" id="bm-prop" onchange="updateSummary()">
-          <option value="lodge">THE LODGE — 美留和（¥35,000/泊）</option>
-          <option value="nesting">NESTING — 美留和の森（¥38,000/泊）</option>
-          <option value="instant">インスタントハウス — 美留和（¥25,000/泊）</option>
+          <option value="lodge">THE LODGE — 美留和（¥52,000/泊）</option>
+          <option value="nesting">NESTING — 美留和の森（¥44,000/泊）</option>
+          <option value="instant">インスタントハウス — 美留和（¥32,000/泊）</option>
         </select>
       </div>
 
@@ -532,7 +532,7 @@ loadAll();
 
 // ── 予約モーダル ───────────────────────────────────────────
 var PLANS = [];
-var BASE_PRICE = {lodge:35000, nesting:38000, instant:25000};
+var BASE_PRICE = {lodge:52000, nesting:44000, instant:32000};
 var selectedPlan = 'basic';
 
 fetch('/api/hokkaido/plans').then(function(r){return r.json();}).then(function(d){
@@ -542,9 +542,9 @@ fetch('/api/hokkaido/plans').then(function(r){return r.json();}).then(function(d
 }).catch(function(){
   // フォールバック（API失敗時）
   PLANS = [
-    {key:'basic',     label:'素泊まり',                                addon_per_night_per_guest:0,     desc:'シンプルな自炊滞在。'},
+    {key:'basic',     label:'素泊まり',                                addon_per_night_per_guest:0,     desc:'温泉・サウナ込みのシンプル滞在。'},
     {key:'breakfast', label:'朝食付き（北海道食材）',                  addon_per_night_per_guest:2500,  desc:'弟子屈町産の有機卵・野菜・パン。'},
-    {key:'onsen',     label:'温泉&サウナ満喫プラン',                    addon_per_night_per_guest:4500,  desc:'天然温泉pH9.2 + 薪サウナ + アロマ。'},
+    {key:'winter',    label:'冬季・薪ストーブ満喫プラン（11-3月）',    addon_per_night_per_guest:3500,  desc:'薪追加 + ホットワイン + 雪見温泉セット。'},
     {key:'gibier',    label:'道東ジビエディナー付き',                  addon_per_night_per_guest:12000, desc:'蝦夷鹿・羆・知床牛のフルコース。'},
     {key:'activity',  label:'アクティビティプラン（カヌー or 乗馬）',  addon_per_night_per_guest:18000, desc:'屈斜路湖カヌー or 美留和乗馬ガイド付き。'},
   ];
@@ -610,7 +610,8 @@ function updateSummary(){
   sum.innerHTML =
     '宿泊料: ¥'+basePrice.toLocaleString('ja-JP')+' × '+nights+'泊 = ¥'+stayTotal.toLocaleString('ja-JP')+'<br>'
     +'プラン加算: ¥'+(plan && plan.addon_per_night_per_guest || 0).toLocaleString('ja-JP')+' × '+guests+'名 × '+nights+'泊 = ¥'+addon.toLocaleString('ja-JP')+'<br>'
-    +'<span class="total">合計目安: ¥'+total.toLocaleString('ja-JP')+'</span>';
+    +'<span class="total">合計目安: ¥'+total.toLocaleString('ja-JP')+'</span><br>'
+    +'<span style="font-size:10px;color:#666">税込・清掃費込み / 担当者が空き状況確認後に正式金額をご案内</span>';
 }
 
 function submitBooking(){
