@@ -66,9 +66,16 @@ h1{font-size:1.15rem;font-weight:700;color:var(--gold);letter-spacing:.08em;marg
 .common-count{font-size:10px;color:#888}
 .common-card .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .common-card .cal-nav button{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;color:#888;font-size:12px;padding:4px 10px;cursor:pointer}
-.common-card .cal-day.all-open{background:rgba(200,164,85,.22);color:var(--gold);font-weight:700}
-.common-card .cal-day.some-open{background:rgba(78,203,141,.08);color:#4ecb8d}
+.common-card .cal-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:2px;aspect-ratio:auto;min-height:42px}
+.common-card .cal-day .dnum{font-size:11px;line-height:1.1}
+.common-card .cal-day .pmarks{display:flex;gap:1px;margin-top:auto;margin-bottom:2px;justify-content:center}
+.common-card .cal-day .pm{font-size:8px;font-weight:700;line-height:1;padding:1px 2.5px;border-radius:2px;background:rgba(78,203,141,.18);color:#4ecb8d;letter-spacing:0}
+.common-card .cal-day .pm.booked{background:rgba(230,90,90,.28);color:#e65a5a;text-decoration:line-through;text-decoration-thickness:1px}
+.common-card .cal-day.all-open{background:rgba(200,164,85,.22);color:var(--gold)}
+.common-card .cal-day.all-open .dnum{font-weight:700}
+.common-card .cal-day.some-open{background:rgba(78,203,141,.05)}
 .common-card .cal-day.all-booked{background:rgba(230,90,90,.18);color:#e65a5a}
+.common-card .cal-day.past .pmarks{display:none}
 .next-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .next-list .chip{background:rgba(200,164,85,.12);border:1px solid rgba(200,164,85,.25);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:12px}
 .common-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:10px;color:#666}
@@ -102,6 +109,7 @@ h1{font-size:1.15rem;font-weight:700;color:var(--gold);letter-spacing:.08em;marg
     <span><span class="dot" style="background:rgba(200,164,85,.6)"></span>全棟空き</span>
     <span><span class="dot" style="background:rgba(78,203,141,.3)"></span>一部空き</span>
     <span><span class="dot" style="background:rgba(230,90,90,.5)"></span>全棟予約</span>
+    <span style="color:#888;border-left:1px solid #2a2a28;padding-left:10px;margin-left:2px">バッジ: <b style="color:#aaa">L</b>=LODGE / <b style="color:#aaa">N</b>=NESTING / <b style="color:#aaa">I</b>=INSTANT（赤＝予約済）</span>
   </div>
   <div class="next-list" id="next-list"></div>
 </div>
@@ -152,20 +160,35 @@ function navCommon(dir){
   renderCommon();
 }
 
+// Beds24連携物件の表示用ショートコード（順番固定）
+var COMMON_PROPS = [
+  {slug:'lodge',   code:'L', name:'LODGE'},
+  {slug:'nesting', code:'N', name:'NESTING'},
+  {slug:'instant', code:'I', name:'INSTANT'},
+];
+
 // 連携3棟の予約状況をまとめて、各日付の状態を返す
 // state: 'all-open' | 'some-open' | 'all-booked' | 'loading'
 function commonStatus(ds){
-  var beds24Props = PROPS.filter(function(p){ return p.beds24>0; });
-  var loaded = beds24Props.filter(function(p){ return (state[p.slug]||{}).loaded; });
-  if(loaded.length < beds24Props.length) return 'loading';
+  var loaded = COMMON_PROPS.filter(function(p){ return (state[p.slug]||{}).loaded; });
+  if(loaded.length < COMMON_PROPS.length) return 'loading';
   var bookedCount = 0;
-  beds24Props.forEach(function(p){
+  COMMON_PROPS.forEach(function(p){
     var booked = (state[p.slug]||{}).booked||[];
     if(booked.indexOf(ds) >= 0) bookedCount++;
   });
   if(bookedCount === 0) return 'all-open';
-  if(bookedCount === beds24Props.length) return 'all-booked';
+  if(bookedCount === COMMON_PROPS.length) return 'all-booked';
   return 'some-open';
+}
+
+// 各物件ごとの当日状態を返す: ['open','booked','open']
+function commonDayBreakdown(ds){
+  return COMMON_PROPS.map(function(p){
+    var st = state[p.slug]||{};
+    if(!st.loaded) return 'loading';
+    return (st.booked||[]).indexOf(ds) >= 0 ? 'booked' : 'open';
+  });
 }
 
 function renderCommon(){
@@ -184,7 +207,8 @@ function renderCommon(){
     var dt = new Date(commonYear,commonMonth,d);
     var ds = fmt(dt);
     var cls = 'cal-day';
-    if(dt < today() && ds !== todayStr){ cls += ' past'; }
+    var isPast = dt < today() && ds !== todayStr;
+    if(isPast){ cls += ' past'; }
     else {
       var st = commonStatus(ds);
       if(st === 'all-open') cls += ' all-open';
@@ -192,7 +216,24 @@ function renderCommon(){
       else if(st === 'all-booked') cls += ' all-booked';
     }
     if(ds === todayStr) cls += ' today';
-    html += '<div class="'+cls+'" title="'+ds+'">'+d+'</div>';
+    var marks = '';
+    if(!isPast){
+      var bd = commonDayBreakdown(ds);
+      var bookedNames = [];
+      var openNames = [];
+      var pieces = COMMON_PROPS.map(function(p, i){
+        var s = bd[i];
+        if(s === 'booked') bookedNames.push(p.name);
+        else if(s === 'open') openNames.push(p.name);
+        var c = (s === 'booked') ? 'pm booked' : 'pm';
+        return '<span class="'+c+'">'+p.code+'</span>';
+      }).join('');
+      marks = '<div class="pmarks">'+pieces+'</div>';
+      var tip = ds + (bookedNames.length ? ' / 予約済: '+bookedNames.join(',') : '') + (openNames.length ? ' / 空き: '+openNames.join(',') : '');
+      html += '<div class="'+cls+'" title="'+tip+'"><div class="dnum">'+d+'</div>'+marks+'</div>';
+    } else {
+      html += '<div class="'+cls+'" title="'+ds+'"><div class="dnum">'+d+'</div></div>';
+    }
   }
   grid.innerHTML = html;
 
