@@ -143,7 +143,7 @@ export default function TicketsPage() {
             SOLUNA FEST HAWAII 2026
           </h1>
           <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, letterSpacing: 2, marginTop: 12 }}>
-            SEP 4-6 &middot; OAHU, HAWAII
+            OCT 31 &middot; OAHU, HAWAII
           </p>
         </div>
 

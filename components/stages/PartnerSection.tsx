@@ -233,8 +233,8 @@ export default function PartnerSection() {
             <p style={{ color: "#fff", fontWeight: 700, fontSize: 15, marginBottom: 6 }}>SOLUNA FEST HAWAII</p>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, lineHeight: 1.6 }}>
               {locale === "ja"
-                ? "世界最高峰のアンダーグラウンド・エレクトロニックミュージック・フェスティバル。2026年9月、オアフ島初上陸。"
-                : "The world's finest underground electronic music festival. Arrives in Oahu, September 2026."}
+                ? "世界最高峰のアンダーグラウンド・エレクトロニックミュージック・フェスティバル。2026年10月、オアフ島初上陸。"
+                : "The world's finest underground electronic music festival. Arrives in Oahu, October 2026."}
             </p>
           </div>
           {/* OpenSonic */}

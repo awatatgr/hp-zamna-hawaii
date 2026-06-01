@@ -135,12 +135,12 @@ const SECTIONS: Section[] = [
       { ja: "Taylor/Electric Palms パートナーシップ検討", en: "Taylor/Electric Palms partnership evaluation", status: "in_progress",note: { ja: "⚠ 島で最も有力なEDMプロモーター。LA面談済み。$100K以下のアーティスト確保可能と主張。ただしDavidの教訓から価格の裏取りが必須。SOLUNAライセンス外の土日開催で協業の可能性", en: "⚠ Most prominent EDM promoter on island. Met in LA. Claims artists under $100K. Must verify pricing (learned from David). Potential Sat/Sun collab outside SOLUNA license" } },
       { ja: "ローカル DJ / アーティストの選定（ハワイ）",en: "Local Hawaii DJ / artist selection",          status: "in_progress",note: { ja: "Sean のローカルチームが活動中。Baby Zamnaイベント実施済み", en: "Sean's local team active. Baby Zamna event executed" } },
       { ja: "全アーティストの出演ライダー確認",          en: "All artist riders confirmed",                 status: "pending" },
-      { ja: "外国人アーティストのビザ申請（O-1 / P-1）", en: "Artist visa applications (O-1 / P-1)",        status: "urgent",     note: { ja: "⚠ 申請〜取得に3〜6ヶ月。9月開催まで6ヶ月。今すぐ着手しないと間に合わない", en: "⚠ 3–6 months lead time. 6 months to event. Must start NOW or risk missing deadline" } },
+      { ja: "外国人アーティストのビザ申請（O-1 / P-1）", en: "Artist visa applications (O-1 / P-1)",        status: "urgent",     note: { ja: "⚠ 申請〜取得に3〜6ヶ月。10月開催まで6ヶ月。今すぐ着手しないと間に合わない", en: "⚠ 3–6 months lead time. 6 months to event. Must start NOW or risk missing deadline" } },
       { ja: "フライト・ホテル comp rooms の手配",        en: "Artist comp flights & hotel rooms",           status: "in_progress",note: { ja: "航空会社・ホテルにスポンサー型comp交渉中（Sean）", en: "Negotiating comp rooms via sponsor deals (Sean)" } },
       { ja: "バックステージライダー・ケータリング手配",  en: "Backstage catering & rider fulfillment",      status: "pending",    note: { ja: "専属シェフ+フードベンダーからのフードチケット提供。海外アーティストにハワイアン料理体験", en: "Dedicated chef + food tickets from vendors. Give international artists Hawaiian food experience" } },
       { ja: "シカゴラインナップからのアーティスト移動",  en: "Chicago lineup → Hawaii artist routing",      status: "in_progress",note: { ja: "シカゴ公演後ハワイへ直行。土日月に配置。コスト効率の良いルーティング", en: "Direct from Chicago shows to Hawaii. Schedule for Sat/Sun/Mon. Cost-efficient routing" } },
       { ja: "SOLUNA vs Taylor アーティスト価格比較",       en: "SOLUNA vs Taylor artist price comparison",     status: "in_progress",note: { ja: "SOLUNAのブッキング手数料15%+利益7% vs Taylorの$100K以下アーティスト。独立検証必須", en: "SOLUNA booking 15% + profit 7% vs Taylor's sub-$100K artists. Independent verification required" } },
-      { ja: "2-3日間タイムテーブルの確定",               en: "2-3 day timetable finalized",                 status: "pending",    note: { ja: "Day1=SOLUNA(Sep4) / Day2-3=Taylor協業の可能性(Sep5-6)。3PM-10PM+アフターパーティー", en: "Day1=SOLUNA(Sep4) / Day2-3=Taylor collab(Sep5-6). 3PM-10PM + after party" } },
+      { ja: "2-3日間タイムテーブルの確定",               en: "2-3 day timetable finalized",                 status: "pending",    note: { ja: "Day1=SOLUNA(Oct31) / Day2-3=Taylor協業の可能性(Nov1-2)。3PM-10PM+アフターパーティー", en: "Day1=SOLUNA(Oct31) / Day2-3=Taylor collab(Nov1-2). 3PM-10PM + after party" } },
     ],
   },
 
@@ -252,7 +252,7 @@ const SECTIONS: Section[] = [
       { ja: "緊急時対応マニュアルの作成",                en: "Emergency response manual created",           status: "pending",    note: { ja: "避難経路・集合場所・連絡フロー・天候中止基準を含む", en: "Include evacuation routes, assembly points, comms flow, weather cancellation criteria" } },
       { ja: "消防署・警察との事前協議",                  en: "Pre-event coordination with fire dept & police",status: "pending",  note: { ja: "HPD Manny・Dougとの連携。会場確定後に詳細協議", en: "Coordinate with HPD Manny & Doug. Detailed planning after venue confirmed" } },
       { ja: "危険物・薬物対策ポリシーの策定",            en: "Drugs & contraband policy defined",           status: "pending" },
-      { ja: "熱中症・暑さ対策（9月ハワイ）",             en: "Heat stroke prevention (Sept Hawaii)",        status: "pending",    note: { ja: "ミスト扇風機・無料給水ステーション・日陰エリアの確保。9月のハワイは30°C超", en: "Mist fans, free hydration stations, shade areas. Hawaii in Sept exceeds 30°C / 86°F" } },
+      { ja: "熱中症・暑さ対策（10月ハワイ）",             en: "Heat stroke prevention (Oct Hawaii)",        status: "pending",    note: { ja: "ミスト扇風機・無料給水ステーション・日陰エリアの確保。10月のハワイは30°C超", en: "Mist fans, free hydration stations, shade areas. Hawaii in Oct exceeds 30°C / 86°F" } },
     ],
   },
 
@@ -315,8 +315,8 @@ const SECTIONS: Section[] = [
 ];
 
 const KPI = [
-  { value: "Sep 4–6, 2026", label: { ja: "開催日（Labor Day週末）", en: "Event dates (Labor Day wknd)" } },
-  { value: `${Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000)}d`, label: { ja: "開催まで残り", en: "Days until event" } },
+  { value: "Oct 31, 2026", label: { ja: "開催日（ハロウィン）", en: "Event date (Halloween)" } },
+  { value: `${Math.ceil((new Date("2026-10-31").getTime() - Date.now()) / 86400000)}d`, label: { ja: "開催まで残り", en: "Days until event" } },
   { value: "9,000/day",     label: { ja: "想定来場者数（/日）",     en: "Expected attendance (per day)" } },
   { value: "$200,000",      label: { ja: "調達目標",               en: "Fundraise target" } },
   { value: "VIP $1,000+",   label: { ja: "VIPチケット最低価格",    en: "VIP ticket starting price" } },
@@ -391,7 +391,7 @@ const PARTNERS: Partner[] = [
   { name: "Sydney / Project P", contact: "Sydney & Lucas", type_ja: "ピックルボール・レイブ", type_en: "Pickleball Rave", status: "outreach", notes_ja: "プレイベントまたはフェスティバル内でのコラボ案。ハワイにはピックルボール+車好きが多い。Vakas作成のmonetizationプラン・投資デックあり", notes_en: "Pre-event or in-festival collab proposal. Hawaii has strong pickleball + car community. Vakas created monetization plan & investor deck", who: "Keyanna/Vakas" },
   { name: "Beatbox", contact: "TBD", type_ja: "飲料スポンサー候補", type_en: "Beverage Sponsor Candidate", status: "outreach", notes_ja: "Sidがオーナーと知り合い。Insomniacイベントで人気。ハワイではまだ少ないがMaui Brewingと組み合わせ可能", notes_en: "Sid knows the owner. Popular at Insomniac events. Limited in Hawaii but pairs well with Maui Brewing", who: "Sid/Vakas" },
   { name: "Maui Brewing Company", contact: "TBD", type_ja: "飲料スポンサー候補", type_en: "Beverage Sponsor Candidate", status: "pending", notes_ja: "島で確立されたブランド。Beatboxと組み合わせ案（若者向け+地元ビール）", notes_en: "Established island brand. Combo with Beatbox proposed (youth + local beer)", who: "Keyanna" },
-  { name: "Kala Waikiki", contact: "Tropic Bamba / Jack", type_ja: "アフターパーティー会場候補", type_en: "After-party Venue Candidate", status: "outreach", notes_ja: "5PM-2AM。毎週金曜+月1土曜。先週リブランド。9月までに変更の可能性あり", notes_en: "5PM-2AM. Every Fri + 1x monthly Sat. Just rebranded last week. May change by September", who: "Keyanna" },
+  { name: "Kala Waikiki", contact: "Tropic Bamba / Jack", type_ja: "アフターパーティー会場候補", type_en: "After-party Venue Candidate", status: "outreach", notes_ja: "5PM-2AM。毎週金曜+月1土曜。先週リブランド。10月までに変更の可能性あり", notes_en: "5PM-2AM. Every Fri + 1x monthly Sat. Just rebranded last week. May change by October", who: "Keyanna" },
   { name: "Anura", contact: "Miko", type_ja: "アフターパーティー会場候補", type_en: "After-party Venue Candidate", status: "outreach", notes_ja: "12AM-dawn。Mikoが窓口", notes_en: "12AM-dawn. Miko is the connect", who: "Keyanna" },
 ];
 
@@ -478,7 +478,7 @@ const GANTT: { ja: string; en: string; start: string; end: string; s: GStatus }[
   { ja: "アルコール仕入れ ($100K+)",en: "Alcohol Procurement ($100K+)",start: "2026-06-01", end: "2026-08-15", s: "pending" },
   { ja: "アフタームービー制作",     en: "After-movie Production",   start: "2026-09-06", end: "2026-09-30", s: "pending" },
   { ja: "投資家返済",               en: "Investor Repayment",       start: "2026-09-15", end: "2026-10-15", s: "pending" },
-  { ja: "SOLUNA FEST HAWAII 開催",         en: "EVENT DAY",               start: "2026-09-04", end: "2026-09-05", s: "event" },
+  { ja: "SOLUNA FEST HAWAII 開催",         en: "EVENT DAY",               start: "2026-10-31", end: "2026-10-31", s: "event" },
 ];
 
 type Submission = {
@@ -1221,7 +1221,7 @@ export default function AdminPage() {
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{ja ? "要対応" : "Urgent"}</p>
             </div>
             <div style={{ background: "rgba(201,169,98,0.06)", border: "1px solid rgba(201,169,98,0.12)", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ color: "rgba(201,169,98,0.8)", fontSize: 22, fontWeight: 700 }}>{`${Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000)}`}</p>
+              <p style={{ color: "rgba(201,169,98,0.8)", fontSize: 22, fontWeight: 700 }}>{`${Math.ceil((new Date("2026-10-31").getTime() - Date.now()) / 86400000)}`}</p>
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{ja ? "残り日数" : "Days left"}</p>
             </div>
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "14px 16px" }}>

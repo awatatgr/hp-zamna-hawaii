@@ -166,7 +166,7 @@ export default function FestivalsPage() {
   };
 
   const countdown = useCountdown(
-    new Date(selected?.start_date || "2026-09-04T18:00:00-10:00")
+    new Date(selected?.start_date || "2026-10-31T18:00:00-10:00")
   );
 
   /* group lineup by stage for schedule view */

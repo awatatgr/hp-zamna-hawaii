@@ -8,10 +8,10 @@ import InnerFooter from "@/components/InnerFooter";
 const fade = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.7 }, viewport: { once: true } };
 
 const BASICS = [
-  { ja_l: "日程", en_l: "Date", ja_v: "2026年9月4日（金）〜5日（土）", en_v: "September 4 (Fri) – 5 (Sat), 2026" },
+  { ja_l: "日程", en_l: "Date", ja_v: "2026年10月31日（土）", en_v: "October 31 (Sat), 2026" },
   { ja_l: "会場", en_l: "Venue", ja_v: "モアナルアガーデン（Moanalua Gardens）, オアフ島", en_v: "Moanalua Gardens, Oahu, HI" },
   { ja_l: "開場", en_l: "Gates Open", ja_v: "18:00 HST", en_v: "6:00 PM HST" },
-  { ja_l: "チケット", en_l: "Tickets", ja_v: "Day 1: $120 / Day 2: $180 / VIP: $1,000+", en_v: "Day 1: $120 / Day 2: $180 / VIP: $1,000+" },
+  { ja_l: "チケット", en_l: "Tickets", ja_v: "GA: $120 / VIP: $1,000+", en_v: "GA: $120 / VIP: $1,000+" },
   { ja_l: "年齢制限", en_l: "Age Limit", ja_v: "21歳以上（ID必須）", en_v: "21+ (valid ID required)" },
   { ja_l: "シャトル", en_l: "Shuttle", ja_v: "Waikiki発着 往復シャトルあり（詳細近日公開）", en_v: "Round-trip shuttle from Waikiki (details TBA)" },
 ];

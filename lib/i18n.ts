@@ -5,7 +5,7 @@ export const translations = {
       tagline: "COMING SOON",
     },
     date: {
-      title: "SEPTEMBER 4, 2026",
+      title: "OCTOBER 31, 2026",
       location: "OAHU, HAWAII",
       venue: "SECRET LOCATION",
       tagline: "Where the jungle meets the ocean",
@@ -31,7 +31,7 @@ export const translations = {
       tagline: "COMING SOON",
     },
     date: {
-      title: "2026年9月4日",
+      title: "2026年10月31日",
       location: "オアフ島、ハワイ",
       venue: "SECRET LOCATION",
       tagline: "ジャングルと海が出会う場所",

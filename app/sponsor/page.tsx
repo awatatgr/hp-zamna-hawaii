@@ -118,8 +118,8 @@ export default function SponsorPage() {
           </p>
           <p style={{ color: "rgba(255,255,255,0.42)", fontSize: 15, lineHeight: 1.7 }}>
             {ja
-              ? "世界最高峰の音楽フェスが、2026年9月4日にオアフ島で開催されます。"
-              : "The world's top music festival comes to Oahu on September 4, 2026."}
+              ? "世界最高峰の音楽フェスが、2026年10月31日にオアフ島で開催されます。"
+              : "The world's top music festival comes to Oahu on October 31, 2026."}
           </p>
         </motion.div>
 
@@ -147,7 +147,7 @@ export default function SponsorPage() {
 
           <div className="data-table">
             {[
-              [ja ? "日程" : "Date", "2026年9月4日 / September 4, 2026"],
+              [ja ? "日程" : "Date", "2026年10月31日 / October 31, 2026"],
               [ja ? "会場" : "Venue", "Moanalua Gardens（モアナルアガーデン）· オアフ島 / Oahu"],
               [ja ? "来場者" : "Guests", ja ? "2,000〜5,000人" : "2,000–5,000"],
               [ja ? "客層" : "Audience", ja ? "22〜45歳・平均年収$120K+" : "Age 22–45, avg income $120K+"],

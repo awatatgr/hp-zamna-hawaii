@@ -19,8 +19,8 @@ const CLAUSES_JA = [
     title: "第2条 — 使用目的",
     body: `甲は、以下のイベント開催のために乙の施設を使用する。
 イベント名: SOLUNA FEST HAWAII 2026
-日程: 2026年9月3日（水）設営 〜 9月6日（日）撤収完了
-本番: 9月4日（金）18:00〜03:00、9月5日（土）18:00〜03:00
+日程: 2026年10月30日（金）設営 〜 11月1日（日）撤収完了
+本番: 10月31日（土）18:00〜03:00
 想定来場者数: 2,000〜5,000名`,
   },
   {
@@ -68,7 +68,7 @@ const CLAUSES_JA = [
   },
   {
     title: "第8条 — 原状回復",
-    body: `甲は、撤収完了日（9月6日）までに会場を原状回復する。
+    body: `甲は、撤収完了日（11月1日）までに会場を原状回復する。
  - 全ての仮設構造物の撤去
  - ゴミ・廃棄物の完全撤去
  - 芝生・地面の損傷があった場合は甲の費用で修復
@@ -95,8 +95,8 @@ Venue Owner ("Party B"): Moanalua Gardens Management`,
     title: "Article 2 — Purpose of Use",
     body: `Party A shall use Party B's facility for the following event:
 Event Name: SOLUNA FEST HAWAII 2026
-Dates: September 3, 2026 (setup) – September 6, 2026 (teardown complete)
-Event: Sep 4 (Fri) 18:00–03:00, Sep 5 (Sat) 18:00–03:00
+Dates: October 30, 2026 (setup) – November 1, 2026 (teardown complete)
+Event: Oct 31 (Sat) 18:00–03:00
 Expected Attendance: 2,000–5,000`,
   },
   {
@@ -144,7 +144,7 @@ Party A shall indemnify and hold Party B harmless from damages caused by Party A
   },
   {
     title: "Article 8 — Restoration",
-    body: `Party A shall restore the venue to its original condition by teardown date (Sep 6).
+    body: `Party A shall restore the venue to its original condition by teardown date (Nov 1).
  - Remove all temporary structures
  - Complete waste and debris removal
  - Repair any lawn/ground damage at Party A's expense

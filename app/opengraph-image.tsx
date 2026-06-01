@@ -1,7 +1,7 @@
 export const dynamic = "force-static";
 import { ImageResponse } from "next/og";
 
-export const alt = "SOLUNA FEST HAWAII 2026 — Sep 4–6, Oahu";
+export const alt = "SOLUNA FEST HAWAII 2026 — Oct 31, Oahu";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -52,7 +52,7 @@ export default function Image() {
           fontSize: 36, color: "#C9A962", letterSpacing: "0.25em",
           marginBottom: 20, display: "flex",
         }}>
-          2026 · SEP 4–6 · OAHU
+          2026 · OCT 31 · OAHU
         </div>
 
         {/* Tickets */}

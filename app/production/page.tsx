@@ -29,21 +29,7 @@ const TIMELINE_DAY1 = [
   { time: "01:00", ja: "クロージング DJ", en: "Closing DJ" },
   { time: "02:00", ja: "ラストコール / シャトル案内開始", en: "Last call / shuttle announcement" },
   { time: "03:00", ja: "完全閉場・シャトル最終便", en: "Venue closed — last shuttle" },
-  { time: "03:30", ja: "撤収作業開始（Day1→Day2切替）", en: "Reset begins (Day 1 → Day 2 turnover)" },
-];
-
-const TIMELINE_DAY2 = [
-  { time: "08:00", ja: "Day2 セットアップ・追加演出", en: "Day 2 setup & additional staging" },
-  { time: "12:00", ja: "音響チェック（Day2アーティスト）", en: "Sound check (Day 2 artists)" },
-  { time: "15:00", ja: "セキュリティ・ケータリング再確認", en: "Security & catering recheck" },
-  { time: "18:00", ja: "開場", en: "Gates open" },
-  { time: "19:00", ja: "Opening DJ", en: "Opening DJ" },
-  { time: "21:00", ja: "メインアクト #2", en: "Main Act #2" },
-  { time: "23:00", ja: "グランドヘッドライナー", en: "Grand Headliner" },
-  { time: "01:30", ja: "フィナーレ（花火 / 特殊演出）", en: "Finale (fireworks / special effects)" },
-  { time: "02:00", ja: "シャトル・退場案内", en: "Shuttle & exit guidance" },
-  { time: "03:00", ja: "完全閉場", en: "Venue closed" },
-  { time: "04:00", ja: "完全撤収開始", en: "Full teardown begins" },
+  { time: "03:30", ja: "完全撤収開始", en: "Full teardown begins" },
 ];
 
 const ZONES = [
@@ -146,29 +132,14 @@ export default function ProductionPage() {
           </div>
         </motion.section>
 
-        {/* Day 1 Timeline */}
+        {/* Event Day Timeline */}
         <motion.section {...fade} style={{ marginBottom: 60 }}>
           <h2 className="font-display" style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", color: "#fff", marginBottom: 24 }}>
-            {ja ? "Day 1 — 9月4日（金）タイムライン" : "Day 1 — Sep 4 (Fri) Timeline"}
+            {ja ? "10月31日（土）タイムライン" : "Oct 31 (Sat) Timeline"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {TIMELINE_DAY1.map((t, i) => (
               <div key={t.time + "-d1"} style={{ display: "flex", gap: 16, padding: "12px 0", borderBottom: i < TIMELINE_DAY1.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
-                <span style={{ color: "var(--gold)", fontSize: 13, fontWeight: 700, minWidth: 52, fontVariantNumeric: "tabular-nums" }}>{t.time}</span>
-                <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>{ja ? t.ja : t.en}</span>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Day 2 Timeline */}
-        <motion.section {...fade} style={{ marginBottom: 60 }}>
-          <h2 className="font-display" style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", color: "#fff", marginBottom: 24 }}>
-            {ja ? "Day 2 — 9月5日（土）タイムライン" : "Day 2 — Sep 5 (Sat) Timeline"}
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {TIMELINE_DAY2.map((t, i) => (
-              <div key={t.time + "-d2"} style={{ display: "flex", gap: 16, padding: "12px 0", borderBottom: i < TIMELINE_DAY2.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
                 <span style={{ color: "var(--gold)", fontSize: 13, fontWeight: 700, minWidth: 52, fontVariantNumeric: "tabular-nums" }}>{t.time}</span>
                 <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>{ja ? t.ja : t.en}</span>
               </div>

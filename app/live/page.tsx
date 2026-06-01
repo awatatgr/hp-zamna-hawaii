@@ -17,7 +17,7 @@ interface LiveStream {
   stream_url?: string;
 }
 
-const FESTIVAL_DATE = new Date("2026-09-04T18:00:00-10:00");
+const FESTIVAL_DATE = new Date("2026-10-31T18:00:00-10:00");
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(Date.now());
@@ -365,7 +365,7 @@ export default function LivePage() {
                 fontWeight: 500,
               }}
             >
-              {t("SOLUNA FEST HAWAII 2026 — 9月4-6日, オアフ", "SOLUNA FEST HAWAII 2026 — Sep 4-6, Oahu")}
+              {t("SOLUNA FEST HAWAII 2026 — 10月31日, オアフ", "SOLUNA FEST HAWAII 2026 — Oct 31, Oahu")}
             </p>
           </div>
         )}

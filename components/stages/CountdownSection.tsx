@@ -22,7 +22,7 @@ function useCountdown(target: Date) {
 
 export default function CountdownSection() {
   const [locale, setLocale] = useState<Locale>("en");
-  const countdown = useCountdown(new Date("2026-09-04T18:00:00-10:00"));
+  const countdown = useCountdown(new Date("2026-10-31T18:00:00-10:00"));
 
   useEffect(() => {
     const lang = navigator.language.split("-")[0];
@@ -140,7 +140,7 @@ export default function CountdownSection() {
               textTransform: "uppercase",
             }}
           >
-            SEP 4–6, 2026 · MOANALUA GARDENS · OAHU
+            OCT 31, 2026 · MOANALUA GARDENS · OAHU
           </p>
 
           {/* Ticket CTA — Stage 3+ */}
@@ -187,7 +187,7 @@ export default function CountdownSection() {
                   letterSpacing: "0.08em",
                 }}
               >
-                Day 1: $120 · Day 2: $180 · VIP: $1,000+
+                GA: $120 · VIP: $1,000+
               </p>
             </>
           )}
@@ -229,7 +229,7 @@ export default function CountdownSection() {
               {
                 stat: "2026",
                 label: locale === "ja" ? "ハワイ初上陸" : "Hawaii Debut",
-                sub: "Sep 4–6 · Oahu",
+                sub: "Oct 31 · Oahu",
               },
             ].map((card) => (
               <div

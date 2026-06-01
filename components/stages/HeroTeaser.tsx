@@ -101,7 +101,7 @@ export default function HeroTeaser() {
               marginBottom: 6,
             }}
           >
-            SEP 4–6, 2026
+            OCT 31, 2026
           </p>
           <p
             style={{

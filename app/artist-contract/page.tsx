@@ -19,7 +19,7 @@ const CLAUSES_JA = [
     title: "第2条 — 出演概要",
     body: `イベント名: SOLUNA FEST HAWAII 2026
 会場: モアナルアガーデン（Moanalua Gardens）, オアフ島, ハワイ州
-出演日時: 2026年9月____日 ____:____ 〜 ____:____（HST）
+出演日時: 2026年10月31日 ____:____ 〜 ____:____（HST）
 セット時間: ____分
 ジャンル: アンダーグラウンド・エレクトロニック`,
   },
@@ -37,7 +37,7 @@ const CLAUSES_JA = [
     body: `甲が負担するもの:
  - 往復航空券（ビジネスクラス / エコノミー: ___________）
    出発地: _______________
- - ホテル宿泊: ____泊（チェックイン: 9月___日 / チェックアウト: 9月___日）
+ - ホテル宿泊: ____泊（チェックイン: 10月___日 / チェックアウト: 11月___日）
    ホテル: Waikiki周辺（甲が手配）
  - 空港 ↔ ホテル ↔ 会場の送迎
 乙が負担するもの:
@@ -119,7 +119,7 @@ Management: _______________`,
     title: "Article 2 — Performance Details",
     body: `Event: SOLUNA FEST HAWAII 2026
 Venue: Moanalua Gardens, Oahu, Hawaii
-Performance Date & Time: September ___, 2026, ___:___ – ___:___ (HST)
+Performance Date & Time: October 31, 2026, ___:___ – ___:___ (HST)
 Set Length: ___ minutes
 Genre: Underground Electronic`,
   },
@@ -137,7 +137,7 @@ Currency: USD`,
     body: `Party A provides:
  - Round-trip airfare (Business / Economy: ___________)
    Departure city: _______________
- - Hotel: ___ nights (Check-in: Sep ___ / Check-out: Sep ___)
+ - Hotel: ___ nights (Check-in: Oct ___ / Check-out: Nov ___)
    Hotel: Waikiki area (arranged by Party A)
  - Airport ↔ Hotel ↔ Venue transfers
 Party B provides:

@@ -32,7 +32,7 @@ export default function LineupSection() {
           {locale === "ja" ? "ラインナップ" : "LINEUP"}
         </p>
         <h2 className="font-display text-4xl md:text-6xl lg:text-7xl tracking-wider mb-4">
-          {locale === "ja" ? "2026年9月4日" : "SEPTEMBER 4, 2026"}
+          {locale === "ja" ? "2026年10月31日" : "OCTOBER 31, 2026"}
         </h2>
         <p className="text-xl md:text-2xl tracking-widest text-white/80 mb-2">
           {locale === "ja" ? "オアフ島、ハワイ" : "OAHU, HAWAII"}

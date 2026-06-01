@@ -30,7 +30,7 @@ export default function Home() {
               <span key={k} style={{ display: "flex" }}>
                 {[
                   "SOLUNA FEST HAWAII 2026",
-                  "SEP 4\u20136 \u00B7 OAHU, HAWAII",
+                  "OCT 31 \u00B7 OAHU, HAWAII",
                   "TICKETS FROM $120",
                   "VIP FROM $1,000",
                   "UNDERGROUND ELECTRONIC",

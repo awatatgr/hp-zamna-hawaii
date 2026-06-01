@@ -52,7 +52,7 @@ export default function LineupPage() {
   useEffect(() => { setLang(getSavedLang()); }, []);
   const ja = lang === "ja";
   const toggleLang = () => { const n = lang === "ja" ? "en" : "ja"; setLang(n); saveLang(n); };
-  const countdown = useCountdown(new Date("2026-09-04T18:00:00-10:00"));
+  const countdown = useCountdown(new Date("2026-10-31T18:00:00-10:00"));
 
   const handleNotify = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,12 +142,12 @@ export default function LineupPage() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
             {[
-              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 1 · Sep 4", head: true },
-              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 2 · Sep 5", head: true },
-              { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Day 1", head: false },
-              { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Day 2", head: false },
-              { tier: ja ? "サポートアクト" : "SUPPORT", day: "Day 1", head: false },
-              { tier: ja ? "サポートアクト" : "SUPPORT", day: "Day 2", head: false },
+              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Oct 31", head: true },
+              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Oct 31", head: true },
+              { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Oct 31", head: false },
+              { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Oct 31", head: false },
+              { tier: ja ? "サポートアクト" : "SUPPORT", day: "Oct 31", head: false },
+              { tier: ja ? "サポートアクト" : "SUPPORT", day: "Oct 31", head: false },
               { tier: ja ? "ローカル アクト" : "LOCAL ACT", day: "Oahu", head: false },
               { tier: ja ? "ローカル アクト" : "LOCAL ACT", day: "Oahu", head: false },
             ].map((slot, i) => (

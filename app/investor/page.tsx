@@ -20,7 +20,7 @@ export default function InvestorPage() {
   const ja = lang === "ja";
   const toggleLang = () => { const n = lang === "ja" ? "en" : "ja"; setLang(n); saveLang(n); };
 
-  const daysLeft = Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000);
+  const daysLeft = Math.ceil((new Date("2026-10-31").getTime() - Date.now()) / 86400000);
 
   return (
     <main id="pdf-content" style={{ background: "#080808", position: "relative", overflowX: "hidden" }}>
@@ -53,11 +53,11 @@ export default function InvestorPage() {
           </p>
           <p style={{ fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: 1.8, marginBottom: 12 }}>
             {ja
-              ? "世界最大級のアンダーグラウンド・エレクトロニックミュージックフェスティバル「SOLUNA」が、2026年9月、ハワイ・オアフ島に初上陸。その創設パートナーとして参加しませんか？"
-              : "SOLUNA — one of the world's premier underground electronic music festivals — lands in Oahu, Hawaii for the first time in September 2026. Join as a founding partner."}
+              ? "世界最大級のアンダーグラウンド・エレクトロニックミュージックフェスティバル「SOLUNA」が、2026年10月、ハワイ・オアフ島に初上陸。その創設パートナーとして参加しませんか？"
+              : "SOLUNA — one of the world's premier underground electronic music festivals — lands in Oahu, Hawaii for the first time in October 2026. Join as a founding partner."}
           </p>
           <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }}>
-            {ja ? `開催まであと${daysLeft}日 · 2026年9月4-6日 · オアフ島` : `${daysLeft} days to event · Sep 4-6, 2026 · Oahu, HI`}
+            {ja ? `開催まであと${daysLeft}日 · 2026年10月31日 · オアフ島` : `${daysLeft} days to event · Oct 31, 2026 · Oahu, HI`}
           </p>
         </motion.div>
 
@@ -98,7 +98,7 @@ export default function InvestorPage() {
             <p style={{ color: "rgba(201,169,98,0.7)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", marginBottom: 8 }}>{ja ? "ハワイ開催の強み" : "WHY HAWAII"}</p>
             <ul style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, lineHeight: 2, paddingLeft: 18 }}>
               <li>{ja ? "北米・アジア両方からアクセスしやすい太平洋の中心" : "Pacific hub — accessible from both North America and Asia"}</li>
-              <li>{ja ? "Labor Day週末（9月4-6日）= 米国全土から集客可能" : "Labor Day weekend (Sep 4-6) = nationwide US draw"}</li>
+              <li>{ja ? "ハロウィン週末（10月31日）= 米国全土から集客可能" : "Halloween weekend (Oct 31) = nationwide US draw"}</li>
               <li>{ja ? "ハワイには大規模EDMフェスが存在しない = 市場空白" : "No major EDM festival exists in Hawaii = untapped market"}</li>
               <li>{ja ? "日本・韓国・オーストラリアからの観光需要が高い" : "Strong tourism demand from Japan, Korea, Australia"}</li>
             </ul>
@@ -323,7 +323,7 @@ export default function InvestorPage() {
             <div className="card-gold" style={{ padding: "18px 20px" }}>
               <p style={{ color: "var(--gold)", fontWeight: 600, fontSize: 14, marginBottom: 6 }}>{ja ? "VIPパッケージ" : "VIP Package"}</p>
               <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, lineHeight: 1.7 }}>
-                {ja ? "VIP 2-Day Pass + 高級ホテル3泊 + 空港送迎 + 島内アクティビティ。目標 500〜1,000室 @約$250/泊で仮押さえ予定。Labor Day前にホテル在庫は枯渇するため、早期確保が必須。" : "VIP 2-Day Pass + luxury hotel 3 nights + airport transfer + island activities. Target: 500-1,000 rooms @ ~$250/night. Labor Day inventory will vanish — early blocking essential."}
+                {ja ? "VIP 2-Day Pass + 高級ホテル3泊 + 空港送迎 + 島内アクティビティ。目標 500〜1,000室 @約$250/泊で仮押さえ予定。ハロウィン前にホテル在庫は枯渇するため、早期確保が必須。" : "VIP 2-Day Pass + luxury hotel 3 nights + airport transfer + island activities. Target: 500-1,000 rooms @ ~$250/night. Halloween inventory will vanish — early blocking essential."}
               </p>
             </div>
           </div>
@@ -416,8 +416,8 @@ export default function InvestorPage() {
               { date: ja ? "4〜5月" : "Apr-May", item: ja ? "ヘッドライナー確定・ラインナップ発表" : "Headliner confirmed · Lineup announced", done: false },
               { date: ja ? "5〜6月" : "May-Jun", item: ja ? "スポンサー確定・ホテルパッケージ販売" : "Sponsors confirmed · Hotel packages on sale", done: false },
               { date: ja ? "7〜8月" : "Jul-Aug", item: ja ? "スタッフ採用・リハーサル" : "Staff hired · Rehearsals", done: false },
-              { date: "Sep 4-6", item: ja ? "🎉 SOLUNA FEST HAWAII 開催！" : "🎉 SOLUNA FEST HAWAII!", done: false, event: true },
-              { date: ja ? "9月末" : "Late Sep", item: ja ? "💰 投資家への最優先返済実行" : "💰 Investor first-out repayment", done: false },
+              { date: "Oct 31", item: ja ? "🎉 SOLUNA FEST HAWAII 開催！" : "🎉 SOLUNA FEST HAWAII!", done: false, event: true },
+              { date: ja ? "11月" : "Nov", item: ja ? "💰 投資家への最優先返済実行" : "💰 Investor first-out repayment", done: false },
             ].map((s, i) => (
               <div key={i} style={{ display: "flex", gap: 14, padding: "12px 0", borderLeft: `2px solid ${s.event ? "var(--gold)" : s.now ? "rgba(255,80,80,0.6)" : s.done ? "rgba(74,222,128,0.5)" : "rgba(255,255,255,0.1)"}`, paddingLeft: 18, marginLeft: 8 }}>
                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.event ? "var(--gold)" : s.now ? "rgba(255,80,80,0.8)" : s.done ? "rgba(74,222,128,0.7)" : "rgba(255,255,255,0.15)", flexShrink: 0, marginTop: 4, marginLeft: -24 }} />

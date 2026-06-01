@@ -12,11 +12,11 @@ const GA_MEASUREMENT_ID = "G-XWZTCMLK4M";
 export const metadata: Metadata = {
   title: "SOLUNA — Festival Experience Platform | SOLUNA FEST HAWAII 2026",
   description:
-    "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII — Sep 4–6, 2026, Oahu.",
+    "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII — Oct 31, 2026, Oahu.",
   metadataBase: new URL("https://solun.art"),
   openGraph: {
     title: "SOLUNA — Festival Experience Platform",
-    description: "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII Sep 4–6, 2026.",
+    description: "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII Oct 31, 2026.",
     type: "website",
     url: "https://solun.art",
     siteName: "SOLUNA",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SOLUNA — Festival Experience Platform",
-    description: "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII Sep 4–6, 2026.",
+    description: "Drop a track, get a radio channel. Vote for the next headliner. SOLUNA FEST HAWAII Oct 31, 2026.",
     site: "@solaborig",
   },
   robots: { index: true, follow: true },

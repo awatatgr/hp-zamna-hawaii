@@ -10,7 +10,7 @@ const fade = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }
 
 const KEY_FACTS = [
   { ja_l: "イベント名", en_l: "Event Name", v: "SOLUNA FEST HAWAII 2026" },
-  { ja_l: "日程", en_l: "Dates", ja_v: "2026年9月4日（金）〜5日（土）", en_v: "September 4 (Fri) – 5 (Sat), 2026" },
+  { ja_l: "日程", en_l: "Dates", ja_v: "2026年10月31日（土）", en_v: "October 31 (Sat), 2026" },
   { ja_l: "会場", en_l: "Venue", ja_v: "モアナルアガーデン（Moanalua Gardens）, オアフ島", en_v: "Moanalua Gardens, Oahu, HI" },
   { ja_l: "ジャンル", en_l: "Genre", ja_v: "アンダーグラウンド・エレクトロニック", en_v: "Underground Electronic Music" },
   { ja_l: "想定来場者数", en_l: "Expected Attendance", ja_v: "最大9,000人/日", en_v: "Up to 9,000 per day" },
@@ -223,8 +223,8 @@ export default function PressPage() {
           <div className="card" style={{ padding: "24px 28px" }}>
             <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, lineHeight: 1.8, fontStyle: "italic" }}>
               {ja
-                ? "SOLUNA FEST HAWAIIは、世界最高峰のアンダーグラウンド・エレクトロニック・ミュージックフェスティバル「SOLUNA」の初の米国開催です。2026年9月4〜5日、オアフ島モアナルアガーデンにて開催。SOLUNAがプロデュース。詳細: solun.art"
-                : "SOLUNA FEST HAWAII is the first-ever US edition of SOLUNA, the world's most premium underground electronic music festival. September 4–6, 2026 at Moanalua Gardens, Oahu. Produced by SOLUNA. More info: solun.art"}
+                ? "SOLUNA FEST HAWAIIは、世界最高峰のアンダーグラウンド・エレクトロニック・ミュージックフェスティバル「SOLUNA」の初の米国開催です。2026年10月31日、オアフ島モアナルアガーデンにて開催。SOLUNAがプロデュース。詳細: solun.art"
+                : "SOLUNA FEST HAWAII is the first-ever US edition of SOLUNA, the world's most premium underground electronic music festival. October 31, 2026 at Moanalua Gardens, Oahu. Produced by SOLUNA. More info: solun.art"}
             </p>
           </div>
         </motion.section>

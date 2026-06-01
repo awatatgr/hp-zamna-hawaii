@@ -665,6 +665,9 @@ app.use((req, res, next) => {
   if (req.hostname === "www.solun.art") {
     return res.redirect(301, `https://solun.art${req.originalUrl}`);
   }
+  if (req.hostname === "solunahi.com" || req.hostname === "www.solunahi.com") {
+    return res.redirect(301, `https://zamna-hawaii.love${req.originalUrl}`);
+  }
   next();
 });
 
