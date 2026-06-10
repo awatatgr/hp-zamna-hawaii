@@ -8,6 +8,12 @@
  * All admin routes require ?key= parameter or a valid session cookie.
  * Protected routes: /admin, /production, /safety, /staff, /budget,
  *                   /venue-agreement, /artist-contract, /press
+ *
+ * SECURITY NOTE: In-memory session token store (validTokens Set) is
+ * intentionally unbounded beyond the 1000-token trim heuristic.
+ * This is acceptable: the admin server is an ephemeral Node process
+ * (restarted on each deploy), so token accumulation is bounded by
+ * uptime, not an attack surface worth a persistent store.
  */
 
 const http = require("http");
@@ -15,7 +21,11 @@ const { parse } = require("url");
 const next = require("next");
 const crypto = require("crypto");
 
-const ADMIN_KEY = process.env.ADMIN_KEY || "LIFEISART";
+const ADMIN_KEY = process.env.ADMIN_KEY;
+if (!ADMIN_KEY) {
+  console.error("ADMIN_KEY environment variable is required");
+  process.exit(1);
+}
 const PORT = parseInt(process.env.ADMIN_PORT || "4000", 10);
 const COOKIE_NAME = "zamna_admin";
 const COOKIE_MAX_AGE = 60 * 60 * 24; // 24h
@@ -157,7 +167,7 @@ app.prepare().then(() => {
 │  ZAMNA HAWAII — Admin Server                │
 │                                             │
 │  Local:  http://localhost:${PORT}/admin       │
-│  Auth:   ?key=${ADMIN_KEY.slice(0, 4)}${"*".repeat(Math.max(0, ADMIN_KEY.length - 4))}                     │
+│  Auth:   ?key=<set via ADMIN_KEY env var>   │
 │                                             │
 │  Protected routes:                          │
 │    /admin  /production  /safety  /staff     │
