@@ -15,7 +15,7 @@ const AUDIO_DEFS = [
   { freqs: [[40,"sine"],[80,"sine"],[165,"sine"]], filter: 200,  vol: 0.18, lfoHz: 0.08, lfoDepth: 20 },
   // 1 — Conflict / Date problem: minor tension, dissonance
   { freqs: [[55,"sine"],[87,"sine"],[147,"triangle"]], filter: 300,  vol: 0.22, lfoHz: 0.12, lfoDepth: 30 },
-  // 2 — Resolution / Oct 31 argument: major chord resolving
+  // 2 — Resolution / date argument: major chord resolving
   { freqs: [[65,"sine"],[131,"sine"],[196,"sine"],[262,"sine"]], filter: 600,  vol: 0.20, lfoHz: 0.10, lfoDepth: 25 },
   // 3 — Vision / Venue: harmonic richness, warmth
   { freqs: [[55,"sine"],[110,"sine"],[165,"sine"],[220,"sine"]], filter: 800,  vol: 0.22, lfoHz: 0.15, lfoDepth: 15 },
@@ -313,7 +313,7 @@ export default function PitchPage() {
         <R>
           <p style={{ fontSize: 10, letterSpacing: "0.45em", color: "rgba(201,169,98,0.5)", marginBottom: 16 }}>THE DATE PROBLEM</p>
           <h2 className="font-display" style={{ fontSize: "clamp(2rem,7vw,4rem)", lineHeight: 0.95, color: "#fff", marginBottom: 24 }}>
-            9月4日では、<br /><span style={{ color: "rgba(255,100,100,0.9)" }}>行けない人がいる。</span>
+            日程によっては、<br /><span style={{ color: "rgba(255,100,100,0.9)" }}>行けない人がいる。</span>
           </h2>
           <div style={{ width: 36, height: 2, background: "rgba(255,100,100,0.4)", marginBottom: 36 }} />
         </R>
@@ -330,7 +330,7 @@ export default function PitchPage() {
             <p style={{ fontSize: 12, letterSpacing: "0.3em", color: "rgba(255,100,100,0.7)", marginBottom: 12 }}>CONFLICT DETECTED</p>
             <p style={{ fontSize: "1rem", lineHeight: 1.9, color: muted }}>
               今年の日本で開催される<strong style={{ color: "#fff" }}>ブラジリアン柔術世界大会</strong>の日程が、
-              9月4日と完全にかぶっています。良蔵さんは大会運営側でもあるため、
+              当初の日程案と完全にかぶっています。良蔵さんは大会運営側でもあるため、
               ハワイに来ることがほぼ不可能な状況です。
             </p>
           </div>
@@ -352,7 +352,7 @@ export default function PitchPage() {
         <R>
           <p style={{ fontSize: 10, letterSpacing: "0.45em", color: "rgba(201,169,98,0.5)", marginBottom: 16 }}>THE PROPOSAL</p>
           <h2 className="font-display" style={{ fontSize: "clamp(2rem,7vw,4rem)", lineHeight: 0.95, color: "#fff", marginBottom: 24 }}>
-            10月30日か31日、<br /><span style={{ color: gold }}>どちらかに動かしたい。</span>
+            日程を、<br /><span style={{ color: gold }}>動かしたい。</span>
           </h2>
           <div style={{ width: 36, height: 2, background: "rgba(201,169,98,0.5)", marginBottom: 36 }} />
         </R>
@@ -360,11 +360,11 @@ export default function PitchPage() {
         <R delay={0.1}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32, maxWidth: 700 }}>
             {[
-              { date: "OCT 30 (Fri)", label: "10月30日（金）", pros: ["週末前日で来やすい", "翌日にフォローアップ可能", "ハロウィン前夜の雰囲気"], cons: ["ハロウィン当日ではない"] },
-              { date: "OCT 31 (Sat)", label: "10月31日（土）★推奨", pros: ["ハロウィン当日の特別感", "古代の祭り・帳が破れる夜", "土曜日で参加しやすい"], cons: ["Hawaii GET税込みで若干コスト増"] },
+              { rec: false, label: "日程案A", pros: ["週末前日で来やすい", "翌日にフォローアップ可能", "ハロウィン前夜の雰囲気"], cons: ["ハロウィン当日ではない"] },
+              { rec: true, label: "日程案B（★推奨）", pros: ["ハロウィン当日の特別感", "古代の祭り・帳が破れる夜", "土曜日で参加しやすい"], cons: ["Hawaii GET税込みで若干コスト増"] },
             ].map(opt => (
-              <div key={opt.date} style={{ padding: "20px 18px", border: `1px solid ${opt.date.includes("31") ? "rgba(201,169,98,0.35)" : "rgba(255,255,255,0.08)"}`, background: opt.date.includes("31") ? "rgba(201,169,98,0.04)" : "transparent", borderRadius: 2 }}>
-                <p className="font-display" style={{ fontSize: "1.2rem", color: opt.date.includes("31") ? gold : "#fff", marginBottom: 8 }}>{opt.label}</p>
+              <div key={opt.label} style={{ padding: "20px 18px", border: `1px solid ${opt.rec ? "rgba(201,169,98,0.35)" : "rgba(255,255,255,0.08)"}`, background: opt.rec ? "rgba(201,169,98,0.04)" : "transparent", borderRadius: 2 }}>
+                <p className="font-display" style={{ fontSize: "1.2rem", color: opt.rec ? gold : "#fff", marginBottom: 8 }}>{opt.label}</p>
                 {opt.pros.map(p => <p key={p} style={{ fontSize: 12, color: "rgba(74,222,128,0.8)", marginBottom: 4 }}>✓ {p}</p>)}
                 {opt.cons.map(c => <p key={c} style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>· {c}</p>)}
               </div>
@@ -374,7 +374,7 @@ export default function PitchPage() {
 
         <R delay={0.2}>
           <p style={{ fontSize: "clamp(1rem,2.5vw,1.15rem)", lineHeight: 2, color: muted, maxWidth: 640 }}>
-            31日を推奨する理由は、<strong style={{ color: "#fff" }}>ハロウィンという日が持つ意味</strong>と、
+            この日程を推奨する理由は、<strong style={{ color: "#fff" }}>ハロウィンという日が持つ意味</strong>と、
             このイベントのコンセプト（帳が破れる夜・先祖が踊る）が完全に一致するから。
             仮装パーティーではなく、「古代の儀式としてのフェス」という文脈で、
             ハロウィン当日は強力な追い風になります。
@@ -731,7 +731,7 @@ export default function PitchPage() {
           <R delay={0.15}>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 40 }}>
               {[
-                { n: "01", q: "日程変更（9月4日 → 10月31日）は現実的ですか？すでに確定しているものへの影響は？" },
+                { n: "01", q: "日程の確定は現実的ですか？すでに確定しているものへの影響は？" },
                 { n: "02", q: "「ハワイに来る日本人富裕層」をメインターゲットにすることへの合意は取れますか？この方針でSean・チームは動けますか？" },
                 { n: "03", q: "DJ Nobu（日本アンカー）→ Mathame → WhoMadeWhoのラインナップ。日本人を集めるという観点で十分と思いますか？" },
                 { n: "04", q: "スポンサー営業：ANA・JTB・三越伊勢丹・国産ウィスキーブランドへのアプローチは誰が担当できますか？コネクションはありますか？" },

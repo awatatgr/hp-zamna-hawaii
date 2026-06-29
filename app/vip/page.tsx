@@ -275,7 +275,7 @@ export default function VIPPage() {
           </a>
           <Link href="/guide" className="btn-ghost" style={{ display: "inline-block", marginBottom: 12 }}>{ja ? "当日ガイド" : "Attendee Guide"}</Link>
           <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 12 }}>
-            {ja ? "Day 1: Sep 4 · Day 2: Sep 5 · Oahu, Hawaii" : "Day 1: Sep 4 · Day 2: Sep 5 · Oahu, Hawaii"}
+            {ja ? "Day 1: TBA · Day 2: TBA · Oahu, Hawaii" : "Day 1: TBA · Day 2: TBA · Oahu, Hawaii"}
           </p>
         </motion.section>
       </div>

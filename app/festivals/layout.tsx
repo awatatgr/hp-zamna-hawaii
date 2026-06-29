@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "フェスティバル | SOLUNA",
   description:
-    "SOLUNA FEST HAWAII 2026 — Sep 4-6, Moanalua Gardens, Oahu.",
+    "SOLUNA FEST HAWAII 2026 — Date TBA, Moanalua Gardens, Oahu.",
   openGraph: {
     title: "フェスティバル | SOLUNA",
     description:
-      "SOLUNA FEST HAWAII 2026 — Sep 4-6, Moanalua Gardens, Oahu.",
+      "SOLUNA FEST HAWAII 2026 — Date TBA, Moanalua Gardens, Oahu.",
     url: "https://solun.art/festivals",
     type: "website",
     siteName: "SOLUNA",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "フェスティバル | SOLUNA",
     description:
-      "SOLUNA FEST HAWAII 2026 — Sep 4-6, Moanalua Gardens, Oahu.",
+      "SOLUNA FEST HAWAII 2026 — Date TBA, Moanalua Gardens, Oahu.",
   },
 };
 

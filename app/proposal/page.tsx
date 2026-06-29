@@ -153,11 +153,11 @@ const MEDIA = [
 ];
 
 const TIMELINE_ITEMS = [
-  { phase: "今すぐ", items: ["Zamna ライセンス条件の確認・契約（最優先）", "日程（10/31）の法的・許可申請確認", "チームの意思決定・役割分担"] },
+  { phase: "今すぐ", items: ["Zamna ライセンス条件の確認・契約（最優先）", "日程の法的・許可申請確認", "チームの意思決定・役割分担"] },
   { phase: "T−6ヶ月（2026年4月）", items: ["アーティストデポジット支払い・契約締結", "Moanalua Gardens 本契約", "日本語先行チケット販売開始（Yukiネットワーク先行）", "スポンサー営業開始（ANA・JAL・JTB優先）"] },
   { phase: "T−3ヶ月（2026年7月）", items: ["プロダクション会社確定", "ドローン業者・FAA Part 107 申請", "日本メディア向けプレスリリース配信", "VIPパッケージ販売開始"] },
   { phase: "T−1ヶ月（2026年9月）", items: ["本チケット一般販売", "日本→ハワイ航空パッケージ（ANA/JALタイアップ）発売", "神主との最終打合せ・リハーサル", "スタッフ・セキュリティ確定"] },
-  { phase: "当日（2026年10月31日）", items: ["ゲートオープン 17:00", "神道儀式（お祓い）日没", "DJ Nobu + 坂本龍一追悼ピアノ 19:00", "Mathame 21:00", "WhoMadeWho + ドローン300機 23:00"] },
+  { phase: "当日（日程未定）", items: ["ゲートオープン 17:00", "神道儀式（お祓い）日没", "DJ Nobu + 坂本龍一追悼ピアノ 19:00", "Mathame 21:00", "WhoMadeWho + ドローン300機 23:00"] },
 ];
 
 export default function ProposalPage() {
@@ -190,7 +190,7 @@ export default function ProposalPage() {
           </h1>
           <p style={{ fontSize: "clamp(1rem,2.5vw,1.2rem)", color: "rgba(255,255,255,0.55)", marginBottom: 12, maxWidth: 560, lineHeight: 1.7 }}>
             モアナルア・ガーデンズ / バニヤンの木の下<br />
-            2026年10月31日（土）— ハロウィン夜
+            日程未定（TBA）— ハロウィン夜
           </p>
           <p style={{ fontSize: 13, color: "rgba(201,169,98,0.8)", marginBottom: 32, fontWeight: 700 }}>
             「日本人が、Zamnaをハワイに召喚する。」
@@ -237,7 +237,7 @@ export default function ProposalPage() {
         <section id="sec01" style={{ marginBottom: 64 }}>
           <DocTitle n="01">イベント概要</DocTitle>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 8, marginBottom: 28 }}>
-            <Cell label="開催日" value="2026年10月31日" sub="ハロウィン（土曜日）" />
+            <Cell label="開催日" value="日程未定（TBA）" sub="ハロウィン（土曜日）" />
             <Cell label="会場" value="モアナルア・ガーデンズ" sub="オアフ島・ホノルル" />
             <Cell label="定員" value="5,000人" sub="70%動員目標" />
             <Cell label="ライセンス" value="Zamna" sub="メキシコ発・世界展開" />
@@ -330,12 +330,12 @@ export default function ProposalPage() {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <tbody>
               {[
-                ["日時", "2026年10月31日（土）17:00〜翌3:00"],
+                ["日時", "日程未定（TBA）／17:00〜翌3:00"],
                 ["会場", "Moanalua Gardens, Honolulu, Oahu, Hawaii"],
                 ["定員", "5,000名（VIP 208名含む）"],
                 ["チケット価格", "GA $120 / VIPパッケージ $1,000 / VIPテーブル 応相談"],
                 ["ライセンス", "Zamna（メキシコ）— 売上総額の15%（内容要確認）"],
-                ["日程変更の理由", "当初9/4案から変更。村田良蔵（柔術世界チャンピオン・日本連盟幹部）が9/4世界大会と完全重複するため。Yukiのネットワーク多数が参加不可能な状況だった"],
+                ["日程変更の理由", "当初の日程案から変更。村田良蔵（柔術世界チャンピオン・日本連盟幹部）が同日程の世界大会と完全重複するため。Yukiのネットワーク多数が参加不可能な状況だった"],
                 ["ハロウィン選択の理由", "帳が破れる夜・先祖が踊るという古代の意味と、神道儀式×バニヤン×テクノのコンセプトが完全一致。土曜日で参加しやすい"],
               ].map(([k, v]) => (
                 <tr key={k} style={{ borderBottom: `1px solid ${C.border}` }}>
@@ -618,7 +618,7 @@ export default function ProposalPage() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: "Q1", q: "日程変更（9月4日 → 10月31日）は現実的ですか？すでに確定している要素への影響は？" },
+              { n: "Q1", q: "日程の確定は現実的ですか？すでに確定している要素への影響は？" },
               { n: "Q2", q: "「ハワイを訪れる日本人富裕層をメインターゲット」という戦略に合意できますか？この方針でSean・チームは動けますか？" },
               { n: "Q3", q: "DJ Nobu（日本アンカー）→ Mathame → WhoMadeWho のラインナップ。日本人集客の観点で十分と思いますか？" },
               { n: "Q4", q: "スポンサー営業（ANA・JTB・三越伊勢丹・サントリーなど）：誰が担当できますか？具体的なコネクションはありますか？" },

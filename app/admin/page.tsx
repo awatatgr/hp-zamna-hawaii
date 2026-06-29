@@ -140,7 +140,7 @@ const SECTIONS: Section[] = [
       { ja: "バックステージライダー・ケータリング手配",  en: "Backstage catering & rider fulfillment",      status: "pending",    note: { ja: "専属シェフ+フードベンダーからのフードチケット提供。海外アーティストにハワイアン料理体験", en: "Dedicated chef + food tickets from vendors. Give international artists Hawaiian food experience" } },
       { ja: "シカゴラインナップからのアーティスト移動",  en: "Chicago lineup → Hawaii artist routing",      status: "in_progress",note: { ja: "シカゴ公演後ハワイへ直行。土日月に配置。コスト効率の良いルーティング", en: "Direct from Chicago shows to Hawaii. Schedule for Sat/Sun/Mon. Cost-efficient routing" } },
       { ja: "SOLUNA vs Taylor アーティスト価格比較",       en: "SOLUNA vs Taylor artist price comparison",     status: "in_progress",note: { ja: "SOLUNAのブッキング手数料15%+利益7% vs Taylorの$100K以下アーティスト。独立検証必須", en: "SOLUNA booking 15% + profit 7% vs Taylor's sub-$100K artists. Independent verification required" } },
-      { ja: "2-3日間タイムテーブルの確定",               en: "2-3 day timetable finalized",                 status: "pending",    note: { ja: "Day1=SOLUNA(Sep4) / Day2-3=Taylor協業の可能性(Sep5-6)。3PM-10PM+アフターパーティー", en: "Day1=SOLUNA(Sep4) / Day2-3=Taylor collab(Sep5-6). 3PM-10PM + after party" } },
+      { ja: "2-3日間タイムテーブルの確定",               en: "2-3 day timetable finalized",                 status: "pending",    note: { ja: "Day1=SOLUNA / Day2-3=Taylor協業の可能性。3PM-10PM+アフターパーティー", en: "Day1=SOLUNA / Day2-3=Taylor collab. 3PM-10PM + after party" } },
     ],
   },
 
@@ -315,8 +315,8 @@ const SECTIONS: Section[] = [
 ];
 
 const KPI = [
-  { value: "Sep 4–6, 2026", label: { ja: "開催日（Labor Day週末）", en: "Event dates (Labor Day wknd)" } },
-  { value: `${Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000)}d`, label: { ja: "開催まで残り", en: "Days until event" } },
+  { value: "Date TBA", label: { ja: "開催日（Labor Day週末）", en: "Event dates (Labor Day wknd)" } },
+  { value: "TBA", label: { ja: "開催まで残り", en: "Days until event" } },
   { value: "9,000/day",     label: { ja: "想定来場者数（/日）",     en: "Expected attendance (per day)" } },
   { value: "$200,000",      label: { ja: "調達目標",               en: "Fundraise target" } },
   { value: "VIP $1,000+",   label: { ja: "VIPチケット最低価格",    en: "VIP ticket starting price" } },
@@ -1221,7 +1221,7 @@ export default function AdminPage() {
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{ja ? "要対応" : "Urgent"}</p>
             </div>
             <div style={{ background: "rgba(201,169,98,0.06)", border: "1px solid rgba(201,169,98,0.12)", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ color: "rgba(201,169,98,0.8)", fontSize: 22, fontWeight: 700 }}>{`${Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000)}`}</p>
+              <p style={{ color: "rgba(201,169,98,0.8)", fontSize: 22, fontWeight: 700 }}>TBA</p>
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{ja ? "残り日数" : "Days left"}</p>
             </div>
             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "14px 16px" }}>

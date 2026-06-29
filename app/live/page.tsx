@@ -17,22 +17,6 @@ interface LiveStream {
   stream_url?: string;
 }
 
-const FESTIVAL_DATE = new Date("2026-09-04T18:00:00-10:00");
-
-function useCountdown(target: Date) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const diff = Math.max(0, target.getTime() - now);
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-  const seconds = Math.floor((diff % 60000) / 1000);
-  return { days, hours, minutes, seconds };
-}
-
 function formatViewers(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
   return String(n);
@@ -84,8 +68,6 @@ export default function LivePage() {
     }, 30000);
     return () => clearInterval(id);
   }, []);
-
-  const countdown = useCountdown(FESTIVAL_DATE);
 
   return (
     <div
@@ -320,41 +302,19 @@ export default function LivePage() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                gap: 20,
-                flexWrap: "wrap",
               }}
             >
-              {[
-                { val: countdown.days, label: t("日", "Days") },
-                { val: countdown.hours, label: t("時間", "Hours") },
-                { val: countdown.minutes, label: t("分", "Min") },
-                { val: countdown.seconds, label: t("秒", "Sec") },
-              ].map(({ val, label }) => (
-                <div key={label} style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      fontFamily: "'Anton', sans-serif",
-                      fontSize: 42,
-                      color: "#C9A962",
-                      lineHeight: 1,
-                      minWidth: 64,
-                    }}
-                  >
-                    {String(val).padStart(2, "0")}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: "rgba(255,255,255,0.4)",
-                      marginTop: 6,
-                      textTransform: "uppercase",
-                      letterSpacing: 2,
-                    }}
-                  >
-                    {label}
-                  </div>
-                </div>
-              ))}
+              <div
+                style={{
+                  fontFamily: "'Anton', sans-serif",
+                  fontSize: 42,
+                  color: "#C9A962",
+                  lineHeight: 1,
+                  letterSpacing: 4,
+                }}
+              >
+                TBA
+              </div>
             </div>
 
             <p
@@ -365,7 +325,7 @@ export default function LivePage() {
                 fontWeight: 500,
               }}
             >
-              {t("SOLUNA FEST HAWAII 2026 — 9月4-6日, オアフ", "SOLUNA FEST HAWAII 2026 — Sep 4-6, Oahu")}
+              {t("SOLUNA FEST HAWAII 2026 — 日程未定, オアフ", "SOLUNA FEST HAWAII 2026 — Date TBA, Oahu")}
             </p>
           </div>
         )}

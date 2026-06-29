@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -198,21 +198,6 @@ function PianoKeys() {
 
 /* ─── Main page ───────────────────────────────────────────── */
 export default function VisionPage() {
-  const [tick, setTick] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setTick(n => n + 1), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  // Countdown to Oct 31 2026
-  const target = useMemo(() => new Date("2026-10-31T18:00:00-10:00").getTime(), []);
-  const diff = target - Date.now() - tick * 0;
-  const days = Math.max(0, Math.floor(diff / 86400000));
-  const hrs = Math.max(0, Math.floor((diff % 86400000) / 3600000));
-  const mins = Math.max(0, Math.floor((diff % 3600000) / 60000));
-  const secs = Math.max(0, Math.floor((diff % 60000) / 1000));
-
   return (
     <main style={{ background: "#080808", color: "#fff", overflowX: "hidden" }}>
       <ProgressBar />
@@ -230,7 +215,7 @@ export default function VisionPage() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.3 }}
             style={{ fontSize: 10, letterSpacing: "0.6em", color: "rgba(201,169,98,0.5)", marginBottom: 28, textTransform: "uppercase" }}
           >
-            OCTOBER 31 · 2026 · MOANALUA GARDENS · OAHU, HAWAII
+            DATE TBA · MOANALUA GARDENS · OAHU, HAWAII
           </motion.p>
 
           <motion.h1
@@ -294,7 +279,7 @@ export default function VisionPage() {
           </R>
           <R delay={0.25}>
             <p style={{ fontSize: "clamp(1rem,2.5vw,1.25rem)", lineHeight: 1.9, color: "rgba(255,255,255,0.55)", maxWidth: 640, marginBottom: 48 }}>
-              On Halloween night 2026, the tree witnesses something new: 5,850 people becoming one
+              On Halloween night, the tree witnesses something new: 5,850 people becoming one
               organism beneath its canopy. Underground electronic music as ceremony. As offering.
               As memory made sound.
             </p>
@@ -325,7 +310,7 @@ export default function VisionPage() {
 
         <div style={{ position: "relative", zIndex: 1, maxWidth: 800, margin: "0 auto", width: "100%" }}>
           <R>
-            <SH accent="HALLOWEEN · OCT 31 · 18:00 HST">THE VEIL<br />BREAKS TONIGHT</SH>
+            <SH accent="DATE TBA">THE VEIL<br />BREAKS TONIGHT</SH>
           </R>
           <R delay={0.1}>
             <p style={{ fontSize: "clamp(1rem,2.5vw,1.25rem)", lineHeight: 1.9, color: "rgba(255,255,255,0.55)", maxWidth: 640, marginBottom: 28 }}>
@@ -378,7 +363,7 @@ export default function VisionPage() {
           <R delay={0.3}>
             <div style={{ padding: "28px 32px", border: "1px solid rgba(201,169,98,0.15)", background: "rgba(201,169,98,0.03)", maxWidth: 540 }}>
               <p style={{ fontSize: 11, letterSpacing: "0.4em", color: "rgba(201,169,98,0.5)", marginBottom: 12 }}>THE RITUAL SEQUENCE</p>
-              {["お祓い · Shinto purification ritual", "太鼓 · Taiko drumming, 10 minutes", "夕日 · The last light of October 31st", "最初の音 · The first electronic note", "一夜限り · One night. Never again, exactly like this."].map((step, i) => (
+              {["お祓い · Shinto purification ritual", "太鼓 · Taiko drumming, 10 minutes", "夕日 · The last light of the day", "最初の音 · The first electronic note", "一夜限り · One night. Never again, exactly like this."].map((step, i) => (
                 <p key={i} style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 2.2, borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none", paddingBottom: i < 4 ? 4 : 0 }}>{step}</p>
               ))}
             </div>
@@ -527,7 +512,7 @@ export default function VisionPage() {
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <R>
-            <p style={{ fontSize: 10, letterSpacing: "0.6em", color: "rgba(201,169,98,0.5)", marginBottom: 24 }}>OCTOBER 31 · 2026 · OAHU, HAWAII</p>
+            <p style={{ fontSize: 10, letterSpacing: "0.6em", color: "rgba(201,169,98,0.5)", marginBottom: 24 }}>DATE TBA · OAHU, HAWAII</p>
             <h2 className="font-display" style={{ fontSize: "clamp(2rem,9vw,6.5rem)", lineHeight: 0.92, marginBottom: 32 }}>
               5,850 SOULS.<br />
               <span style={{ color: "#c9a962" }}>ONE TREE.</span><br />
@@ -539,17 +524,10 @@ export default function VisionPage() {
           {/* Countdown */}
           <R delay={0.1}>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 48 }}>
-              {[
-                { v: days, u: "DAYS" },
-                { v: hrs, u: "HRS" },
-                { v: mins, u: "MIN" },
-                { v: secs, u: "SEC" },
-              ].map(c => (
-                <div key={c.u} style={{ textAlign: "center", padding: "16px 20px", border: "1px solid rgba(255,255,255,0.06)", minWidth: 72 }}>
-                  <p className="font-display" style={{ fontSize: 36, color: "#c9a962", lineHeight: 1 }}>{String(c.v).padStart(2, "0")}</p>
-                  <p style={{ fontSize: 9, letterSpacing: "0.3em", color: "rgba(255,255,255,0.3)", marginTop: 6 }}>{c.u}</p>
-                </div>
-              ))}
+              <div style={{ textAlign: "center", padding: "16px 32px", border: "1px solid rgba(255,255,255,0.06)", minWidth: 72 }}>
+                <p className="font-display" style={{ fontSize: 36, color: "#c9a962", lineHeight: 1 }}>TBA</p>
+                <p style={{ fontSize: 9, letterSpacing: "0.3em", color: "rgba(255,255,255,0.3)", marginTop: 6 }}>DATE</p>
+              </div>
             </div>
           </R>
 

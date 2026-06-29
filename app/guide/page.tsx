@@ -108,7 +108,7 @@ export default function GuidePage() {
         <motion.div {...fade} className="card-gold" style={{ marginBottom: 40, padding: "24px 28px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {[
-              { l: ja ? "日程" : "Date", v: ja ? "2026年9月4日（金）〜5日（土）" : "Sep 4 (Fri) – 5 (Sat), 2026" },
+              { l: ja ? "日程" : "Date", v: ja ? "日程未定（TBA）" : "Date TBA" },
               { l: ja ? "会場" : "Venue", v: ja ? "モアナルアガーデン（Moanalua Gardens）, Oahu" : "Moanalua Gardens, Oahu, HI" },
               { l: ja ? "開場時刻" : "Gates Open", v: "18:00 HST" },
               { l: ja ? "年齢制限" : "Age Limit", v: ja ? "21歳以上（ID必須）" : "21+ with valid ID" },

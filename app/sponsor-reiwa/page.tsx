@@ -59,13 +59,13 @@ export default function SponsorReiwaPage() {
             </h1>
             <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, maxWidth: 520 }}>
               日本人が、Zamnaをハワイに召喚する。<br />
-              2026年10月31日ハロウィン夜——バニヤンの木の下に<br />
+              日程未定（TBA）——バニヤンの木の下に<br />
               5,000人が集まる日本発の世界水準フェスを、<br />
               令和トラベルとともに作りたい。
             </p>
           </div>
           <div style={{ position: "relative", display: "flex", flexWrap: "wrap", gap: 32, paddingTop: 40, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-            {[["日付", "2026年10月31日（土）"], ["会場", "Moanalua Gardens, Hawaii"], ["規模", "5,000名"], ["提案日", "2026年4月"]].map(([k, v]) => (
+            {[["日付", "日程未定（TBA）"], ["会場", "Moanalua Gardens, Hawaii"], ["規模", "5,000名"], ["提案日", "2026年4月"]].map(([k, v]) => (
               <div key={k}>
                 <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.2em", marginBottom: 4 }}>{k}</p>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.75)" }}>{v}</p>
@@ -80,7 +80,7 @@ export default function SponsorReiwaPage() {
           <SectionTitle n="01">イベント概要</SectionTitle>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 8, marginBottom: 28 }}>
             {[
-              { label: "開催日", value: "2026.10.31", sub: "ハロウィン（土曜）" },
+              { label: "開催日", value: "日程未定", sub: "TBA" },
               { label: "会場", value: "バニヤンの木", sub: "モアナルア・ガーデンズ" },
               { label: "定員", value: "5,000名", sub: "VIP 208名含む" },
               { label: "ライセンス", value: "Zamna", sub: "世界最高峰テクノフェス" },
@@ -313,7 +313,7 @@ export default function SponsorReiwaPage() {
                 ["2026年6月", "パッケージ先行販売スタート（NEWT独占期間）"],
                 ["2026年7月", "一般チケット発売・メディア一斉掲載"],
                 ["2026年9月", "タイアップコンテンツ集中配信"],
-                ["2026年10月31日", "SOLUNA FEST HAWAII 当日"],
+                ["日程未定（TBA）", "SOLUNA FEST HAWAII 当日"],
                 ["2026年11月〜", "コンテンツ素材活用・次回イベント検討"],
               ].map(([date, event]) => (
                 <tr key={date} style={{ borderBottom: `1px solid ${border}` }}>

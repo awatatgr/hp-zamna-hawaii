@@ -20,8 +20,6 @@ export default function InvestorPage() {
   const ja = lang === "ja";
   const toggleLang = () => { const n = lang === "ja" ? "en" : "ja"; setLang(n); saveLang(n); };
 
-  const daysLeft = Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000);
-
   return (
     <main id="pdf-content" style={{ background: "#080808", position: "relative", overflowX: "hidden" }}>
       <div className="atmo" />
@@ -57,7 +55,7 @@ export default function InvestorPage() {
               : "SOLUNA — one of the world's premier underground electronic music festivals — lands in Oahu, Hawaii for the first time in September 2026. Join as a founding partner."}
           </p>
           <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }}>
-            {ja ? `開催まであと${daysLeft}日 · 2026年9月4-6日 · オアフ島` : `${daysLeft} days to event · Sep 4-6, 2026 · Oahu, HI`}
+            {ja ? `開催まで日程未定 · オアフ島` : `Date TBA · Oahu, HI`}
           </p>
         </motion.div>
 
@@ -98,7 +96,7 @@ export default function InvestorPage() {
             <p style={{ color: "rgba(201,169,98,0.7)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", marginBottom: 8 }}>{ja ? "ハワイ開催の強み" : "WHY HAWAII"}</p>
             <ul style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, lineHeight: 2, paddingLeft: 18 }}>
               <li>{ja ? "北米・アジア両方からアクセスしやすい太平洋の中心" : "Pacific hub — accessible from both North America and Asia"}</li>
-              <li>{ja ? "Labor Day週末（9月4-6日）= 米国全土から集客可能" : "Labor Day weekend (Sep 4-6) = nationwide US draw"}</li>
+              <li>{ja ? "Labor Day週末 = 米国全土から集客可能" : "Labor Day weekend = nationwide US draw"}</li>
               <li>{ja ? "ハワイには大規模EDMフェスが存在しない = 市場空白" : "No major EDM festival exists in Hawaii = untapped market"}</li>
               <li>{ja ? "日本・韓国・オーストラリアからの観光需要が高い" : "Strong tourism demand from Japan, Korea, Australia"}</li>
             </ul>
@@ -296,8 +294,8 @@ export default function InvestorPage() {
           <p style={{ color: "rgba(201,169,98,0.7)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", marginBottom: 10 }}>{ja ? "チケット価格" : "TICKET PRICING"}</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8, marginBottom: 24 }}>
             {[
-              { tier: "GA Day 1", price: "$120", desc: ja ? "9月4日（木）一般入場" : "Sep 4 (Thu) general admission" },
-              { tier: "GA Day 2", price: "$180", desc: ja ? "9月5日（金）一般入場" : "Sep 5 (Fri) general admission" },
+              { tier: "GA Day 1", price: "$120", desc: ja ? "Day 1 一般入場" : "Day 1 general admission" },
+              { tier: "GA Day 2", price: "$180", desc: ja ? "Day 2 一般入場" : "Day 2 general admission" },
               { tier: "2-Day Pass", price: "$250", desc: ja ? "両日通し券（割引）" : "Both days (discounted)" },
               { tier: "VIP", price: "$1,000+", desc: ja ? "専用エリア・ドリンク付" : "Private area + drinks", gold: true },
               { tier: "Diamond VIP", price: "$3,000+", desc: ja ? "バックステージ・ホテル込" : "Backstage + hotel", gold: true },
@@ -416,7 +414,7 @@ export default function InvestorPage() {
               { date: ja ? "4〜5月" : "Apr-May", item: ja ? "ヘッドライナー確定・ラインナップ発表" : "Headliner confirmed · Lineup announced", done: false },
               { date: ja ? "5〜6月" : "May-Jun", item: ja ? "スポンサー確定・ホテルパッケージ販売" : "Sponsors confirmed · Hotel packages on sale", done: false },
               { date: ja ? "7〜8月" : "Jul-Aug", item: ja ? "スタッフ採用・リハーサル" : "Staff hired · Rehearsals", done: false },
-              { date: "Sep 4-6", item: ja ? "🎉 SOLUNA FEST HAWAII 開催！" : "🎉 SOLUNA FEST HAWAII!", done: false, event: true },
+              { date: ja ? "日程未定" : "TBA", item: ja ? "🎉 SOLUNA FEST HAWAII 開催！" : "🎉 SOLUNA FEST HAWAII!", done: false, event: true },
               { date: ja ? "9月末" : "Late Sep", item: ja ? "💰 投資家への最優先返済実行" : "💰 Investor first-out repayment", done: false },
             ].map((s, i) => (
               <div key={i} style={{ display: "flex", gap: 14, padding: "12px 0", borderLeft: `2px solid ${s.event ? "var(--gold)" : s.now ? "rgba(255,80,80,0.6)" : s.done ? "rgba(74,222,128,0.5)" : "rgba(255,255,255,0.1)"}`, paddingLeft: 18, marginLeft: 8 }}>

@@ -124,7 +124,7 @@ export default function DealPage() {
               { value: "$200,000", label: ja ? "お借りしたい金額" : "Amount needed", color: "var(--gold)" },
               { value: "First", label: ja ? "返済の順番（最優先）" : "Repayment priority", color: "#fff" },
               { value: "$550,000+", label: ja ? "最低収益見込み" : "Min. expected revenue", color: "rgba(74,222,128,0.9)" },
-              { value: "Sep 4, 2026", label: ja ? "イベント当日" : "Event date", color: "#fff" },
+              { value: ja ? "日程未定（TBA）" : "Date TBA", label: ja ? "イベント当日" : "Event date", color: "#fff" },
             ].map((card) => (
               <div key={card.label} className="card" style={{ padding: "22px 20px" }}>
                 <p className="kpi-value" style={{ color: card.color, fontSize: "clamp(1.4rem,5vw,2.2rem)", marginBottom: 6 }}>
