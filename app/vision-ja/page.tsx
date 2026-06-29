@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -142,16 +142,6 @@ function SH({ children, accent }: { children: React.ReactNode; accent?: string }
 
 /* ─── Main page ───────────────────────────────────────────── */
 export default function VisionJaPage() {
-  const [tick, setTick] = useState(0);
-  useEffect(() => { const t = setInterval(() => setTick(n => n + 1), 1000); return () => clearInterval(t); }, []);
-
-  const target = useMemo(() => new Date("2026-10-31T18:00:00-10:00").getTime(), []);
-  const diff = target - Date.now() - tick * 0;
-  const days = Math.max(0, Math.floor(diff / 86400000));
-  const hrs  = Math.max(0, Math.floor((diff % 86400000) / 3600000));
-  const mins = Math.max(0, Math.floor((diff % 3600000) / 60000));
-  const secs = Math.max(0, Math.floor((diff % 60000) / 1000));
-
   return (
     <main style={{ background: "#080808", color: "#fff", overflowX: "hidden", fontFamily: "'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif" }}>
       <ProgressBar />
@@ -172,7 +162,7 @@ export default function VisionJaPage() {
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 24px" }}>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2, delay: 0.3 }}
             style={{ fontSize: 10, letterSpacing: "0.5em", color: "rgba(201,169,98,0.5)", marginBottom: 28 }}>
-            2026年10月31日（土）· モアナルア・ガーデンズ · オアフ島、ハワイ
+            日程未定（TBA）· モアナルア・ガーデンズ · オアフ島、ハワイ
           </motion.p>
           <motion.h1 className="font-display"
             initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -220,7 +210,7 @@ export default function VisionJaPage() {
           </R>
           <R delay={0.15}>
             <p style={{ fontSize: "clamp(1rem,2.5vw,1.2rem)", lineHeight: 2, color: "rgba(255,255,255,0.55)", maxWidth: 640, marginBottom: 0 }}>
-              2026年のハロウィンの夜、この木は新たな目撃者となる。5,850人がその樹冠の下でひとつの生命体になる瞬間。
+              ハロウィンの夜、この木は新たな目撃者となる。5,850人がその樹冠の下でひとつの生命体になる瞬間。
               アンダーグラウンド・エレクトロニック・ミュージックは儀式となり、供物となり、音となった記憶として刻まれる。
             </p>
           </R>
@@ -253,7 +243,7 @@ export default function VisionJaPage() {
       ══════════════════════════════ */}
       <section style={{ position: "relative", minHeight: "80vh", display: "flex", alignItems: "center", background: "radial-gradient(ellipse at 30% 50%, rgba(80,10,10,0.8) 0%, rgba(40,5,5,0.6) 40%, #080808 80%)", padding: "120px 24px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
-          <R><SH accent="ハロウィン · 10月31日 · 18:00 HST">今夜、帳が<br />破れる</SH></R>
+          <R><SH accent="日程未定">今夜、帳が<br />破れる</SH></R>
           <R delay={0.1}>
             <p style={{ fontSize: "clamp(1rem,2.5vw,1.2rem)", lineHeight: 2, color: "rgba(255,255,255,0.55)", maxWidth: 640, marginBottom: 28 }}>
               ハワイの伝承では、この時期、霊と現世の境界が最も薄くなると言われている。
@@ -300,7 +290,7 @@ export default function VisionJaPage() {
           <R delay={0.2}>
             <div style={{ padding: "28px 32px", border: "1px solid rgba(201,169,98,0.15)", background: "rgba(201,169,98,0.03)", maxWidth: 540 }}>
               <p style={{ fontSize: 11, letterSpacing: "0.3em", color: "rgba(201,169,98,0.5)", marginBottom: 12 }}>儀式の流れ</p>
-              {["お祓い · 神道の清めの儀式", "太鼓 · 10分間の奉納演奏", "夕日 · 10月31日最後の光", "最初の音 · エレクトロニックの幕開け", "一夜限り · 二度と同じ夜は来ない"].map((step, i) => (
+              {["お祓い · 神道の清めの儀式", "太鼓 · 10分間の奉納演奏", "夕日 · 最後の光", "最初の音 · エレクトロニックの幕開け", "一夜限り · 二度と同じ夜は来ない"].map((step, i) => (
                 <p key={i} style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 2.2, borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none", paddingBottom: i < 4 ? 4 : 0 }}>{step}</p>
               ))}
             </div>
@@ -437,7 +427,7 @@ export default function VisionJaPage() {
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <R>
-            <p style={{ fontSize: 10, letterSpacing: "0.5em", color: "rgba(201,169,98,0.5)", marginBottom: 24 }}>2026年10月31日 · オアフ島、ハワイ</p>
+            <p style={{ fontSize: 10, letterSpacing: "0.5em", color: "rgba(201,169,98,0.5)", marginBottom: 24 }}>日程未定（TBA）· オアフ島、ハワイ</p>
             <h2 className="font-display" style={{ fontSize: "clamp(2rem,9vw,6.5rem)", lineHeight: 0.92, marginBottom: 32 }}>
               5,850の魂。<br /><span style={{ color: "#c9a962" }}>一本の木。</span><br />一夜限り。
             </h2>
@@ -446,12 +436,10 @@ export default function VisionJaPage() {
 
           <R delay={0.1}>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 48 }}>
-              {[{ v: days, u: "日" }, { v: hrs, u: "時間" }, { v: mins, u: "分" }, { v: secs, u: "秒" }].map(c => (
-                <div key={c.u} style={{ textAlign: "center", padding: "16px 20px", border: "1px solid rgba(255,255,255,0.06)", minWidth: 72 }}>
-                  <p className="font-display" style={{ fontSize: 36, color: "#c9a962", lineHeight: 1 }}>{String(c.v).padStart(2, "0")}</p>
-                  <p style={{ fontSize: 10, letterSpacing: "0.15em", color: "rgba(255,255,255,0.3)", marginTop: 6 }}>{c.u}</p>
-                </div>
-              ))}
+              <div style={{ textAlign: "center", padding: "16px 32px", border: "1px solid rgba(255,255,255,0.06)", minWidth: 72 }}>
+                <p className="font-display" style={{ fontSize: 36, color: "#c9a962", lineHeight: 1 }}>TBA</p>
+                <p style={{ fontSize: 10, letterSpacing: "0.15em", color: "rgba(255,255,255,0.3)", marginTop: 6 }}>日程</p>
+              </div>
             </div>
           </R>
 

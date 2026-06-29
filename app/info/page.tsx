@@ -8,7 +8,7 @@ import InnerFooter from "@/components/InnerFooter";
 const fade = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.7 }, viewport: { once: true } };
 
 const BASICS = [
-  { ja_l: "日程", en_l: "Date", ja_v: "2026年9月4日（金）〜5日（土）", en_v: "September 4 (Fri) – 5 (Sat), 2026" },
+  { ja_l: "日程", en_l: "Date", ja_v: "日程未定（TBA）", en_v: "Date TBA" },
   { ja_l: "会場", en_l: "Venue", ja_v: "モアナルアガーデン（Moanalua Gardens）, オアフ島", en_v: "Moanalua Gardens, Oahu, HI" },
   { ja_l: "開場", en_l: "Gates Open", ja_v: "18:00 HST", en_v: "6:00 PM HST" },
   { ja_l: "チケット", en_l: "Tickets", ja_v: "Day 1: $120 / Day 2: $180 / VIP: $1,000+", en_v: "Day 1: $120 / Day 2: $180 / VIP: $1,000+" },

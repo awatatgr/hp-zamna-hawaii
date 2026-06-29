@@ -7,22 +7,6 @@ import InnerFooter from "@/components/InnerFooter";
 
 const fade = { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.7 }, viewport: { once: true } };
 
-function useCountdown(target: Date) {
-  const [diff, setDiff] = useState(0);
-  useEffect(() => {
-    const tick = () => setDiff(Math.max(0, target.getTime() - Date.now()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [target]);
-  return {
-    d: Math.floor(diff / 86400000),
-    h: Math.floor((diff % 86400000) / 3600000),
-    m: Math.floor((diff % 3600000) / 60000),
-    s: Math.floor((diff % 60000) / 1000),
-  };
-}
-
 // ── SOLUNA 公式映像 — YouTube video IDs（差し替え可能）──────────────────────────
 const VIDEOS = [
   { id: "KQeBtpFkEtQ", ja: "SOLUNA Tulum 2024 Aftermovie", en: "SOLUNA Tulum 2024 Aftermovie" },
@@ -52,7 +36,6 @@ export default function LineupPage() {
   useEffect(() => { setLang(getSavedLang()); }, []);
   const ja = lang === "ja";
   const toggleLang = () => { const n = lang === "ja" ? "en" : "ja"; setLang(n); saveLang(n); };
-  const countdown = useCountdown(new Date("2026-09-04T18:00:00-10:00"));
 
   const handleNotify = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,25 +93,15 @@ export default function LineupPage() {
           <p style={{ fontSize: 10, letterSpacing: "0.3em", color: "rgba(255,255,255,0.2)", marginBottom: 20, textTransform: "uppercase" }}>
             {ja ? "イベント開幕まで" : "Event Starts In"}
           </p>
-          <div style={{ display: "flex", justifyContent: "center", gap: "clamp(10px,3vw,24px)" }}>
-            {[
-              { v: countdown.d, l: ja ? "日" : "DAYS" },
-              { v: countdown.h, l: ja ? "時間" : "HRS" },
-              { v: countdown.m, l: ja ? "分" : "MIN" },
-              { v: countdown.s, l: ja ? "秒" : "SEC" },
-            ].map(({ v, l }) => (
-              <div key={l} style={{ textAlign: "center" }}>
-                <div style={{
-                  fontFamily: "var(--font-display, serif)", fontSize: "clamp(1.8rem,7vw,3rem)",
-                  fontWeight: 700, color: "#fff", minWidth: "2ch",
-                  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: 10, padding: "10px 16px",
-                }}>
-                  {String(v).padStart(2, "0")}
-                </div>
-                <p style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.15em" }}>{l}</p>
-              </div>
-            ))}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{
+              fontFamily: "var(--font-display, serif)", fontSize: "clamp(1.8rem,7vw,3rem)",
+              fontWeight: 700, color: "#fff", letterSpacing: "0.1em",
+              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10, padding: "10px 28px",
+            }}>
+              TBA
+            </div>
           </div>
         </motion.section>
 
@@ -142,8 +115,8 @@ export default function LineupPage() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
             {[
-              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 1 · Sep 4", head: true },
-              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 2 · Sep 5", head: true },
+              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 1 · TBA", head: true },
+              { tier: ja ? "ヘッドライナー" : "HEADLINER", day: "Day 2 · TBA", head: true },
               { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Day 1", head: false },
               { tier: ja ? "メインステージ" : "MAIN STAGE", day: "Day 2", head: false },
               { tier: ja ? "サポートアクト" : "SUPPORT", day: "Day 1", head: false },

@@ -69,23 +69,6 @@ interface Stage {
   color?: string;
 }
 
-/* ── countdown hook ────────────────────────────────────────── */
-function useCountdown(target: Date) {
-  const [diff, setDiff] = useState(0);
-  useEffect(() => {
-    const tick = () => setDiff(Math.max(0, target.getTime() - Date.now()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [target]);
-  return {
-    d: Math.floor(diff / 86400000),
-    h: Math.floor((diff % 86400000) / 3600000),
-    m: Math.floor((diff % 3600000) / 60000),
-    s: Math.floor((diff % 60000) / 1000),
-  };
-}
-
 /* ── style constants ───────────────────────────────────────── */
 const GOLD = "#C9A962";
 const BG = "#05060a";
@@ -110,14 +93,6 @@ const SL = ({ n, t }: { n: string; t: string }) => (
     <span style={{ fontSize: 10, letterSpacing: "0.3em", color: GOLD, fontWeight: 700 }}>{n}</span>
     <div style={{ flex: 1, height: 1, background: `linear-gradient(90deg, ${GOLD}40, transparent)` }} />
     <span style={{ fontSize: 11, letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase" }}>{t}</span>
-  </div>
-);
-
-/* ── countdown unit display ────────────────────────────────── */
-const CUnit = ({ v, l }: { v: number; l: string }) => (
-  <div style={{ textAlign: "center", minWidth: 56 }}>
-    <div style={{ fontSize: 32, fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums" }}>{String(v).padStart(2, "0")}</div>
-    <div style={{ fontSize: 9, letterSpacing: "0.2em", color: "rgba(255,255,255,0.35)", textTransform: "uppercase", marginTop: 4 }}>{l}</div>
   </div>
 );
 
@@ -164,10 +139,6 @@ export default function FestivalsPage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {}
   };
-
-  const countdown = useCountdown(
-    new Date(selected?.start_date || "2026-09-04T18:00:00-10:00")
-  );
 
   /* group lineup by stage for schedule view */
   const stageMap = new Map<string, ArtistSlot[]>();
@@ -309,14 +280,8 @@ export default function FestivalsPage() {
               {/* ── 2. Countdown ────────────────────────────── */}
               <motion.section {...fade} style={{ marginBottom: 56, textAlign: "center" }}>
                 <SL n="01" t={t("カウントダウン", "Countdown")} />
-                <div style={{ ...glass, padding: "32px 24px", display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
-                  <CUnit v={countdown.d} l={t("日", "Days")} />
-                  <span style={{ fontSize: 28, color: "rgba(255,255,255,0.15)", alignSelf: "flex-start", paddingTop: 4 }}>:</span>
-                  <CUnit v={countdown.h} l={t("時間", "Hours")} />
-                  <span style={{ fontSize: 28, color: "rgba(255,255,255,0.15)", alignSelf: "flex-start", paddingTop: 4 }}>:</span>
-                  <CUnit v={countdown.m} l={t("分", "Min")} />
-                  <span style={{ fontSize: 28, color: "rgba(255,255,255,0.15)", alignSelf: "flex-start", paddingTop: 4 }}>:</span>
-                  <CUnit v={countdown.s} l={t("秒", "Sec")} />
+                <div style={{ ...glass, padding: "32px 24px", display: "flex", justifyContent: "center" }}>
+                  <div style={{ fontSize: 32, fontWeight: 700, color: "#fff", letterSpacing: "0.15em" }}>TBA</div>
                 </div>
               </motion.section>
 

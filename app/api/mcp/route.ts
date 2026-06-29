@@ -10,15 +10,15 @@ const CORS = {
 // ── Festival knowledge base ──
 const KB = {
   basics: `SOLUNA FEST HAWAII 2026
-Date: September 4 (Fri) – 6 (Sun), 2026
+Date: TBA (to be announced)
 Venue: Moanalua Gardens, Oahu, Hawaii
 Gates open: 6:00 PM HST
 Age limit: 21+ (valid ID required)
 Official site: https://solun.art`,
 
   tickets: `Ticket Pricing:
-- Day 1 (Sep 4): $120
-- Day 2 (Sep 5): $180
+- Day 1: $120
+- Day 2: $180
 - Day 1+2 Combo: $280
 - VIP (2-day): $1,000+
 - Early Bird sold out
@@ -76,7 +76,7 @@ A: Tickets are non-refundable. Contact support for exceptional circumstances.`,
   about: `About SOLUNA:
 SOLUNA is a music festival and lifestyle brand created by Yuki Hamada (Enabler CEO, ex-Mercari CPO).
 The vision: residences, experiences, and communities that remain in the world.
-SOLUNA FEST HAWAII 2026 — underground electronic music, Sep 4-6, Oahu.
+SOLUNA FEST HAWAII 2026 — underground electronic music, date TBA, Oahu.
 Creator: Yuki Hamada — https://yukihamada.jp`
 };
 

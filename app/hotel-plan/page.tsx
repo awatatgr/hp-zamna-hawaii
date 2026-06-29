@@ -38,7 +38,6 @@ export default function HotelPlanPage() {
 
   const ja = lang === "ja";
   const toggleLang = () => { const n = lang === "ja" ? "en" : "ja"; setLang(n); saveLang(n); };
-  const daysLeft = Math.ceil((new Date("2026-09-04").getTime() - Date.now()) / 86400000);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,12 +105,12 @@ export default function HotelPlanPage() {
           </h1>
           <p style={{ fontSize: 16, color: "rgba(255,255,255,0.55)", lineHeight: 1.8, marginBottom: 12 }}>
             {ja
-              ? "2026年9月4-6日、ハワイ・オアフ島で開催される世界最大級のエレクトロニックミュージックフェスティバル「SOLUNA FEST HAWAII」。日本・アジアからの観光客向けホテルパッケージの共同企画・販売パートナーとしてのご提案です。"
-              : "SOLUNA FEST HAWAII — one of the world's premier electronic music festivals — comes to Oahu, Hawaii on September 4-5, 2026. This is a partnership proposal for co-creating and distributing hotel packages for Japan & Asia tourists."}
+              ? "日程未定（TBA）、ハワイ・オアフ島で開催される世界最大級のエレクトロニックミュージックフェスティバル「SOLUNA FEST HAWAII」。日本・アジアからの観光客向けホテルパッケージの共同企画・販売パートナーとしてのご提案です。"
+              : "SOLUNA FEST HAWAII — one of the world's premier electronic music festivals — comes to Oahu, Hawaii (date TBA). This is a partnership proposal for co-creating and distributing hotel packages for Japan & Asia tourists."}
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <span style={{ padding: "6px 14px", borderRadius: 999, background: "rgba(201,169,98,0.1)", border: "1px solid rgba(201,169,98,0.25)", color: "rgba(201,169,98,0.8)", fontSize: 12 }}>Sep 4-6, 2026</span>
-            <span style={{ padding: "6px 14px", borderRadius: 999, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{ja ? `開催まで${daysLeft}日` : `${daysLeft} days left`}</span>
+            <span style={{ padding: "6px 14px", borderRadius: 999, background: "rgba(201,169,98,0.1)", border: "1px solid rgba(201,169,98,0.25)", color: "rgba(201,169,98,0.8)", fontSize: 12 }}>{ja ? "日程未定（TBA）" : "Date TBA"}</span>
+            <span style={{ padding: "6px 14px", borderRadius: 999, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{ja ? "開催日: TBA" : "Date: TBA"}</span>
             <span style={{ padding: "6px 14px", borderRadius: 999, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)", fontSize: 12 }}>{ja ? "キャパ 9,000人/日" : "9,000/day capacity"}</span>
           </div>
         </motion.div>
@@ -177,7 +176,7 @@ export default function HotelPlanPage() {
               { v: "9,000", l: ja ? "1日キャパ" : "Daily cap" },
               { v: "12min", l: ja ? "ワイキキから" : "From Waikiki" },
               { v: "100+年", l: ja ? "日立の樹の歴史" : "Hitachi Tree age" },
-              { v: "3日間", l: ja ? "Sep 4-6" : "Sep 4-6" },
+              { v: "3日間", l: ja ? "日程未定" : "Date TBA" },
             ].map(k => (
               <div key={k.l} className="card" style={{ textAlign: "center", padding: "14px 10px" }}>
                 <p style={{ color: "#fff", fontSize: 18, fontWeight: 700, marginBottom: 4 }}>{k.v}</p>
@@ -301,7 +300,7 @@ export default function HotelPlanPage() {
             {[
               { l: ja ? "目標室数" : "Target rooms", v: ja ? "500〜1,000室" : "500-1,000 rooms" },
               { l: ja ? "目標単価" : "Target rate", v: ja ? "~$250/泊（卸値）" : "~$250/night (wholesale)" },
-              { l: ja ? "宿泊期間" : "Stay period", v: ja ? "9月3日(水)〜6日(土) 3泊" : "Sep 3 (Wed) - 6 (Sat) 3 nights" },
+              { l: ja ? "宿泊期間" : "Stay period", v: ja ? "3泊（日程未定）" : "3 nights (dates TBA)" },
               { l: ja ? "候補ホテル①" : "Hotel candidate 1", v: ja ? "シェラトンワイキキ" : "Sheraton Waikiki" },
               { l: ja ? "候補ホテル②" : "Hotel candidate 2", v: ja ? "プリンセスカイウラニ" : "Princess Kaiulani" },
               { l: ja ? "卸パートナー" : "Wholesale partner", v: "Aloha7" },
@@ -519,9 +518,9 @@ export default function HotelPlanPage() {
               { date: ja ? "5月" : "May", item: ja ? "パッケージ構成確定・販売ページ構築" : "Package finalized & sales page built", now: false },
               { date: ja ? "5-6月" : "May-Jun", item: ja ? "ラインナップ発表 → パッケージ販売開始" : "Lineup announced → Package sales start", now: false },
               { date: ja ? "6-8月" : "Jun-Aug", item: ja ? "プロモーション展開・予約受付" : "Promotion & booking", now: false },
-              { date: "Sep 3", item: ja ? "ゲスト到着・ウェルカムレセプション" : "Guest arrival & welcome reception", now: false },
-              { date: "Sep 4-6", item: ja ? "🎉 SOLUNA FEST HAWAII 開催" : "🎉 SOLUNA FEST HAWAII", event: true },
-              { date: "Sep 6", item: ja ? "チェックアウト・空港送迎" : "Checkout & airport transfer", now: false },
+              { date: ja ? "前日" : "Day before", item: ja ? "ゲスト到着・ウェルカムレセプション" : "Guest arrival & welcome reception", now: false },
+              { date: "TBA", item: ja ? "🎉 SOLUNA FEST HAWAII 開催" : "🎉 SOLUNA FEST HAWAII", event: true },
+              { date: ja ? "最終日" : "Final day", item: ja ? "チェックアウト・空港送迎" : "Checkout & airport transfer", now: false },
               { date: ja ? "10月" : "Oct", item: ja ? "精算・2027年計画開始" : "Settlement & 2027 planning", now: false },
             ].map((s, i) => (
               <div key={i} style={{ display: "flex", gap: 14, padding: "12px 0", borderLeft: `2px solid ${s.event ? "var(--gold)" : s.now ? "rgba(255,80,80,0.6)" : "rgba(255,255,255,0.1)"}`, paddingLeft: 18, marginLeft: 8 }}>

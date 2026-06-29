@@ -149,7 +149,7 @@ export default function ProductionPage() {
         {/* Day 1 Timeline */}
         <motion.section {...fade} style={{ marginBottom: 60 }}>
           <h2 className="font-display" style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", color: "#fff", marginBottom: 24 }}>
-            {ja ? "Day 1 — 9月4日（金）タイムライン" : "Day 1 — Sep 4 (Fri) Timeline"}
+            {ja ? "Day 1 — タイムライン" : "Day 1 — Timeline"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {TIMELINE_DAY1.map((t, i) => (
@@ -164,7 +164,7 @@ export default function ProductionPage() {
         {/* Day 2 Timeline */}
         <motion.section {...fade} style={{ marginBottom: 60 }}>
           <h2 className="font-display" style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", color: "#fff", marginBottom: 24 }}>
-            {ja ? "Day 2 — 9月5日（土）タイムライン" : "Day 2 — Sep 5 (Sat) Timeline"}
+            {ja ? "Day 2 — タイムライン" : "Day 2 — Timeline"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {TIMELINE_DAY2.map((t, i) => (
